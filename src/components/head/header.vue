@@ -1,5 +1,5 @@
 <template>
-  <div class="HelloWorld">
+  <div id="hello">
     <remote-js src="http://at.alicdn.com/t/font_1923532_t27fwckkxkh.js"></remote-js>
      <el-row class="head">
         <el-col :span="num"><div class="grid-content bg-purple">主站</div></el-col>
@@ -34,7 +34,7 @@ export default {
   data () {
     return {
       msg: 'Welcome to Your Vue.js App',
-      num: "1"
+      num: '1'
     }
   },
   components: {
@@ -55,13 +55,9 @@ export default {
 
     .el-row {
       margin-bottom: 20px;
-      &:last-child {
-        margin-bottom: 0;
-      }
     }
     .el-col {
       border-radius: 4px;
-
     }
     .grid-content {
       text-shadow:1px 1px 1px #000;

@@ -6,12 +6,13 @@ import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import VideoPlayer from 'vue-video-player'
+import axios from 'axios' 
 require('video.js/dist/video-js.css')
 require('vue-video-player/src/custom-theme.css')
 Vue.use(VideoPlayer)
 Vue.use(ElementUI)
 Vue.config.productionTip = false
-
+Vue.prototype.$axios = axios; 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
