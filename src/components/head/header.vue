@@ -2,7 +2,7 @@
   <div id="hello">
     <remote-js src="http://at.alicdn.com/t/font_1923532_t27fwckkxkh.js"></remote-js>
      <el-row class="head">
-        <el-col :span="num"><div class="grid-content bg-purple">主站</div></el-col>
+        <el-col :span="num"><a href="/header"><div class="grid-content bg-purple">主站</div></a></el-col>
         <el-col :span="num"><div class="grid-content bg-purple">番剧</div></el-col>
         <el-col :span="num+0.5"><div class="grid-content bg-purple">游戏中心</div></el-col>
         <el-col :span="num"><div class="grid-content bg-purple">直播</div></el-col>

@@ -45,7 +45,7 @@
             <div class="item-container">
                   <div class="item-type" v-for="(item,index) in items" v-bind:key="index">
                     <a href="#">
-                      <span>动画<em>999+</em></span>
+                      <span>{{item.name}}<em>{{item.proNum}}</em></span>
                     </a>
                   </div>  
             </div>
@@ -116,97 +116,26 @@
             <!--推荐视频-->
             <div class="recommend-box">
                 <div class="recommnd-card">
-                    <div class="info-box">
+                    <div class="info-box" v-for="(item,index) in recommendList" v-bind:key="index">
                         <a href="#">
-                            <img :src="imageUrl"/>
+                            <img :src="item.cover"/>
                         </a>
-                        <div class="info">
-                            <p class="title">内容</p>
-                            <p class="up">
-                                <svg class="small-icon" aria-hidden="true">
-                                    <use xlink:href="#icon-UPzhu"></use>
-                                </svg> 
-                                作者
-                            </p>
-                            <p class="play">
-                                9999播放量
-                            </p>
-                        </div>
-                    </div>
-                    <div class="info-box">
-                        <a href="#">
-                            <img :src="imageUrl"/>
-                        </a>
-                        <div class="info">
-                            <p class="title">内容</p>
-                            <p class="up">
+                        <a :href="'#/details?id='+item.id" target="view_window">
+                            <div class="info">
+            
+                                    <p class="title" :title="item.title">{{item.title}}</p>
+                                    <p class="up">
+                                        <svg class="small-icon" aria-hidden="true" style="width:16px;height:16px">
+                                            <use xlink:href="#icon-UPzhu"></use>
+                                        </svg> 
+                                        {{item.upName}}
+                                    </p>
+                                    <p class="play">
+                                        {{item.playNum}}播放量
+                                    </p>
                             
-                                作者
-                            </p>
-                            <p class="play">
-                                9999播放量
-                            </p>
-                        </div>
-                    </div>
-                    <div class="info-box">
-                        <a href="#">
-                            <img :src="imageUrl"/>
+                            </div>
                         </a>
-                        <div class="info">
-                            <p class="title">内容</p>
-                            <p class="up">
-                            
-                                作者
-                            </p>
-                            <p class="play">
-                                9999播放量
-                            </p>
-                        </div>
-                    </div>
-                    <div class="info-box">
-                        <a href="#">
-                            <img :src="imageUrl"/>
-                        </a>
-                        <div class="info">
-                            <p class="title">内容</p>
-                            <p class="up">
-                            
-                                作者
-                            </p>
-                            <p class="play">
-                                9999播放量
-                            </p>
-                        </div>
-                    </div>
-                    <div class="info-box">
-                        <a href="#">
-                            <img :src="imageUrl"/>
-                        </a>
-                        <div class="info">
-                            <p class="title">内容</p>
-                            <p class="up">
-                            
-                                作者
-                            </p>
-                            <p class="play">
-                                9999播放量
-                            </p>
-                        </div>
-                    </div>
-                    <div class="info-box">
-                        <a href="#">
-                            <img :src="imageUrl"/>
-                        </a>
-                        <div class="info">
-                            <p class="title">内容</p>
-                            <p class="up">
-                            
-                                作者
-                            </p>
-                            <p class="play">
-                                9999播放量
-                            </p>
-                        </div>
                     </div>
                 </div>
                 
@@ -346,18 +275,117 @@
             <div class="proxy-box">
                 <div class="bili_live">
                 <a href="#">
-                    <img src="https://i0.hdslb.com/bfs/sycp/creative_img/202007/fe96d3f5b1ec214f7cf61d023302bbdc.jpg" alt=""> 
+                    <img src="https://i0.hdslb.com/bfs/sycp/creative_img/202007/8fc4eff039caf7bd74950cb548037517.jpg" alt=""> 
                     <svg class="gg-icon" aria-hidden="true">
                             <use xlink:href="#icon-guanggao"></use>
                     </svg>
                 </a>
                 </div>
+
+                
+        <div class="recommend-content-list" v-for="(item,index) in items" v-bind:key="index">
+            <div class="extension">
+            <header class="storey-title">
+                <div class="l-con">
+                    <svg class="recommend-icon" aria-hidden="true">
+                            <use xlink:href="#icon-tuiguang"></use>
+                    </svg>
+                    <a href="#" class="link-name">{{item.name}}</a>
+                    <a href="#" class="text-info-link">
+                        <svg class="small-icon" aria-hidden="true">
+                            <use xlink:href="#icon-huoyandaping"></use>
+                        </svg> 
+                    </a>
+                </div>
+            </header>
+            <div class="zone-list-box" :id="item.id">
+                <div class="video-card-common" v-for="(videoItem, index) in videoList[item.id] " :key="index">
+                    <a :href="'#/details?id='+videoItem.id" target="view_window">
+                    <div class="card-pic">
+                            <img :src="videoItem.cover"/> 
+                            <div class="count">
+                               <div class="left"></div>
+                               <div class="right"></div>
+                            </div>
+                            <p class="ex-title">
+                                {{videoItem.title}}
+                            </p>
+                            <div class="van-framepreview">
+                                <div class="van-fpbar-box">
+                                    <span style="width:50%"></span>
+                                </div>
+                            </div>
+                        
+                    </div>
+                    </a>
+                    <a href="#" class="ex-up">
+                            <svg class="small-icon" aria-hidden="true">
+                                    <use xlink:href="#icon-UPzhu"></use>
+                            </svg>
+                            {{videoItem.upName}}
+                    </a>
+                </div>
+            </div>
+        </div>
+            <!--专栏位-->
+            <div class="rank-list">
+                <header class="rank-header">
+                    <span class="name">排行榜</span>
+                    <a href="/ranking/all/3/0/3" target="_blank" class="more">更多
+                        <svg class="small-icon" aria-hidden="true" style="vertical-align: -0.5em;">
+                                <use xlink:href="#icon-you"></use>
+                    </svg> 
+                    </a>
+                </header>
+                <div class="rank-wrap">
+                    <span class="number on">1</span>
+                    <div class="preview">
+                        <!--图片-->
+                        <div class="pic">
+                            <a href="#" class="link">
+                                <img src="//i1.hdslb.com/bfs/archive/d3321bbd0645f01a1583a09fa4ef976ba3b8b3b6.jpg@140w_79h_1c_100q.webp"/>
+                            </a>
+                        </div>
+                        <div class="txt">
+                            <a href="#" class="link">
+                                <p title="" >对不起，我旧病复发，医生说这次需要移植</p>
+                            </a>
+                            <span>综合评分:151.6万</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="rank-wrap">
+                    <span class="number on">2</span>
+                    <a href="#" class="link">
+                         <p class="title">开口以为是青铜，结果是王者的门牙哥来了！Beatbox senorita翻唱</p>
+                    </a>
+                </div>
+                <div class="rank-wrap">
+                    <span class="number on">3</span>
+                    <a href="#" class="link">
+                         <p class="title">【初音ミク】就算没有爱 只要有你就好【ピノキオピー】</p>
+                    </a>
+                </div>
+                <div class="rank-wrap">
+                    <span class="number">4</span>
+                    <a href="#" class="link">
+                         <p class="title">【drum尊】中国的粉丝们，我开B站账号了！</p>
+                    </a>
+                </div>
+            </div>
+        </div>
             </div>
         </div>
     </div>
     </div>  
 </template>
 <style  scoped>
+    @import '../../../static/css/videoRank.css';
+    *{
+        margin: 0;
+        padding: 0;
+    }
+
      .back{
     z-index: -1;
     left: 0px;
@@ -407,6 +435,7 @@
     margin: 0 auto 4px;
   }
   .item-container{
+    height: 68px;
     margin: 0; padding: 0;
     width: 748px;
     display: inline-block;
@@ -462,7 +491,7 @@
        overflow: hidden;
     }
       .small-icon {
-       width: 20px; height: 22px;
+       width: 22px; height: 24px;
        vertical-align: -0.30em;
        fill: currentColor;
        overflow: hidden;
@@ -473,9 +502,8 @@
     */
 
 
-    .recommend-content{
-    
-        margin-top: 30px;
+    .recommend-content,.recommend-content-list{
+        margin-top: px;
         width: 1198px;
         height: 242px;
     }
@@ -547,7 +575,7 @@
     }
 
      .info-box:hover .info{
-        transform:translateY(-80px);
+        transform:translateY(-60px);
         background: rgba(0, 0, 0, 0.5);
      }
 
@@ -555,11 +583,14 @@
         position: absolute;
         z-index: 2;
         width: 100%;
+        height: 116px;
         top: 48px;
         left: 0;
         transition:  .2s;
-        padding: 26px 10px 10px;
+        padding: 40px 10px 10px;
      }
+
+
 
      .title{
         font-size: 14px;
@@ -572,7 +603,7 @@
         white-space: nowrap;
         font-weight: 500;
      }
-     .up .play{
+     .up,.play{
         font-size: 12px;
         color: #e0e0e0;
         margin-bottom: 3px;
@@ -717,7 +748,7 @@
         font-size: 12px;
         color: #999;
         line-height: 16px;
-        margin-top: 100px;
+        margin-top: 80px;
     }
 
     /*
@@ -753,7 +784,6 @@
     .storey-box{
         margin-top: 60px;
         width: 1198px;
-        border:1px solid;
     }
 
     .proxy-box {
@@ -779,34 +809,104 @@
         background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEwAAAAsCAMAAAD4va5DAAAAolBMVEX///8AAAAAAAAAAAAAAAACAgIAAAAAAAAGBgb5+fns7OwAAACBgYHq6ur9/f17e3tgYGD09PSoqKiLi4sAAAANDQ3V1dW6urqPj48DAwMAAAD////u7u7j4+MbGxv////b29vBwcH19fXt7e3GxsaLi4ukpKRTU1P4+Pjl5eXh4eHX19fLy8vb29v4+PisrKwvLy86Ojr7+/vy8vK4uLhVVVX0WqNFAAAANnRSTlOZAgULFR0IACCBYxIvW4sxJmk0HxoXU0grJQ6TZl0cj1RFcmtENTUmfGFYTUlGcT4rI4dyMhsJ24tXAAABiElEQVRIx+3XyW6DMBCA4WnAzrCUJUDYCpQAIWuTdHn/V6sNqZqFAwSfqv4HJHP4ZECIAabT6ZOQGARnazKqhuBYI1EqjYjSxpsCt6gUaZr8cJoWSZRr0FiObcCIDNvhWoNJTgYjyxypxWhkw+jsiHJsQjVjPGZodMIxSQMBaVKLySIw+R/jxX5lXK2LFYDqK4/tLCeby+UadwA7XAzECj/Py7KcuXVZ5rnv+zHfmEXYzvbuUOwVyU+IGIYhxxLipp4ne15K2Dm/P0Y2ylV8tyQNWF+yEwS6ac4HYC9w0wLT5vr28tvgy7zD3msbhGHqRm369LZqW/Y4FiJxWR7LdQnBMFR6Ylss4KYkSZ4vYkujJ7bDhbjX6YAruGu9nLGW7THvj1Vo3GNzcrIsq64tFtH7YyeELuz3qaT9MQUrcZiKW3HYISw6MSvQddM0dT0gvbH4eIy7MLS41Who9r9nc+hoXX3Auazy/84HZSAmdjwQOriIHKmEDnuCx1ChA7LI0V3sT4XQ351vRIIkxg4KQCAAAAAASUVORK5CYII=);
         background-size: cover;
     }
+
+
+
+    /** 
+        频道视频通用模块
+    */
+
+    .zone-list-box{
+        width:880px;
+        height: 404px;
+        margin: 0;padding: 0;
+    }
     
-</style>
-
+</style>   
 <script>
+import https from '../../https.js'  
+/*
+         *
+         * String: className
+         * 指定 lazyLoad 应该使用懒加载的类名
+         *
+         * function: callback
+         * 指定 lazyLoad 的元素到达加载时机触发的回调函数
+         * 该回调函数携带了一个参数，为当前到达加载时机的元素
+         * 
+         */
 
+var myVue = {
+
+}
+let videoIndex = 0;
+function lazyLoad (className, callback) {
+    var imgs = document.getElementsByClassName(className);
+    var curI = 0;
+
+    window.addEventListener('scroll', scroll);
+    scroll();
+
+    function loadable (ele) {
+        if (document.documentElement.scrollTop + document.documentElement.clientHeight >= ele.offsetTop) {
+            return true
+        }
+        return false
+    }
+
+    function scroll () {
+        for ( var i = curI; i < imgs.length; i++) {
+            if (loadable(imgs[i])) {
+                callback.call(imgs[i], imgs[i]);
+                curI++;
+            }
+        }
+    }
+}
+lazyLoad('zone-list-box', function (ele) {
+    myVue.$axios.get("http://localhost:8081/category/random/"+ele.id)
+    .then(res => {
+        res = res.data;
+        console.log(res)
+        myVue.$set(myVue.videoList,ele.id,res.data)
+    })
+    .catch(err => {
+        console.error(err); 
+    })
+});
 export default {
     data(){
         return{
-            items:[
-                    {name:"动画",num:"999+"},
-                    {name:"动画",num:"999+"},
-                    {name:"动画",num:"999+"},
-                    {name:"动画",num:"999+"},
-                    {name:"动画",num:"999+"},
-                    {name:"动画",num:"999+"},
-                    {name:"动画",num:"999+"},
-                    {name:"动画",num:"999+"},
-                    {name:"动画",num:"999+"},
-                    {name:"动画",num:"999+"},
-                    {name:"动画",num:"999+"},
-                    {name:"动画",num:"999+"},
-                    {name:"动画",num:"999+"},
-                    {name:"动画",num:"999+"},
-                    {name:"动画",num:"999+"},
-                    {name:"动画",num:"999+"}
-                ],
-                imageUrl:require("../../assets/image.jpg")
+            items:null,
+            imageUrl:require("../../assets/image.jpg"),
+            recommendList:null,
+            videoList:new Array(10)
       }
-        }
+    },
+    mounted(){
+        //加载频道+
+        this.$axios.get("http://localhost:8081/category")
+        .then(res => {
+            res = res.data
+            console.log(res.message);
+            this.items=res.data;
+        })
+        .catch(err => {
+            console.error(err); 
+        })
+
+        //加载推荐视频
+        this.$axios.get("http://localhost:8081/video/recommend/1")
+        .then(res => {
+            res = res.data
+            this.recommendList = res.data
+        })
+        .catch(err => {
+            console.error(err); 
+        })
+    },
+    created(){
+        myVue = this;
     }
+}
 </script>
