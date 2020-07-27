@@ -2,6 +2,7 @@ import Vue from 'vue'
 import home from "../page/home/home.vue"
 import videodetails from "../page/video/videodetails.vue"
 import login from "../page/login/login.vue"
+import barrage from "../components/VBarrage/index.vue"
 import Router from 'vue-router'
 import axios from 'axios'
 Vue.use(Router)

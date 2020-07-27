@@ -1,6 +1,6 @@
 <template>
   <div id="hello">
-    <remote-js src="http://at.alicdn.com/t/font_1923532_t27fwckkxkh.js"></remote-js>
+    <remote-js src="http://at.alicdn.com/t/font_1923532_bn9qyf8ma.js"></remote-js>
      <el-row class="head">
         <el-col :span="num"><a href="/header"><div class="grid-content bg-purple">主站</div></a></el-col>
         <el-col :span="num"><div class="grid-content bg-purple">番剧</div></el-col>
@@ -12,7 +12,7 @@
         <el-col :span="num"><div class="grid-content bg-purple">歌会</div></el-col>
         <el-col :span="6">
             <el-input placeholder="请输入内容" v-model="input3" class="input-with-select" style="margin-top:10px"/>
-            <el-button slot="append" icon="el-icon-search"></el-button>
+            <el-button slot="append" icon="el-icon-search">搜索</el-button>
         </el-col>
         <el-col :span="0.5">
             <el-avatar :size="size" :src="circleUrl" style="margin-top: 10px;margin-left: 20px;"></el-avatar>
@@ -34,7 +34,10 @@ export default {
   data () {
     return {
       msg: 'Welcome to Your Vue.js App',
-      num: '1'
+      num: 1,
+      size: 1,
+      input3: null,
+      circleUrl:null
     }
   },
   components: {

@@ -301,11 +301,14 @@
             <div class="zone-list-box" :id="item.id">
                 <div class="video-card-common" v-for="(videoItem, index) in videoList[item.id] " :key="index">
                     <a :href="'#/details?id='+videoItem.id" target="view_window">
-                    <div class="card-pic">
+                    <div class="card-pic" @mousemove="movePreview($event)">
                             <img :src="videoItem.cover"/> 
                             <div class="count">
                                <div class="left"></div>
                                <div class="right"></div>
+                            </div>
+                            <div class="preview-container" :background-url="videoItem.previewUrl">
+                                
                             </div>
                             <p class="ex-title">
                                 {{videoItem.title}}
@@ -683,7 +686,7 @@
 
     .card-pic{
         width: 100%;
-        height: 96px;
+        height: 116px;
     }
 
     .count{
@@ -822,6 +825,22 @@
         margin: 0;padding: 0;
     }
     
+
+    /**
+        预览图样式
+    */
+
+    .preview-container{
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 116px;
+        pointer-events: none;
+        overflow: hidden;
+        transition: opacity .3s;
+        z-index: 1;
+    }
 </style>   
 <script>
 import https from '../../https.js'  
@@ -907,6 +926,12 @@ export default {
     },
     created(){
         myVue = this;
+    },
+    methods:{
+        movePreview:function(event){
+            let x = event.offsetX;
+            let i = x
+        }
     }
 }
 </script>

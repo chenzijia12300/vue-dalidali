@@ -5,29 +5,31 @@
             </div>
             <div class="l-con">
                 <div class="video-header-info">
-                    <h1 title="巴西总统宣布确诊&nbsp;转头就为特朗普推荐的“神药”代言" class="video-title">
+                    <h1 :title="details.title" class="video-title">
                         <!---->
-                        <span class="tit">巴西总统宣布确诊&nbsp;转头就为特朗普推荐的“神药”代言</span>
+                        <span class="tit">{{details.title}}</span>
                         </h1>
                     <div class="video-data">
                         <span class="a-crumbs">
                             <a target="_blank" href="//www.bilibili.com/v/information/"
-                            >资讯</a><i class="van-icon-general_enter_s"></i>
-                            <a target="_blank" href="//www.bilibili.com/v/information/global/">环球</a>
+                            >{{details.categoryPName}}</a>
+                            >
+                            <a target="_blank" href="//www.bilibili.com/v/information/global/">{{details.categoryName}}</a>
                             </span><span>2020-07-08 14:13:48</span>
                             <!---->
                             </div>
                             <div class="video-data">
-                                <span title="总播放数128539" class="view">
-                                    12.9万播放&nbsp;·&nbsp;
-                                </span><span title="历史累计弹幕数503" class="dm">503弹幕</span><span class="copyright"><i class="van-icon-info_prohibit"></i>未经作者授权，禁止转载</span><!----></div>
+                                <span :title="details.playNum+'总播放数'" class="view">
+                                    {{details.playNum}}播放量&nbsp;·&nbsp;
+                                </span><span title="历史累计弹幕数503" class="dm">{{details.danmuNum}}弹幕</span><span class="copyright"><i class="van-icon-info_prohibit"></i>未经作者授权，禁止转载</span><!----></div>
                 </div>
                  <div class="player-wrap">
-                <video-player  class="video-player vjs-custom-skin"
-                    ref="videoPlayer" 
-                    :playsinline="true" 
-                    :options="playerOptions"
-                ></video-player>
+                    <v-barrage :arr="arr"
+                        :isPause="isPause"
+                        :percent="100"
+                        :videoUrl="details.urls"
+                        >
+                    </v-barrage>
                 </div>
                 <div class="player-bottom">
                     <div class="player-video-sendbar">
@@ -135,6 +137,7 @@
                     </div>
                 </div>
             </div>
+
             </div>
 
 </template>
@@ -142,7 +145,13 @@
 <style scoped>
 
 
-
+    a{
+        color: #999;
+        text-decoration: none;
+    }
+    a:link:hover, a:visited {
+        text-decoration: none;
+    }
 
     /*
         详细页的开始
@@ -169,6 +178,7 @@
      */
 
      .r-con{
+        position: relative;
         float:right;
         width: 320px;
         margin-left: 30px;
@@ -317,6 +327,13 @@
         box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.08);
     }
 
+
+    .barrage{
+        width:400px;
+        height: 400px;
+        border: 1px solid;
+    }
+
     /**
         左边内容
       */
@@ -380,6 +397,7 @@
         }
 
         .player-wrap{
+            position: relative;
             width:802px;
             height: 585px;
             border: 1px solid;
@@ -528,26 +546,78 @@
             color: #757575;
         }
 
-    
-
+        /**
+            视频播放器样式
+         */
+        .video-js{
+            position: relative;
+            border: 1px solid;
+            width: 100%;
+            height: 100%;
+            display: block;
+            z-index: 99999;
+        }
 
 
 
 </style>
 <script>
-
+import '@/https.js'
+import vBarrage from '@/components/VBarrage/index.vue'
 export default {
+    components:{
+        vBarrage
+    },
     data(){
         return{
             isheader:true,
-            playerOptions:{
-                height:585,
-                 sources: [{
-                    type: "video/mp4",//这里的种类支持很多种：基本视频格式、直播、流媒体等，具体可以参看git网址项目
-                    src: require("@/assets/video.mp4") //url地址
-                }]
+        
+            value:null,
+            details:null,
+            arr:[],
+            isPause: false
+        }
+    },
+    created(){
+        const videoId = this.$route.query.id
+        this.$axios.get("http://localhost:8081/video/"+videoId+"?userId=1")
+        .then(res => {
+            res = res.data
+            console.log(res)
+            this.details=res.data
+        })
+        .catch(err => {
+            console.error(err); 
+        })
+    },
+    mounted(){
+        this.initTestData();
+    },
+    methods:{
+            // 初始化模拟弹幕数据
+        initTestData () {
+        let arr = [
+            '这是一条有弹幕',
+            '今天去打LOL',
+            '可以吗？',
+            '一起嗨！！！'
+        ]
+        for (let i = 0; i < 6; i++) {
+            for (let index = 0; index < 1000; index++) {
+            if (index % 2 == 0) {
+                this.arr.push({
+                direction: 'top',
+                content: arr[parseInt(Math.random() * arr.length)]
+                })
+            } else {
+                this.arr.push({
+                direction: 'default',
+                content: arr[parseInt(Math.random() * arr.length)]
+                })
+            }
             }
         }
+        }
     }
-    }
+}
 </script>
