@@ -2,7 +2,7 @@ import Vue from 'vue'
 import home from "../page/home/home.vue"
 import videodetails from "../page/video/videodetails.vue"
 import login from "../page/login/login.vue"
-import barrage from "../components/VBarrage/index.vue"
+import comments from "../components/comment/Comment.vue"
 import Router from 'vue-router'
 import axios from 'axios'
 Vue.use(Router)
@@ -24,6 +24,11 @@ export default new Router({
       path: '/',
       name: 'home',
       component: home
+    },
+    {
+      path: '/comments',
+      name: 'comments',
+      component: comments
     }
   ]
 })

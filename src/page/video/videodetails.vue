@@ -21,7 +21,11 @@
                             <div class="video-data">
                                 <span :title="details.playNum+'总播放数'" class="view">
                                     {{details.playNum}}播放量&nbsp;·&nbsp;
-                                </span><span title="历史累计弹幕数503" class="dm">{{details.danmuNum}}弹幕</span><span class="copyright"><i class="van-icon-info_prohibit"></i>未经作者授权，禁止转载</span><!----></div>
+                                </span><span title="历史累计弹幕数503" class="dm">{{details.danmuNum}}弹幕</span><span class="copyright">
+                                    <svg aria-hidden="true" style="width:14px;height:14px;vertical-align:middle">
+                                        <use xlink:href="#icon-jinzhi"></use>
+                                    </svg>
+                                    未经作者授权，禁止转载</span><!----></div>
                 </div>
                  <div class="player-wrap">
                     <v-barrage :arr="arr"
@@ -67,29 +71,39 @@
                             </div>
                     </div>
                 </div>
-                    <div class="ops">
-                        <span title="点赞数4098" class="like"><!----><!----><!----><!----><!---->
-                            <svg class="gg-icon" aria-hidden="true">
-                                <use xlink:href="#icon-dianzan"></use>
-                            </svg>
-                            4098</span>
-                        <span title="投硬币枚数1446" class="coin">
-                            <svg class="gg-icon" aria-hidden="true">
-                                <use xlink:href="#icon-icon_shipin_yingbishu"></use>
-                            </svg>
-                            1446</span>
-                        <span title="收藏人数894" class="collect">
-                    
-                            <svg class="gg-icon" aria-hidden="true">
-                                <use xlink:href="#icon-xingxing"></use>
-                            </svg>
-                            894</span>
-                        <span title="分享" class="share">
-                            <svg class="gg-icon" aria-hidden="true">
-                                <use xlink:href="#icon-forward"></use>
-                            </svg>
-                        102</span>
-                    </div>
+                <div class="ops">
+                    <span title="点赞数4098" class="like"><!----><!----><!----><!----><!---->
+                        <svg class="gg-icon" aria-hidden="true">
+                            <use xlink:href="#icon-dianzan"></use>
+                        </svg>
+                        4098</span>
+                    <span title="投硬币枚数1446" class="coin">
+                        <svg class="gg-icon" aria-hidden="true" style="background-color:gray;border-radius: 50%;border:none">
+                            <use xlink:href="#icon-icon_shipin_yingbishu"></use>
+                        </svg>
+                        1446</span>
+                    <span title="收藏人数894" class="collect">
+                
+                        <svg class="gg-icon" aria-hidden="true">
+                            <use xlink:href="#icon-xingxing"></use>
+                        </svg>
+                        894</span>
+                    <span title="分享" class="share">
+                        <svg class="gg-icon" aria-hidden="true">
+                            <use xlink:href="#icon-forward"></use>
+                        </svg>
+                    102</span>
+                </div>
+
+                <!--视频简介-->
+                <div class="video-desc">
+                    <span class="info">家本是爱的港湾，而不是仇恨暴力的场所。彼此尊重才能真正解决家暴问题。</span>
+                </div>
+                <div>
+                    <comment></comment>
+                </div>
+
+
             </div>
             <div class="r-con">
                 <div class="up-info">
@@ -373,12 +387,7 @@
             font-size: 12px;
             height: 16px;
             color: #999;
-            display: -ms-flexbox;
-            display: flex;
-            -ms-flex-align: center;
-            align-items: center;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            vertical-align:middle;
         }
 
         .a-crumbs {
@@ -416,12 +425,13 @@
         }
 
         .ops{
+            border-bottom: 1px solid #e5e9f0;
             position: relative;
             float: left;
             height: 24px;
             margin: 20px 0;
-            padding: 0;
-            border: 0;
+            padding-bottom:12px;
+            width: 100%;
             font-size: 100%;
             vertical-align: baseline;
         }
@@ -558,15 +568,33 @@
             z-index: 99999;
         }
 
+        /**
+            视频简介样式
+         */
+
+         .video-desc .info {
+            white-space: pre-line;
+            transition: all .3s;
+            font-size: 12px;
+            color: #212121;
+            letter-spacing: 0;
+            line-height: 18px;
+            height: 63px;
+            width: 573px;
+            overflow: hidden;
+        }
+
 
 
 </style>
 <script>
 import '@/https.js'
 import vBarrage from '@/components/VBarrage/index.vue'
+import comment from '@/components/comment/Comment.vue'
 export default {
     components:{
-        vBarrage
+        vBarrage,
+        comment
     },
     data(){
         return{

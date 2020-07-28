@@ -291,33 +291,44 @@
                             <use xlink:href="#icon-tuiguang"></use>
                     </svg>
                     <a href="#" class="link-name">{{item.name}}</a>
-                    <a href="#" class="text-info-link">
-                        <svg class="small-icon" aria-hidden="true">
-                            <use xlink:href="#icon-huoyandaping"></use>
-                        </svg> 
-                    </a>
+                    
                 </div>
             </header>
             <div class="zone-list-box" :id="item.id">
                 <div class="video-card-common" v-for="(videoItem, index) in videoList[item.id] " :key="index">
                     <a :href="'#/details?id='+videoItem.id" target="view_window">
-                    <div class="card-pic" @mousemove="movePreview($event)">
+                    <div class="card-pic"  @mousemove="movePreview($event)" @mouseout="clearPreview($event)">
                             <img :src="videoItem.cover"/> 
                             <div class="count">
-                               <div class="left"></div>
-                               <div class="right"></div>
+                               <div class="left">
+                                   <span style="margin-right:16px">
+                                        <svg style="width:16px;height:16px;vertical-align: middle;" aria-hidden="true">
+                                                <use xlink:href="#icon-bofangshu"></use>
+                                        </svg>
+                                        {{videoItem.playNum}}
+                                    </span>
+                                    <span>
+                                        <svg style="width:14px;height:14px;vertical-align: middle;" aria-hidden="true">
+                                            <use xlink:href="#icon-zan"></use>
+                                        </svg>  
+                                        {{videoItem.praiseNum}}
+                                    </span>
+                               </div>
+                               <div class="right">
+                                   <span>{{videoLength(videoItem.length)}}</span>
+                               </div>
                             </div>
-                            <div class="preview-container" :background-url="videoItem.previewUrl">
-                                
+                            <div id="preview-container" class="preview-container" :style="{backgroundImage: 'url(' + videoItem.previewUrl + ')'}">
+                                <div class="van-framepreview">
+                                <div class="van-fpbar-box">
+                                    <span  class="progress-bar"></span>
+                                </div>
+                            </div>    
                             </div>
                             <p class="ex-title">
                                 {{videoItem.title}}
                             </p>
-                            <div class="van-framepreview">
-                                <div class="van-fpbar-box">
-                                    <span style="width:50%"></span>
-                                </div>
-                            </div>
+                            
                         
                     </div>
                     </a>
@@ -562,6 +573,7 @@
      }
 
      .info-box{
+        margin-right: 5px;
         display: inline-block;
         width: 206px;
         height: 116px;
@@ -690,12 +702,14 @@
     }
 
     .count{
+        line-height: 10px;
+        font-size: 12px;
+        z-index: 999;
         position: absolute;
         bottom: 0;
         width: 190px;
         padding: 6px 8px;
         color: #fff;
-        line-height: 16px;
     }
 
     .ex-title{
@@ -751,7 +765,7 @@
         font-size: 12px;
         color: #999;
         line-height: 16px;
-        margin-top: 80px;
+        margin-top: 60px;
     }
 
     /*
@@ -836,10 +850,15 @@
         top: 0;
         width: 100%;
         height: 116px;
-        pointer-events: none;
-        overflow: hidden;
-        transition: opacity .3s;
-        z-index: 1;
+        z-index: -1;
+    }
+
+    .left{
+        float: left;
+    }
+
+    .right{
+        float: right;
     }
 </style>   
 <script>
@@ -929,8 +948,27 @@ export default {
     },
     methods:{
         movePreview:function(event){
+            let target = event.currentTarget.getElementsByClassName("preview-container")[0];;
             let x = event.offsetX;
-            let i = x
+            let i = Math.ceil(x/(206/10));
+            target.style.backgroundPosition=""+(-i*206)+"px 0px";
+            target.style.zIndex=999;
+            let progressBar = target.getElementsByClassName("progress-bar")[0];
+            console.log(target);
+            progressBar.style.width=i*10+"%"
+
+        },
+        clearPreview:function(){
+            let target = event.currentTarget.getElementsByClassName("preview-container")[0];
+            target.style.zIndex=-1;
+            console.log("移除~")
+        },
+        videoLength:function(length){
+            console.log(length);
+            let minutes = parseInt(length/60);
+            minutes = minutes<10?'0'+minutes:minutes;
+            console.log(minutes);
+            return minutes+":"+(length%60)
         }
     }
 }
