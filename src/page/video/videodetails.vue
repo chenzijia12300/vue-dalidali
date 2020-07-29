@@ -99,6 +99,22 @@
                 <div class="video-desc">
                     <span class="info">家本是爱的港湾，而不是仇恨暴力的场所。彼此尊重才能真正解决家暴问题。</span>
                 </div>
+                <!--视频标签-->
+                <div class="video-tags">
+                    <ul>
+                        <li class="tag">
+                            <a href="#" class="tag-link">飙戏</a>
+                        </li>
+                    </ul>
+                </div>
+                <!--相关广告-->
+                <div class="advertising-container">
+                    <a href="#">
+                        <div class="lazy-img">
+                            <img src="https://i0.hdslb.com/bfs/sycp/creative_img/202007/518e7372b19fc0dd0c51931d4c459a45.jpg"/>
+                        </div>
+                    </a>
+                </div>
                 <div>
                     <comment></comment>
                 </div>
@@ -157,7 +173,10 @@
 </template>
 
 <style scoped>
-
+    *{
+        margin: 0;
+        padding: 0;
+    }
 
     a{
         color: #999;
@@ -584,6 +603,69 @@
             overflow: hidden;
         }
 
+        /**
+            标签样式
+         */
+        .video-tags{
+            margin-top: 16px;
+            position: relative;
+            clear: both;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e5e9ef;
+        }
+
+        .video-tags ul{
+            height: 32px;
+            list-style: none;
+            outline: none;
+        }
+
+        .video-tags ul .tag{
+            float: left;
+            margin: 0 10px 8px 0;
+            background: #f4f4f4;
+            border-radius: 100px;
+            padding: 0 12px;
+            position: relative;
+            height: 22px;
+            line-height: 22px;
+            transition: all .3s;
+            font-size: 12px;
+            border: 1px solid #f4f4f4;
+        }
+
+        .tag-link {
+            display: inline-block;
+            height: 22px;
+            color: #505050;
+            position: relative;
+            z-index: 10;
+            transition: all .3s;
+        }       
+
+        /**
+            广告相关样式
+         */
+
+        .advertising-container{
+            width: 100%;
+            max-width: 1279px;
+            max-height: 106px;
+            border-radius: 2px;
+        }
+
+        .lazy-img{
+            width: 100%;
+            height: 100%;
+            display: inline-block;
+        }
+        img{
+            width: 100%;
+            height: 100%;
+            border-radius: 2px;
+        }
+
 
 
 </style>
@@ -599,7 +681,7 @@ export default {
     data(){
         return{
             isheader:true,
-        
+            videoId:0,
             value:null,
             details:null,
             arr:[],
@@ -607,8 +689,8 @@ export default {
         }
     },
     created(){
-        const videoId = this.$route.query.id
-        this.$axios.get("http://localhost:8081/video/"+videoId+"?userId=1")
+        this.videoId = this.$route.query.id
+        this.$axios.get("http://localhost:8081/video/"+this.videoId+"?userId=1")
         .then(res => {
             res = res.data
             console.log(res)

@@ -3,7 +3,6 @@
 		
 
 		<div class="comm">
-			<div class="su com-rep"></div>
 			<div class="com-rep com-title">{{commentNum}} 评论</div>
 		</div>
 		
@@ -14,7 +13,7 @@
 			layout="prev, pager, next"
 			:total="50">
 		  	</el-pagination>
-		  <el-tabs v-model="activeName" @tab-click="handleClick" class="comment-tabs">
+		  <el-tabs v-model="activeName" class="comment-tabs">
 
 			<el-tab-pane label="按热度排序" name="first" style="border:none">
 				<general></general>
@@ -114,6 +113,7 @@
 	  },	
 	  data() {
 	    return {
+            activeName:"first",
 			replyMap:[
 				],
 			buttonMap:[],	
@@ -272,7 +272,15 @@
            
         },
         mounted(){//页面加载完成后
-
+			this.$axios.get("http://localhost:8082/comment/list/VIDEO/"+this.$route.query.id+"/1/8?userId=1",)
+			.then(res => {
+				res = res.data
+				this.commentsList = res.data
+				console.log(this.commentsList)
+			})
+			.catch(err => {
+				console.error(err); 
+			})
         }
 
 	}
@@ -634,7 +642,7 @@
 	text-align: left;
 }
 .comm{
-		padding: 20px;
+        padding-top: 20px;
 	}
 	.su{
 		margin-top: 2px;

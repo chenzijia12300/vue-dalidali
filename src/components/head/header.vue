@@ -1,6 +1,6 @@
 <template>
   <div id="hello">
-    <remote-js src="http://at.alicdn.com/t/font_1923532_jhlzp3bwu0c.js"></remote-js>
+    <remote-js src="http://at.alicdn.com/t/font_1923532_gtgrb1669r.js"></remote-js>
      <el-row class="head">
         <el-col :span="num"><a href="/header"><div class="grid-content bg-purple">主站</div></a></el-col>
         <el-col :span="num"><div class="grid-content bg-purple">番剧</div></el-col>

@@ -1,19 +1,24 @@
 <template>
     <div>
-        		<div class="hbl-comm">
+        	<div class="hbl-comm">
+				<button type="submit" class="comment-submit" @click="submitComment">
+							发表评论
+				</button>
 			<div class="comment-avatar" v-if="showAvatar">
 			<avatar :avatar="avatar"></avatar>
 			</div>
 			<div class="comment" :style="{width:commentWidth}">
 				<el-input
+				  resize="none"
+				  style="height:64px"
 				  @focus="showButton(0)"
 				  type="textarea"
 				  :autosize="{ minRows: minRows, maxRows: maxRows}"
 				  :placeholder=placeholder
 				  v-model="textareaMap[0]">
 				</el-input>
-
-				 <div v-if="buttonMap[0]" class="hbl-owo">
+			
+				 <div  class="hbl-owo">
 					 	<div :class="pBodyMap[0]?'OwO':'OwO OwO-open'" class="emoj publish" :style="{width:emojiWidth}">
 		                    <div class="OwO-logo" @click="pBodyStatus(0)">
 		                        <span>Emoji表情</span>
@@ -27,11 +32,7 @@
 		                       
 		                    </div>
 		                </div>
-
-		                <div class="publish publish-btn">
-		                	  <button class="btn" @click="doSend()">发送</button>
-		                	  <button @click="cancel(0)" class="btn btn-cancel">取消</button>
-		                </div>
+					
 				 </div>
 
 			</div>
@@ -41,95 +42,74 @@
 
 
 
-		<div v-for="(item,index) in commentList" class="hbl-child">
+		<div v-for="(item,index) in commentsList" class="hbl-child" v-bind:key="index">
 			<div class="reply">
 			</div>
 			<div class="content">
 				<div class="comment-f">
-					<avatar :avatar="item.commentUser.avatar?item.commentUser.avatar:avatar"></avatar>
+					<avatar :avatar="item.img?item.img:avatar" ></avatar>
 				</div>
 				
 				<div  class="comment-f">
 					<div>
 						<div class="nickname author">
-							{{item.commentUser.nickName}}
+							{{item.username}}
 						</div>
-						<div v-if="item.commentUser.id===authorId" class="icon author">{{label}}</div>
-						<div class="date">
-							{{item.createDate}}
-						</div>
+						<svg class="lv-icon" aria-hidden="true">
+                            	<use xlink:href="#icon-dengji"></use>
+                        </svg>
+						
 
 						
 					</div>
 				</div>
 
-				 <div class="reply-content" v-html="analyzeEmoji(item.content)">{{analyzeEmoji(item.content)}}</div>
-				<div class="reply-content reply-fa">
-							<div class="reply-font" @click="doReply(item.id)">
-								<div>
-									<img src="../img/icon/reply.png" class="icon-reply"><font class="icon-reply icon-hf">回复</font>
-								</div>
-								
-							</div>
+				 <div class="comment-content" v-html="analyzeEmoji(item.content)">
+					 {{analyzeEmoji(item.content)}}
 
-											<div class="comment" :style="{width:commentWidth}" v-if="replyMap[item.id]" :showAvatar="showAvatar"  >
-												<el-input
-												  @focus="showButton(item.id)"
-												  type="textarea"
-												  :autosize="{ minRows: minRows, maxRows: maxRows}"
-												  :placeholder=placeholder
-												  v-model="textareaMap[item.id]">
-												</el-input>
-
-												 <div v-if="buttonMap[item.id]" class="hbl-owo">
-													 	<div :class="pBodyMap[item.id]?'OwO':'OwO OwO-open'" class="emoj publish" :style="{width:emojiWidth}">
-										                    <div class="OwO-logo" @click="pBodyStatus(item.id)">
-										                        <span>Emoji表情</span>
-										                    </div>
-										                    <div class="OwO-body">
-										                        <ul class="OwO-items OwO-items-show">
-										                            <li class="OwO-item" v-for="(oitem,index) in OwOlist" :key="'oitem'+index" @click="choseEmoji(item.id,oitem.title)">
-										                                 <img :src="require('../img/face/'+oitem.url)" alt="">
-										                            </li>
-										                        </ul>
-										                       
-										                    </div>
-										                </div>
-
-										                <div class="publish publish-btn">
-										                	  <button class="btn" @click="doChidSend(item.id,item.commentUser.id,item.id)">发送</button>
-										                	  <button @click="cancel(item.id)" class="btn btn-cancel">取消</button>
-										                </div>
-												 </div>
-
-											</div>
+					
 				</div>
-
-			</div>
-	
-			<div class="children" v-for="(ritem,jndex) in item.childrenList">
+				 <div class="info">
+						<div class="date">
+								{{item.createTime}}
+						</div>
+						<span class="like">
+							<svg class="small-icon" aria-hidden="true">
+                            	<use xlink:href="#icon-zan1"></use>
+                        	</svg>
+							{{item.praiseNum}}
+						</span>
+						<span class="hate">
+							<svg class="small-icon" aria-hidden="true">
+                            	<use xlink:href="#icon-zan1-copy"></use>
+                        	</svg>
+						
+						</span>
+						<span class="replyButton" @click="showReply(item.nickName,item.index)">
+							回复
+						</span>
+				</div>
+					
+			<div class="children" v-for="(ritem,rindex) in item.childrenList" v-bind:key="rindex">
 				<div class="reply">
 				</div>
 				<div class="content">
 						<div class="comment-f">
-							<avatar :avatar="ritem.commentUser.avatar?ritem.commentUser.avatar:avatar"></avatar>
+							<avatar :avatar="ritem.commentUser.avatar?ritem.commentUser.avatar:avatar" style="width:24px;height:24px"></avatar>
 						</div>
-						
-						<div  class="comment-f">
+								
+						<div  class="comment-f" style="display:inline-block">
 							<div>
 								<div class="nickname author">
 									{{ritem.commentUser.nickName}}
 								</div>
-								<div v-if="ritem.commentUser.id===authorId" class="icon author">{{label}}</div>
-								<div class="date">
-									{{ritem.createDate}}
-								</div>
-
-								
+								<svg class="lv-icon" aria-hidden="true">
+                            		<use xlink:href="#icon-dengji"></use>
+                        		</svg>
 							</div>
 						</div>
 
-						<div class="reply-content">
+						<div class="reply-content" style="display:inline-block">
 							<div class="cc cc-to">
 								<a href="#">@{{ritem.targetUser.nickName}}</a>
 							</div>
@@ -137,49 +117,64 @@
 							 <div class="cc" v-html="analyzeEmoji(ritem.content)">{{analyzeEmoji(ritem.content)}}</div>
 						</div>
 
-						<div class="reply-content reply-fa">
-							<div class="reply-font" @click="doReply(ritem.id)">
-								<div>
-									<img src="../img/icon/reply.png" class="icon-reply"><font class="icon-reply icon-hf">回复</font>
-								</div>
-								
+						<div class="reply-info">
+							<div class="date">
+									{{item.createDate}}
 							</div>
+							<span class="like">
+								<svg class="small-icon" aria-hidden="true">
+									<use xlink:href="#icon-zan1"></use>
+								</svg>
+								2318
+							</span>
+							<span class="hate">
+								<svg class="small-icon" aria-hidden="true">
+									<use xlink:href="#icon-zan1-copy"></use>
+								</svg>
+							
+							</span>
+							<span class="replyButton" @click="showReply(ritem.commentUser.nickName,index)">
+								回复
+							</span>
+				 		</div>
 
-
-											<div class="comment" :style="{width:commentWidth}" v-if="replyMap[ritem.id]" :showAvatar="showAvatar">
-												<el-input
-												  @focus="showButton(ritem.id)"
-												  type="textarea"
-												  :autosize="{ minRows: minRows, maxRows: maxRows}"
-												  :placeholder=placeholder
-												  v-model="textareaMap[ritem.id]">
-												</el-input>
-
-												 <div v-if="buttonMap[ritem.id]" class="hbl-owo">
-													 	<div :class="pBodyMap[ritem.id]?'OwO':'OwO OwO-open'" class="emoj publish" :style="{width:emojiWidth}">
-										                    <div class="OwO-logo" @click="pBodyStatus(ritem.id)">
-										                        <span>Emoji表情</span>
-										                    </div>
-										                    <div class="OwO-body">
-										                        <ul class="OwO-items OwO-items-show">
-										                            <li class="OwO-item" v-for="(oitem,index) in OwOlist" :key="'oitem'+index" @click="choseEmoji(ritem.id,oitem.title)">
-										                                <img :src="require('../img/face/'+oitem.url)" alt="">
-										                            </li>
-										                        </ul>
-										                      
-										                    </div>
-										                </div>
-
-										                <div class="publish publish-btn">
-										                	  <button class="btn" @click="doChidSend(ritem.id,ritem.commentUser.id,item.id)">发送</button>
-										                	  <button @click="cancel(ritem.id)" class="btn btn-cancel">取消</button>
-										                </div>
-												 </div>
-
-											</div>
-						</div>
 				</div>
 			</div>
+			<div class="reply-textarea"  v-if="isShowReply[index]">
+					<div class="comment-avatar">
+						<avatar :avatar="avatar"></avatar>
+					</div>
+					<div class="comment" :style="{width:commentWidth}">
+						<el-input
+						resize="none"
+						style="height:64px"
+						@focus="showButton(0)"
+						type="textarea"
+						:autosize="{ minRows: minRows, maxRows: maxRows}"
+						:placeholder=placeholder
+						v-model="textareaMap[index]">
+						</el-input>
+					
+						<div  class="hbl-owo">
+								<div :class="pBodyMap[0]?'OwO':'OwO OwO-open'" class="emoj publish" :style="{width:emojiWidth}">
+									<div class="OwO-logo" @click="pBodyStatus(0)">
+										<span>Emoji表情</span>
+									</div>
+									<div class="OwO-body">
+										<ul class="OwO-items OwO-items-show">
+											<li class="OwO-item" v-for="(oitem,index) in OwOlist" :key="'oitem'+index" @click="choseEmoji(0,oitem.title)">
+												<img :src="require('../img/face/'+oitem.url)" alt="">
+											</li>
+										</ul>
+									
+									</div>
+								</div>
+							
+						</div>
+
+					</div>
+			</div>
+		</div>
 		</div>
     </div>
 </template>
@@ -205,11 +200,11 @@
 	  	},
 	  	minRows:{
 	  		type:Number,
-	  		default:4
+	  		default:2.5
 	  	},
 	  	maxRows:{
 	  		type:Number,
-	  		default:4
+	  		default:2.5	
 	  	},
 	  	commentNum:{
 	  		type:Number,
@@ -234,8 +229,7 @@
                   avatar:'http://qzapp.qlogo.cn/qzapp/101483738/6637A2B6611592A44A7699D14E13F7F7/50'
               },
               content:"<a style='text-decoration:none;color: #409eff ' href='https://blog.csdn.net/abcwanglinyong/'>我的CSDN博客地址</a>[害羞][害羞][害羞]<br/>"
-              +"我的微信公众号：<br/>"
-              +"<img src="+require('../img/hbl.jpg')+">",
+              +"我的微信公众号：<br/>",
               createDate:'2019-9-23 17:36:02',
               childrenList:[
                 {
@@ -252,8 +246,22 @@
                   },
                   content:'真的就很棒！很Nice!',
                   createDate:'2019-9-23 17:45:26'
+                },
+				{
+                  id:2,
+                  commentUser:{
+                    id:2,
+                    nickName:'坏菠萝',
+                    avatar:''
+                  },
+                  targetUser:{
+                    id:1,
+                    nickName:'花非花',
+                    avatar:'http://qzapp.qlogo.cn/qzapp/101483738/6637A2B6611592A44A7699D14E13F7F7/50'
+                  },
+                  content:'真的就很棒！很Nice!',
+                  createDate:'2019-9-23 17:45:26'
                 }
-
               ]
             },
 				]
@@ -266,10 +274,14 @@
 	  },	
 	  data() {
 	    return {
+			commentsList:[],
+			nowTextarea:null,
+			nowReply:-1,
+			isShowReply:[],
 			replyMap:[
 				],
 			buttonMap:[],	
-			pBodyMap:[],
+			pBodyMap:[true],
 			textareaMap:[],
                 OwOlist:[//表情包和表情路径
                     {'title':'微笑','url':'weixiao.gif'},
@@ -355,7 +367,7 @@
 		    	showButton(index){
 		    		//this.showFlag = true;
 		    		console.log(index+"index");
-		    		this.$set(this.buttonMap,index,true)
+		    		
 		    	},
 		    	cancel(index){
 		    		this.$set(this.buttonMap,index,false)
@@ -406,14 +418,39 @@
 	                }
 	                return str;
 	          },
-	          doReply(index){
-				this.$set(this.replyMap,index,true)
-				console.log(this.replyMap[index]);
-			},
+	          showReply:function(name,index){
+				
+				if(this.nowReply!=index){
+					console.log(this.isShowReply[index]);
+					this.$set(this.isShowReply,index,!this.isShowReply[index])
+					console.log(this.isShowReply[index]);
+					this.nowReply = index;
+				}
+				this.textareaMap[index]="@"+name;
+			  },
 			
   			pBodyStatus(index){
   				this.$set(this.pBodyMap,index,!this.pBodyMap[index])
-  			},
+			  },
+			submitComment:function(){
+				console.log(this.$route.query.id)
+				console.log(this.textareaMap[0])
+				this.$axios.post("http://localhost:8082/comment",{
+					pid:this.$route.query.id,
+					content:this.textareaMap[0],
+					tableNameEnum:"VIDEO"
+				},{
+                   headers: {
+                    'Content-Type':'application/json;charset=UTF-8'
+                        }
+               })
+				.then(res => {
+					console.log(res)
+				})
+				.catch(err => {
+					console.error(err); 
+				})
+			}
 	         
         },
         watch: {
@@ -422,9 +459,6 @@
          },
         created() { //生命周期函数
            
-        },
-        mounted(){//页面加载完成后
-
         }
 
 	}
@@ -788,7 +822,7 @@
 	text-align: left;
 }
 .comm{
-		padding: 20px;
+		
 	}
 	.su{
 		margin-top: 2px;
@@ -811,7 +845,8 @@
 		text-align: left;
 	}
 	.hbl-comm{
-		padding: 40px;
+		padding-top: 20px;
+		padding-bottom: 20px;
 	}
 
 	.reply{
@@ -844,12 +879,18 @@
 		margin-top: 5px;
 		color: grey;
 	}
-	.reply-content{
-		word-wrap : break-word ;
-		width: 90%;
+
+	.comment-content{
+		word-wrap : break-word;
 		font-size: 15px;
 		line-height: 25px;
 		margin-left: 56px;
+	}
+	.reply-content{
+		word-wrap : break-word;
+		font-size: 15px;
+		line-height: 25px;
+		margin-left: 10px;
 	}
 
 	.reply-fa{
@@ -880,6 +921,88 @@
 		margin-top: 2px;
 	}
 	.hbl-child{
-		padding: 20px;
+		padding-top: 20px;
+	}
+
+	.date{
+		display: inline-block;
+		margin-right: 20px;
+	}
+
+	.info{
+		color: #99a2aa;
+		line-height: 26px;
+		font-size: 12px;
+		margin-left: 56px;
+	}
+
+	.reply-info{
+		color: #99a2aa;
+		line-height: 26px;
+		font-size: 12px;
+	}
+
+	.like{
+		
+		cursor: pointer;
+		margin-right: 20px;
+	}
+
+	.hate{
+			margin-right: 20px;
+	}
+
+	.small-icon{
+		width: 14px;
+		height: 14px;
+	}
+
+	.lv-icon{
+		margin-left: 5px;
+		width:19px;
+		height: 9px;
+	}
+
+	.replyButton{
+		padding: 0 5px;
+		border-radius: 4px;
+		margin-right: 15px;
+		cursor: pointer;
+		display: inline-block;
+	}
+
+	.replyButton:hover{
+		background: #1890ff;
+    	color: #fff;
+	}
+
+
+	.comment-submit{
+		width: 70px;
+		height: 64px;
+		float: right;
+		top: 0;
+		padding: 4px 15px;
+		font-size: 14px;
+		color: #fff;
+		border-radius: 4px;
+		text-align: center;
+		min-width: 60px;
+		vertical-align: top;
+		cursor: pointer;
+		background-color: #00a1d6;
+		border: 1px solid #00a1d6;
+		transition: .1s;
+		user-select: none;
+		outline: none;
+	}
+
+	.comment-submit:hover{
+		background-color: #00b5e5;
+    	border-color: #00b5e5;
+	}
+
+	.reply-textarea{
+		margin-left:50px
 	}
 </style>
