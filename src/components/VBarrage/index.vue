@@ -12,7 +12,57 @@
                     :playsinline="true" 
                     :options="playerOptions"
         ></video-player>
-           </div>
+          <div class="video-control">
+              
+              <div class="video-control-top">
+                <div class="progress">
+
+                </div>
+              </div>
+              <div class="video-control-bottom">
+                <!--自定义控制器左边-->
+                <div class="video-control-bottom-left">
+                  <div class="video-btn">
+                    <button class="player-icon">
+                      播放  
+                    </button>  
+                  </div>
+                  <div class="player-time">
+                    <input class="video-time-seek">
+                    <div class="player-time-wrap">
+                      <span class="time-now">
+                        00:00
+                      </span>
+                      <span class="divider">
+                        /
+                      </span>
+                      <span class="time-total">
+                        01:11
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+
+
+                <!--自定义控制器右边-->
+                <div class="video-control-bottom-right">
+                    <div class="video-quality">
+
+                    </div>
+                    <div class="video-speed">
+
+                    </div>
+                    <div class="video-setting">
+
+                    </div>
+                    <div class="videotest">
+
+                    </div>
+                </div>
+              </div>
+          </div>
+        </div>
     </div>
   </section>
 </template>
@@ -413,14 +463,19 @@ export default {
   }
 }
 
-        /**
-            视频播放器样式
-         */
-        .video-js{
-            position: absolute;  
-            border: 1px solid;
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
+/**
+    视频播放器样式
+  */
+.video-js{
+    position: absolute;  
+    border: 1px solid;
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+
+/**
+  自定义视频控制器样式
+ */
 </style>

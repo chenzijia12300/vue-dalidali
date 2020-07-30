@@ -9,17 +9,20 @@
 		<div class="comment-container">
 			<el-pagination
 			class="comment-page"
+            @current-change="handleCurrentChange"
 			small
 			layout="prev, pager, next"
 			:total="50">
 		  	</el-pagination>
-		  <el-tabs v-model="activeName" class="comment-tabs">
+		  <el-tabs v-model="activeName" class="comment-tabs" @tab-click="handleClick">
 
 			<el-tab-pane label="按热度排序" name="first" style="border:none">
-				<general></general>
+				<general :commentList="commentHotList">
+
+                </general>
 			</el-tab-pane>
 			<el-tab-pane label="按时间排序" name="second" style="border:none">
-				<general></general>
+				<general :commentList="commentNewList"></general>
 			</el-tab-pane>
   		</el-tabs>
 		</div>
@@ -34,235 +37,150 @@
 	import general from './general.vue'
 	export default {
 	  props:{
-	  	emojiWidth:{
-	  		type:String,
-	  		default:'560px'
-	  	},
-	  	showAvatar:{
-	  		type:Boolean,
-	  		default:true
-	  	},	
-	  	avatar:{
-	  		type:String,
-	  		default:''
-	  	},
-	  	placeholder:{
-	  		type:String,
-	  		default:'在此输入评论内容...'
-	  	},
-	  	minRows:{
-	  		type:Number,
-	  		default:4
-	  	},
-	  	maxRows:{
-	  		type:Number,
-	  		default:8
-	  	},
-	  	commentNum:{
-	  		type:Number,
-	  		default:2
-	  	},
-	  	authorId:{
-	  		type:Number,
-	  		default:1
-	  	},
-	  	label:{
-	  		type:String,
-	  		default:'作者'
-	  	},
-  		commentList:{
-				type:Array,
-				default: () => [
-					        {
-              id:1,
-              commentUser:{
-                  id:1,
-                  nickName:'花非花',
-                  avatar:'http://qzapp.qlogo.cn/qzapp/101483738/6637A2B6611592A44A7699D14E13F7F7/50'
-              },
-              content:"<a style='text-decoration:none;color: #409eff ' href='https://blog.csdn.net/abcwanglinyong/'>我的CSDN博客地址</a>[害羞][害羞][害羞]<br/>"
-              +"我的微信公众号：<br/>"
-              +"<img src="+require('../img/hbl.jpg')+">",
-              createDate:'2019-9-23 17:36:02',
-              childrenList:[
-                {
-                  id:2,
-                  commentUser:{
-                    id:2,
-                    nickName:'坏菠萝',
-                    avatar:''
-                  },
-                  targetUser:{
-                    id:1,
-                    nickName:'花非花',
-                    avatar:'http://qzapp.qlogo.cn/qzapp/101483738/6637A2B6611592A44A7699D14E13F7F7/50'
-                  },
-                  content:'真的就很棒！很Nice!',
-                  createDate:'2019-9-23 17:45:26'
-                }
-
-              ]
-            },
-				]
-		},
        commentWidth:{
        	type:String,
        	default:'80%',
-       }
+       },
+       commentNum: Number
 
 	  },	
 	  data() {
 	    return {
+            isHot:true,
+            commentHotList:[],
+            commentNewList:[],
             activeName:"first",
-			replyMap:[
-				],
-			buttonMap:[],	
-			pBodyMap:[],
-			textareaMap:[],
-                OwOlist:[//表情包和表情路径
-                    {'title':'微笑','url':'weixiao.gif'},
-                   {'title':'嘻嘻','url':'xixi.gif'},
-                   {'title':'哈哈','url':'haha.gif'},
-                   {'title':'可爱','url':'keai.gif'},
-                   {'title':'可怜','url':'kelian.gif'},
-                   {'title':'挖鼻','url':'wabi.gif'},
-                   {'title':'吃惊','url':'chijing.gif'},
-                   {'title':'害羞','url':'haixiu.gif'},
-                   {'title':'挤眼','url':'jiyan.gif'},
-                   {'title':'闭嘴','url':'bizui.gif'},
-                   {'title':'鄙视','url':'bishi.gif'},
-                   {'title':'爱你','url':'aini.gif'},
-                   {'title':'泪','url':'lei.gif'},
-                   {'title':'偷笑','url':'touxiao.gif'},
-                   {'title':'亲亲','url':'qinqin.gif'},
-                   {'title':'生病','url':'shengbing.gif'},
-                   {'title':'太开心','url':'taikaixin.gif'},
-                   {'title':'白眼','url':'baiyan.gif'},
-                   {'title':'右哼哼','url':'youhengheng.gif'},
-                   {'title':'左哼哼','url':'zuohengheng.gif'},
-                   {'title':'嘘','url':'xu.gif'},
-                   {'title':'衰','url':'shuai.gif'},
-                   {'title':'吐','url':'tu.gif'},
-                   {'title':'哈欠','url':'haqian.gif'},
-                   {'title':'抱抱','url':'baobao.gif'},
-                   {'title':'怒','url':'nu.gif'},
-                   {'title':'疑问','url':'yiwen.gif'},
-                   {'title':'馋嘴','url':'chanzui.gif'},
-                   {'title':'拜拜','url':'baibai.gif'},
-                   {'title':'思考','url':'sikao.gif'},
-                   {'title':'汗','url':'han.gif'},
-                   {'title':'困','url':'kun.gif'},
-                   {'title':'睡','url':'shui.gif'},
-                   {'title':'钱','url':'qian.gif'},
-                   {'title':'失望','url':'shiwang.gif'},
-                   {'title':'酷','url':'ku.gif'},
-                   {'title':'色','url':'se.gif'},
-                   {'title':'哼','url':'heng.gif'},
-                   {'title':'鼓掌','url':'guzhang.gif'},
-                   {'title':'晕','url':'yun.gif'},
-                   {'title':'悲伤','url':'beishang.gif'},
-                   {'title':'抓狂','url':'zhuakuang.gif'},
-                   {'title':'黑线','url':'heixian.gif'},
-                   {'title':'阴险','url':'yinxian.gif'},
-                   {'title':'怒骂','url':'numa.gif'},
-                   {'title':'互粉','url':'hufen.gif'},
-                   {'title':'书呆子','url':'shudaizi.gif'},
-                   {'title':'愤怒','url':'fennu.gif'},
-                   {'title':'感冒','url':'ganmao.gif'},
-                   {'title':'心','url':'xin.gif'},
-                   {'title':'伤心','url':'shangxin.gif'},
-                   {'title':'猪','url':'zhu.gif'},
-                   {'title':'熊猫','url':'xiongmao.gif'},
-                   {'title':'兔子','url':'tuzi.gif'},
-                   {'title':'喔克','url':'ok.gif'},
-                   {'title':'耶','url':'ye.gif'},
-                   {'title':'棒棒','url':'good.gif'},
-                   {'title':'不','url':'no.gif'},
-                   {'title':'赞','url':'zan.gif'},
-                   {'title':'来','url':'lai.gif'},
-                   {'title':'弱','url':'ruo.gif'},
-                   {'title':'草泥马','url':'caonima.gif'},
-                   {'title':'神马','url':'shenma.gif'},
-                   {'title':'囧','url':'jiong.gif'},
-                   {'title':'浮云','url':'fuyun.gif'},
-                   {'title':'给力','url':'geili.gif'},
-                   {'title':'围观','url':'weiguan.gif'},
-                   {'title':'威武','url':'weiwu.gif'},
-                   {'title':'话筒','url':'huatong.gif'},
-                   {'title':'蜡烛','url':'lazhu.gif'},
-                   {'title':'蛋糕','url':'dangao.gif'},
-                   {'title':'发红包','url':'fahongbao.gif'}
-                ]
-	    }
-	  },
-	  components:{
+            replyMap:[
+            ],
+            buttonMap:[],	
+            pBodyMap:[],
+            textareaMap:[],
+                    OwOlist:[//表情包和表情路径
+                        {'title':'微笑','url':'weixiao.gif'},
+                    {'title':'嘻嘻','url':'xixi.gif'},
+                    {'title':'哈哈','url':'haha.gif'},
+                    {'title':'可爱','url':'keai.gif'},
+                    {'title':'可怜','url':'kelian.gif'},
+                    {'title':'挖鼻','url':'wabi.gif'},
+                    {'title':'吃惊','url':'chijing.gif'},
+                    {'title':'害羞','url':'haixiu.gif'},
+                    {'title':'挤眼','url':'jiyan.gif'},
+                    {'title':'闭嘴','url':'bizui.gif'},
+                    {'title':'鄙视','url':'bishi.gif'},
+                    {'title':'爱你','url':'aini.gif'},
+                    {'title':'泪','url':'lei.gif'},
+                    {'title':'偷笑','url':'touxiao.gif'},
+                    {'title':'亲亲','url':'qinqin.gif'},
+                    {'title':'生病','url':'shengbing.gif'},
+                    {'title':'太开心','url':'taikaixin.gif'},
+                    {'title':'白眼','url':'baiyan.gif'},
+                    {'title':'右哼哼','url':'youhengheng.gif'},
+                    {'title':'左哼哼','url':'zuohengheng.gif'},
+                    {'title':'嘘','url':'xu.gif'},
+                    {'title':'衰','url':'shuai.gif'},
+                    {'title':'吐','url':'tu.gif'},
+                    {'title':'哈欠','url':'haqian.gif'},
+                    {'title':'抱抱','url':'baobao.gif'},
+                    {'title':'怒','url':'nu.gif'},
+                    {'title':'疑问','url':'yiwen.gif'},
+                    {'title':'馋嘴','url':'chanzui.gif'},
+                    {'title':'拜拜','url':'baibai.gif'},
+                    {'title':'思考','url':'sikao.gif'},
+                    {'title':'汗','url':'han.gif'},
+                    {'title':'困','url':'kun.gif'},
+                    {'title':'睡','url':'shui.gif'},
+                    {'title':'钱','url':'qian.gif'},
+                    {'title':'失望','url':'shiwang.gif'},
+                    {'title':'酷','url':'ku.gif'},
+                    {'title':'色','url':'se.gif'},
+                    {'title':'哼','url':'heng.gif'},
+                    {'title':'鼓掌','url':'guzhang.gif'},
+                    {'title':'晕','url':'yun.gif'},
+                    {'title':'悲伤','url':'beishang.gif'},
+                    {'title':'抓狂','url':'zhuakuang.gif'},
+                    {'title':'黑线','url':'heixian.gif'},
+                    {'title':'阴险','url':'yinxian.gif'},
+                    {'title':'怒骂','url':'numa.gif'},
+                    {'title':'互粉','url':'hufen.gif'},
+                    {'title':'书呆子','url':'shudaizi.gif'},
+                    {'title':'愤怒','url':'fennu.gif'},
+                    {'title':'感冒','url':'ganmao.gif'},
+                    {'title':'心','url':'xin.gif'},
+                    {'title':'伤心','url':'shangxin.gif'},
+                    {'title':'猪','url':'zhu.gif'},
+                    {'title':'熊猫','url':'xiongmao.gif'},
+                    {'title':'兔子','url':'tuzi.gif'},
+                    {'title':'喔克','url':'ok.gif'},
+                    {'title':'耶','url':'ye.gif'},
+                    {'title':'棒棒','url':'good.gif'},
+                    {'title':'不','url':'no.gif'},
+                    {'title':'赞','url':'zan.gif'},
+                    {'title':'来','url':'lai.gif'},
+                    {'title':'弱','url':'ruo.gif'},
+                    {'title':'草泥马','url':'caonima.gif'},
+                    {'title':'神马','url':'shenma.gif'},
+                    {'title':'囧','url':'jiong.gif'},
+                    {'title':'浮云','url':'fuyun.gif'},
+                    {'title':'给力','url':'geili.gif'},
+                    {'title':'围观','url':'weiguan.gif'},
+                    {'title':'威武','url':'weiwu.gif'},
+                    {'title':'话筒','url':'huatong.gif'},
+                    {'title':'蜡烛','url':'lazhu.gif'},
+                    {'title':'蛋糕','url':'dangao.gif'},
+                    {'title':'发红包','url':'fahongbao.gif'}
+                    ]
+            }
+        },
+	    components:{
 			general
 		},
-		    methods: { //事件处理器
-
-		    	showButton(index){
-		    		//this.showFlag = true;
-		    		console.log(index+"index");
-		    		this.$set(this.buttonMap,index,true)
-		    	},
-		    	cancel(index){
-		    		this.$set(this.buttonMap,index,false)
-		    		if(index!==0){
-		    			this.$set(this.replyMap,index,false)
-		    		}
-		    		console.log(index+"index");
-		    		//this.showFlag = false;
-		    	},
-	          doSend(){
-	          	//console.log("====="+this.textarea);
-	          	this.$emit("doSend",this.textareaMap[0]);
-	          	this.$set(this.textareaMap,0,'')
-	          },
-	          doChidSend(index,commentUserId,pid){
-	          	this.$emit("doChidSend",this.textareaMap[index],commentUserId,pid);
-          		this.$set(this.textareaMap,index,'')
-	          },
-	       
-	          //选择表情包
-	          choseEmoji:function(index,inner){
-	          		var con = '';
-	          		if(!this.textareaMap[index]){
-	          			this.$set(this.textareaMap,index,'')
-	          		}
-	          		con = this.textareaMap[index] +='[' + inner + ']';
-					this.$set(this.textareaMap,index,con)
-	      			
-	          },
-	          analyzeEmoji:function(cont){//编译表情替换成图片展示出来
-	              var pattern1 = /\[[\u4e00-\u9fa5]+\]/g;
-	                var pattern2 = /\[[\u4e00-\u9fa5]+\]/;
-	                var content = cont.match(pattern1);
-	                var str = cont;
-	                if(content){
-	                    for(var i=0;i<content.length;i++){
-	                        for(var j=0;j<this.OwOlist.length;j++){
-	                            if("["+this.OwOlist[j].title +"]" == content[i]){
-	                                var src = this.OwOlist[j].url;
-	                                break;
-	                            }
-	                        }
-	                        var s = require("../img/face/"+src)
-	                        var imoj = "<img src='"+s+"'/>"
-
-	                        str = str.replace(pattern2, imoj);
-	                    }
-	                }
-	                return str;
-	          },
-	          doReply(index){
-				this.$set(this.replyMap,index,true)
-				console.log(this.replyMap[index]);
-			},
-			
-  			pBodyStatus(index){
-  				this.$set(this.pBodyMap,index,!this.pBodyMap[index])
-  			},
-	         
+		 methods: { //事件处理器
+	        listHotComment:function(page){
+                this.$axios.get("http://localhost:8082/comment/list/praise/VIDEO/"+this.$route.query.id+"/"+page+"/8?userId=1",)
+			    .then(res => {
+                    res = res.data
+                    this.commentHotList = res.data
+                    console.log(this.commentHotList);
+			    })
+                .catch(err => {
+                    console.error(err); 
+                })
+            },
+            listNewComment:function(page){
+                this.$axios.get("http://localhost:8082/comment/list/time/VIDEO/"+this.$route.query.id+"/"+page+"/8?userId=1",)
+		        .then(res => {
+                    res = res.data
+                    this.commentNewList = res.data
+			    })
+			    .catch(err => {
+				    console.error(err); 
+			    })
+            },
+            handleClick(tab,event){
+                switch(tab.index){
+                    case "0":
+                        if(this.commentHotList.length==0){
+                            this.listHotComment(1)
+                        }
+                        this.isHot = true;
+                        break;
+                    case "1":
+                        if(this.commentNewList.length==0){
+                            this.listNewComment(1)
+                        }
+                        this.isHot = false;
+                        break;
+                }
+            },
+            handleCurrentChange(val) {
+                console.log(`当前页: ${val}`);
+                if(this.isHot){
+                    this.listHotComment(val);
+                }else{
+                    this.listNewComment(val);
+                }
+                
+            }
         },
         watch: {
            // 如果路由有变化，会再次执行该方法
@@ -272,15 +190,7 @@
            
         },
         mounted(){//页面加载完成后
-			this.$axios.get("http://localhost:8082/comment/list/VIDEO/"+this.$route.query.id+"/1/8?userId=1",)
-			.then(res => {
-				res = res.data
-				this.commentsList = res.data
-				console.log(this.commentsList)
-			})
-			.catch(err => {
-				console.error(err); 
-			})
+            this.listHotComment(1)
         }
 
 	}

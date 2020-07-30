@@ -116,7 +116,9 @@
                     </a>
                 </div>
                 <div>
-                    <comment></comment>
+                    <comment :commentNum="details.commentNum">
+
+                    </comment>
                 </div>
 
 
@@ -527,11 +529,6 @@
             display: -webkit-box;
             display: -ms-flexbox;
             display: flex;
-            -webkit-box-flex: 1;
-            -ms-flex: 1;
-            flex: 1;
-            border: 1px solid #e7e7e7;
-            -webkit-box-sizing: border-box;
             box-sizing: border-box;
         }
 

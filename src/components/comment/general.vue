@@ -15,7 +15,7 @@
 				  type="textarea"
 				  :autosize="{ minRows: minRows, maxRows: maxRows}"
 				  :placeholder=placeholder
-				  v-model="textareaMap[0]">
+				  v-model="comment">
 				</el-input>
 			
 				 <div  class="hbl-owo">
@@ -42,7 +42,7 @@
 
 
 
-		<div v-for="(item,index) in commentsList" class="hbl-child" v-bind:key="index">
+		<div v-for="(item,index) in commentList" class="hbl-child" v-bind:key="index">
 			<div class="reply">
 			</div>
 			<div class="content">
@@ -71,7 +71,7 @@
 				</div>
 				 <div class="info">
 						<div class="date">
-								{{item.createTime}}
+								{{item.createTime | dateFmt('YYYY-MM-DD HH:mm')}}
 						</div>
 						<span class="like">
 							<svg class="small-icon" aria-hidden="true">
@@ -85,23 +85,23 @@
                         	</svg>
 						
 						</span>
-						<span class="replyButton" @click="showReply(item.nickName,item.index)">
+						<span class="replyButton" @click="showReply(item.username,index,item.id,item.uid)">
 							回复
 						</span>
 				</div>
 					
-			<div class="children" v-for="(ritem,rindex) in item.childrenList" v-bind:key="rindex">
+			<div class="children" v-for="(ritem,rindex) in item.replyList" v-bind:key="rindex">
 				<div class="reply">
 				</div>
 				<div class="content">
 						<div class="comment-f">
-							<avatar :avatar="ritem.commentUser.avatar?ritem.commentUser.avatar:avatar" style="width:24px;height:24px"></avatar>
+							<avatar :avatar="ritem.img?ritem.img:avatar" style="width:24px;height:24px"></avatar>
 						</div>
 								
 						<div  class="comment-f" style="display:inline-block">
 							<div>
 								<div class="nickname author">
-									{{ritem.commentUser.nickName}}
+									{{ritem.username}}
 								</div>
 								<svg class="lv-icon" aria-hidden="true">
                             		<use xlink:href="#icon-dengji"></use>
@@ -110,8 +110,8 @@
 						</div>
 
 						<div class="reply-content" style="display:inline-block">
-							<div class="cc cc-to">
-								<a href="#">@{{ritem.targetUser.nickName}}</a>
+							<div class="cc cc-to" v-if="ritem.rusername">
+								回复:<a href="#">{{ritem.rusername}}</a>
 							</div>
 
 							 <div class="cc" v-html="analyzeEmoji(ritem.content)">{{analyzeEmoji(ritem.content)}}</div>
@@ -119,7 +119,7 @@
 
 						<div class="reply-info">
 							<div class="date">
-									{{item.createDate}}
+									{{item.createDate  | dateFmt('YYYY-MM-DD HH:mm')}}
 							</div>
 							<span class="like">
 								<svg class="small-icon" aria-hidden="true">
@@ -133,7 +133,7 @@
 								</svg>
 							
 							</span>
-							<span class="replyButton" @click="showReply(ritem.commentUser.nickName,index)">
+							<span class="replyButton" @click="showReply(ritem.username,index,item.id,ritem.uid)">
 								回复
 							</span>
 				 		</div>
@@ -141,6 +141,9 @@
 				</div>
 			</div>
 			<div class="reply-textarea"  v-if="isShowReply[index]">
+					<button type="submit" class="comment-submit" @click="submitReply(index)">
+								发表评论
+					</button>
 					<div class="comment-avatar">
 						<avatar :avatar="avatar"></avatar>
 					</div>
@@ -151,7 +154,7 @@
 						@focus="showButton(0)"
 						type="textarea"
 						:autosize="{ minRows: minRows, maxRows: maxRows}"
-						:placeholder=placeholder
+						:placeholder=replyPlaceholder
 						v-model="textareaMap[index]">
 						</el-input>
 					
@@ -182,6 +185,7 @@
     import avatar from '../Avatar.vue'
 	export default {
 	  props:{
+		commentList:Array,
 	  	emojiWidth:{
 	  		type:String,
 	  		default:'560px'
@@ -218,54 +222,6 @@
 	  		type:String,
 	  		default:'作者'
 	  	},
-  		commentList:{
-				type:Array,
-				default: () => [
-					        {
-              id:1,
-              commentUser:{
-                  id:1,
-                  nickName:'花非花',
-                  avatar:'http://qzapp.qlogo.cn/qzapp/101483738/6637A2B6611592A44A7699D14E13F7F7/50'
-              },
-              content:"<a style='text-decoration:none;color: #409eff ' href='https://blog.csdn.net/abcwanglinyong/'>我的CSDN博客地址</a>[害羞][害羞][害羞]<br/>"
-              +"我的微信公众号：<br/>",
-              createDate:'2019-9-23 17:36:02',
-              childrenList:[
-                {
-                  id:2,
-                  commentUser:{
-                    id:2,
-                    nickName:'坏菠萝',
-                    avatar:''
-                  },
-                  targetUser:{
-                    id:1,
-                    nickName:'花非花',
-                    avatar:'http://qzapp.qlogo.cn/qzapp/101483738/6637A2B6611592A44A7699D14E13F7F7/50'
-                  },
-                  content:'真的就很棒！很Nice!',
-                  createDate:'2019-9-23 17:45:26'
-                },
-				{
-                  id:2,
-                  commentUser:{
-                    id:2,
-                    nickName:'坏菠萝',
-                    avatar:''
-                  },
-                  targetUser:{
-                    id:1,
-                    nickName:'花非花',
-                    avatar:'http://qzapp.qlogo.cn/qzapp/101483738/6637A2B6611592A44A7699D14E13F7F7/50'
-                  },
-                  content:'真的就很棒！很Nice!',
-                  createDate:'2019-9-23 17:45:26'
-                }
-              ]
-            },
-				]
-		},
        commentWidth:{
        	type:String,
        	default:'80%',
@@ -274,6 +230,10 @@
 	  },	
 	  data() {
 	    return {
+			replyPlaceholder:null,
+			nowCommentId:null,
+			nowTargetUserId:null,
+			comment:null,
 			commentsList:[],
 			nowTextarea:null,
 			nowReply:-1,
@@ -418,34 +378,64 @@
 	                }
 	                return str;
 	          },
-	          showReply:function(name,index){
-				
+	          showReply:function(name,index,commentId,userId){
 				if(this.nowReply!=index){
-					console.log(this.isShowReply[index]);
+					this.$set(this.isShowReply,this.nowReply,!this.isShowReply[this.nowReply])
 					this.$set(this.isShowReply,index,!this.isShowReply[index])
 					console.log(this.isShowReply[index]);
 					this.nowReply = index;
 				}
-				this.textareaMap[index]="@"+name;
+				this.nowCommentId = commentId;
+				this.nowTargetUserId = userId;
+				this.replyPlaceholder="@"+name;
+				this.$forceUpdate()
 			  },
 			
   			pBodyStatus(index){
   				this.$set(this.pBodyMap,index,!this.pBodyMap[index])
 			  },
 			submitComment:function(){
-				console.log(this.$route.query.id)
-				console.log(this.textareaMap[0])
-				this.$axios.post("http://localhost:8082/comment",{
+				let param = {
 					pid:this.$route.query.id,
 					content:this.textareaMap[0],
 					tableNameEnum:"VIDEO"
-				},{
+				};
+				console.log(this.$route.query.id)
+				console.log(this.textareaMap[0])
+				this.$axios.post("http://localhost:8082/comment",param,{
                    headers: {
                     'Content-Type':'application/json;charset=UTF-8'
                         }
                })
 				.then(res => {
 					console.log(res)
+					param.username="czj";
+					param.createTime="刚刚"
+					param.praiseNum=0
+					this.commentList.unshift(param);
+				})
+				.catch(err => {
+					console.error(err); 
+				})
+			},
+			submitReply:function(index){
+				let param = {
+					cid:this.nowCommentId,
+					ruid:this.nowTargetUserId,
+					content:this.textareaMap[index],
+					tableNameEnum:"VIDEO"
+				};
+				this.$axios.post("http://localhost:8082/reply",param,{
+                   headers: {
+                    'Content-Type':'application/json;charset=UTF-8'
+                        }
+               })
+				.then(res => {
+					console.log(res)
+					param.username="czj";
+					param.createTime="刚刚"
+					param.praiseNum=0
+					this.commentList[index].replyList.unshift(param);
 				})
 				.catch(err => {
 					console.error(err); 
