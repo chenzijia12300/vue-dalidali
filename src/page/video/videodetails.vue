@@ -28,13 +28,15 @@
                                     未经作者授权，禁止转载</span><!----></div>
                 </div>
                  <div class="player-wrap">
-                    <v-barrage :arr="arr"
+                    <v-barrage
+                        ref="barrage"
                         :isPause="isPause"
                         :percent="100"
                         :videoUrl="details.urls"
+                        :length="details.length"
                         >
                     </v-barrage>
-                </div>
+                 </div>
                 <div class="player-bottom">
                     <div class="player-video-sendbar">
                         <!--多少人在看-->
@@ -67,7 +69,15 @@
                                 <svg class="gg-icon" aria-hidden="true" style="margin-left:10px">
                                     <use xlink:href="#icon-yansexuanzeqi"></use>
                                 </svg> 
-                                <input class="player-video-danmaku-input" placeholder="发个友善的弹幕见证当下" style="">
+                                <input class="player-video-danmaku-input" placeholder="发个友善的弹幕见证当下" style="" v-model="danmuInput">
+                                <div class="player-video-danmaku-hint">
+                                    <a href="#" class="hint">
+                                        <span>弹幕礼仪</span>
+                                    </a>
+                                </div>
+                                <div class="player-video-danmaku-btn" @click="submitDanmu()">
+                                    发送
+                                </div>
                             </div>
                     </div>
                 </div>
@@ -430,7 +440,6 @@
             position: relative;
             width:802px;
             height: 585px;
-            border: 1px solid;
         }
 
         .player-bottom{
@@ -524,7 +533,7 @@
         */
 
         .player-video-inputbar-wrap {
-            width: 200px;
+            width: 408px;
             border-radius: 2px 0 0 2px;
             display: -webkit-box;
             display: -ms-flexbox;
@@ -534,20 +543,16 @@
 
         .player-video-danmaku-input{
             color: #212121;
-            -webkit-box-flex: 1;
-            -ms-flex-positive: 1;
             flex-grow: 1;
             border: 0;
             height: 30px;
             line-height: 30px;
-            -webkit-box-sizing: border-box;
-            box-sizing: border-box;
             z-index: 12;
             padding: 0 5px;
             background: none;
             font-size: 12px;
-            min-width: 115px;
-            width: 100%;
+            
+            width: 249px;
             outline: none;
         }
 
@@ -556,6 +561,31 @@
             border:none;
         }
 
+        .player-video-danmaku-hint{
+            width:82px;     
+            float: right;
+            
+        }
+        
+        .hint{
+            font-size: 12px;
+            color: #757575;
+            fill: #757575;
+            height: 100%;
+            display: inline-block;
+        }
+
+        .hint:hover{
+            color: #00a1d6;
+            fill: #00a1d6;
+        }
+
+        .hint span{
+            
+            height: 100%;
+            line-height: 28px;
+            display: inline-block;
+        }
 
 
 
@@ -663,7 +693,26 @@
             border-radius: 2px;
         }
 
+        .player-video-danmaku-btn{
+            float:right;
+            background: #1890ff;
+            color: #fff;
+            z-index: 13;
+            height: 30px;
+            width: 60px;
+            min-width: 60px;
+            line-height: 30px;
+            text-align: center;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            border-radius: 0 2px 2px 0;
+        }
 
+         .player-video-danmaku-btn:hover{
+            background-color: #00a1d6;
+            color: #fff;
+            cursor: pointer;
+         }
 
 </style>
 <script>
@@ -677,6 +726,10 @@ export default {
     },
     data(){
         return{
+            //弹幕提交位置
+            location:"top",
+            //当前秒数
+            danmuInput:null,
             isheader:true,
             videoId:0,
             value:null,
@@ -698,32 +751,31 @@ export default {
         })
     },
     mounted(){
-        this.initTestData();
     },
     methods:{
             // 初始化模拟弹幕数据
-        initTestData () {
-        let arr = [
-            '这是一条有弹幕',
-            '今天去打LOL',
-            '可以吗？',
-            '一起嗨！！！'
-        ]
-        for (let i = 0; i < 6; i++) {
-            for (let index = 0; index < 1000; index++) {
-            if (index % 2 == 0) {
-                this.arr.push({
-                direction: 'top',
-                content: arr[parseInt(Math.random() * arr.length)]
-                })
-            } else {
-                this.arr.push({
-                direction: 'default',
-                content: arr[parseInt(Math.random() * arr.length)]
-                })
+        submitDanmu(){
+            console.log(this.$refs.barrage);
+            let param = {
+                vid:this.videoId,
+                showSecond:this.$refs.barrage.nowSec,
+                uid:1,
+                location:this.location,
+                content:this.danmuInput
             }
-            }
-        }
+            this.$axios.post(this.COMMENT_URL+"danmu",param,{
+                   headers: {
+                    'Content-Type':'application/json;charset=UTF-8'
+                }
+            })
+            .then(res => {
+                console.log(res.data);
+                this.arr.unshift(param);
+            })
+            .catch(err => {
+                console.error(err); 
+            })
+            this.danmuInput="";
         }
     }
 }

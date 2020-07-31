@@ -5,39 +5,52 @@
     <div class="barrage-main">
       
       <div class="barrage-main-dm"
+      @click="handlerPlay()"
+      @mouseout="handlerControl(false)"
+                    @mouseover="handlerControl(true)" 
            :class="{'ani-pause':isPause,'ani-running':!isPause}"
            ref="barrageMainDm">
            <video-player  class="video-player vjs-custom-skin"
-                    ref="videoPlayer" 
+                    ref="videoPlayer"
+                    
+                    @playing="onPlayerPlaying($event)"
+                    @timeupdate="onPlayerTimeupdate($event)"
                     :playsinline="true" 
                     :options="playerOptions"
         ></video-player>
-          <div class="video-control">
+          <div class="video-control" v-show="isShow">
               
               <div class="video-control-top">
                 <div class="progress">
+                  <div class="progress-details">
 
+                  </div>
                 </div>
               </div>
               <div class="video-control-bottom">
                 <!--自定义控制器左边-->
                 <div class="video-control-bottom-left">
                   <div class="video-btn">
-                    <button class="player-icon">
-                      播放  
-                    </button>  
+                    <div class="player-icon">
+                      <svg class="player-svg" aria-hidden="true" v-if="isPlay">
+                        <use xlink:href="#icon-play"></use>
+                      </svg>
+                      <svg class="player-svg" aria-hidden="true" v-else>
+                        <use xlink:href="#icon-zantingtingzhi"></use>
+                      </svg>   
+                    </div>  
                   </div>
                   <div class="player-time">
-                    <input class="video-time-seek">
+                    <input class="video-time-seek"/>
                     <div class="player-time-wrap">
                       <span class="time-now">
-                        00:00
+                        {{nowMin}}:{{nowSec}}
                       </span>
                       <span class="divider">
                         /
                       </span>
                       <span class="time-total">
-                        01:11
+                        {{Math.floor(this.length/60)}}:{{this.length%60}}
                       </span>
                     </div>
                   </div>
@@ -47,17 +60,46 @@
 
                 <!--自定义控制器右边-->
                 <div class="video-control-bottom-right">
-                    <div class="video-quality">
-
+                    <div class="video-quality" style="padding-right:10px">
+                      <span>
+                        720P
+                      </span>
                     </div>
-                    <div class="video-speed">
-
+                    <div class="video-speed" >
+                      <span>
+                        倍数
+                      </span>
+                    </div>
+                    
+                    <div class="video-sound">
+                      <svg class="player-svg" aria-hidden="true" style="width:26px;height:18px">
+                        <use xlink:href="#icon-shengyin"></use>
+                      </svg>
                     </div>
                     <div class="video-setting">
-
+                      <svg class="player-svg" aria-hidden="true"  style="width:26px;height:18px">
+                        <use xlink:href="#icon-settings"></use>
+                      </svg>
                     </div>
-                    <div class="videotest">
-
+                    <div class="video-in-video">
+                      <svg class="player-svg" aria-hidden="true"  style="width:26px;height:18px">
+                        <use xlink:href="#icon-kaiqihuazhonghua"></use>
+                      </svg>
+                    </div>
+                    <div class="video-wide">
+                      <svg class="player-svg" aria-hidden="true"  style="width:26px;height:18px">
+                        <use xlink:href="#icon-yinliang-"></use>
+                      </svg>
+                    </div>
+                    <div class="video-web-wide">
+                      <svg class="player-svg" aria-hidden="true"  style="width:26px;height:18px">
+                        <use xlink:href="#icon-widescreen"></use>
+                      </svg>
+                    </div>
+                    <div class="video-full">
+                      <svg class="player-svg" aria-hidden="true"  style="width:26px;height:18px">
+                        <use xlink:href="#icon-quanping"></use>
+                      </svg>
                     </div>
                 </div>
               </div>
@@ -71,12 +113,6 @@
 export default {
   props: {
     // 弹幕源数组
-    arr: {
-      type: Array,
-      default: function () {
-        return []
-      }
-    },
     // 弹幕是否暂停状态
     isPause: {
       type: Boolean
@@ -86,22 +122,25 @@ export default {
       type: Number,
       default: 80
     },
-    videoUrl:String
+    videoUrl:String,
+    length:Number
   },
   data () {
     return {
+      // 是否显示
+      isShow:"block",
       // 每行弹幕数最大值
-      MAX_DM_COUNT: 5,
+      MAX_DM_COUNT: 20                                                 ,
       // 行数
       CHANNEL_COUNT: 8,
       // 弹幕数组
-      barrages: ["123"],
+      barrages:[],
       // dom池
       domPool: [],
       // intervalDM
       intervalDM: null,
       // 取弹幕时间间隔
-      interValTime: 500,
+      interValTime: 700,
       // 滚动弹幕的通道
       hasPosition: [],
       // 顶部弹幕的通道
@@ -123,8 +162,12 @@ export default {
             src: this.nowUrl //url地址
         }]
       },
+
       urls:null,
-      nowUrl:null
+      nowUrl:null,
+      isPlay:false,
+      nowMin:"00",
+      nowSec:"00"
     };
   },
   computed: {
@@ -139,10 +182,9 @@ export default {
     this.barrageMainDm = this.$refs.barrageMainDm;
     // 缓存容器宽度
     this.barMainWidth = this.barrageMainDm.clientWidth;
+    this.listDanmu(0);
     // 初始化弹幕dom组
     this.init();
-    // 开始播放弹幕
-    this.playDm();
     // 注册页面监听器
     document.addEventListener("visibilitychange", this.visibilitychangeFn);
   },
@@ -225,7 +267,7 @@ export default {
      */
     getChannel () {
       for (let i = 0; i < this.CHANNEL_COUNT; i++) {
-        if (this.hasPosition[i] && this.domPool[i].length) return i;
+        if (true && this.domPool[i].length) return i;
       }
       return -1;
     },
@@ -267,6 +309,7 @@ export default {
       // console.log('biu~ [' + dmItem.content + ']');
       // dom.innerText = dmItem.content;
       // 判断是否是js弹幕
+      console.log("弹幕:"+dmItem.content);
       if (dmItem.isJs) {
         dom.innerHTML = dmItem.content;
       } else {
@@ -332,7 +375,6 @@ export default {
     playDm () {
       // 每隔1ms从弹幕池里获取弹幕（如果有的话）并发射
       let self = this; // 这里取一个self this 为了方便调试的时候看到this具体内容
-      self.barrages = self.arr
       self.intervalDM = setInterval(() => {
         let channel;
         if (self.barrages.length && (channel = self.getChannel()) != -1) {
@@ -343,6 +385,7 @@ export default {
             self.shootDanmu(domItem, danmu, channel);
           }
         }
+        console.log(channel);
         if (self.barrages.length > 0) {
           let channel;
           let topChannel;
@@ -361,6 +404,50 @@ export default {
           }
         }
       }, self.interValTime);
+    },
+    handlerControl:function(flag){
+      this.isShow = flag;
+    },
+    onPlayerPlaying:function(event){
+      console.log(event);
+    },
+    onPlayerTimeupdate:function(event){
+    
+      let nowSec = Math.floor(this.$refs.videoPlayer.player.currentTime());
+      
+      console.log(nowSec);
+      if(nowSec==60){
+        nowSec=0;
+        this.nowMin = parseInt(this.nowMin)+1;
+      }
+      if(nowSec<10){
+        nowSec = "0"+nowSec;
+      }
+      this.nowSec = nowSec;
+    },
+    handlerPlay:function(){
+      let player = this.$refs.videoPlayer.player;
+      console.log(this.$refs.videoPlayer.player);
+      if(this.isPlay){
+        player.pause();
+        this.pauseDm();
+      }else{
+        player.play();
+        this.playDm();
+      }
+      this.isPlay = !this.isPlay;
+    },
+    listDanmu:function(second){
+        console.log("加载"+second+"到"+second+10+"的弹幕");
+        this.$axios.get(this.COMMENT_URL+"danmu/"+this.$route.query.id+"/"+second)
+        .then(res => {
+            res = res.data
+            this.barrages = this.barrages.concat(res.data);
+            console.log(this.barrages);
+        })
+        .catch(err => {
+            console.error(err); 
+        })
     }
   },
   components: {
@@ -468,7 +555,6 @@ export default {
   */
 .video-js{
     position: absolute;  
-    border: 1px solid;
     width: 100%;
     height: 100%;
     display: block;
@@ -478,4 +564,123 @@ export default {
 /**
   自定义视频控制器样式
  */
+ .video-control{
+  border: 1px solid;
+  padding: 0 12px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+ }
+ .video-control-top{
+  height: 16px;
+
+  border: 1px solid;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 32px;
+ }
+ .progress,.progress-details{
+  position: absolute;
+  overflow: visible;
+  width: 100%;
+  height: 4px;
+  text-align: center;
+ }
+ .progress{
+  bottom: 2px;
+  background-color: gray;
+ }
+ .progress-details{
+   width: 20px;
+   background-color:blue;
+ }
+
+ 
+
+
+
+ .video-control-bottom{
+   
+    height: 20px;
+    line-height: 0px;
+    margin: 10px 0px 5px; 
+    opacity: 1;
+    transition: all .2s ease-out;
+  }
+  .video-control-bottom-left{
+    display: inline-block ;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+  .video-btn{
+    display: inline-block;
+    cursor: pointer;
+    text-align: center;
+    width: 36px;
+    font-size: 0;
+    z-index: 2;
+  }
+  .player-time{
+    display: inline-block;
+    width: 84px;
+    line-height: 22px;
+    height: 22px;
+    font-size: 12px;
+    position: relative;
+    cursor: pointer;
+  }
+  .video-time-seek{
+    display: none;
+    width: 60px;
+    padding: 0 5px;
+    height: 20px;
+    font-size: 12px;
+    color: hsla(0,0%,100%,.9);
+    line-height: 20px;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    left: 6px;
+    background: hsla(0,0%,100%,.2);
+    border: 1px solid transparent;
+  }
+  .player-time-wrap{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    color: hsla(0,0%,100%,.9);
+  }
+  .player-icon{
+    margin-bottom: 10px;
+  }
+  .player-svg{
+    width:36px;
+    height: 22px;
+  }
+
+
+  .video-control-bottom-right{
+    float:right;
+  }
+  .video-control-bottom-right div{
+    line-height: 22px;
+    display: inline-block;
+    padding: 0 3px;
+    cursor: pointer;
+    text-align: center;
+    width: 36px;
+    height: 22px;
+    color: hsla(0,0%,100%,.8);
+    fill: hsla(0,0%,100%,.9);
+    font-size: 14px;
+    font-weight: bold;
+    vertical-align: middle;
+  }
+
 </style>
