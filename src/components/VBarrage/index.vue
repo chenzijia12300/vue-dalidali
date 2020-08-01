@@ -7,9 +7,10 @@
       <div class="barrage-main-dm"
       @click="handlerPlay()"
       @mouseout="handlerControl(false)"
-                    @mouseover="handlerControl(true)" 
+            @mouseover="handlerControl(true)" 
            :class="{'ani-pause':isPause,'ani-running':!isPause}"
            ref="barrageMainDm">
+           
            <video-player  class="video-player vjs-custom-skin"
                     ref="videoPlayer"
                     
@@ -22,7 +23,7 @@
               
               <div class="video-control-top">
                 <div class="progress">
-                  <div class="progress-details">
+                  <div class="progress-details" :style="{width: progressDetails}">
 
                   </div>
                 </div>
@@ -127,6 +128,12 @@ export default {
   },
   data () {
     return {
+      // 现在时间总长度
+      nowTotalLength:0,
+      //步长
+      step:0,
+      // 进度条
+      progressDetails:0,
       // 是否显示
       isShow:"block",
       // 每行弹幕数最大值
@@ -187,6 +194,8 @@ export default {
     this.init();
     // 注册页面监听器
     document.addEventListener("visibilitychange", this.visibilitychangeFn);
+    this.step=798/this.length;
+    
   },
   watch: {
     isPause (val) {
@@ -414,16 +423,17 @@ export default {
     onPlayerTimeupdate:function(event){
     
       let nowSec = Math.floor(this.$refs.videoPlayer.player.currentTime());
-      
-      console.log(nowSec);
-      if(nowSec==60){
-        nowSec=0;
-        this.nowMin = parseInt(this.nowMin)+1;
-      }
+      this.nowMin =Math.floor(nowSec/60);
+      this.progressDetails = nowSec*this.step+"px";
+      console.log("进度条长度："+this.progressDetails);
+      nowSec = nowSec%60;
+
       if(nowSec<10){
         nowSec = "0"+nowSec;
       }
       this.nowSec = nowSec;
+
+  
     },
     handlerPlay:function(){
       let player = this.$refs.videoPlayer.player;
@@ -508,6 +518,16 @@ export default {
     overflow: hidden;
     // background: #000;
   }
+
+  .control-container{
+    position:absolute;
+    width: 100%;
+    height:555px;
+    border:1px solid;
+    background-color: blacks;
+    z-index: 9999;
+  }
+
   .barrage-main-dm {
     position: absolute;
     width: 100%;
@@ -593,6 +613,10 @@ export default {
  .progress{
   bottom: 2px;
   background-color: gray;
+ }
+
+ .progress:hover{
+   cursor: pointer;
  }
  .progress-details{
    width: 20px;

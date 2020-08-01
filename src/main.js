@@ -15,6 +15,7 @@ Vue.use(ElementUI)
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios; 
 Vue.prototype.COMMENT_URL="http://localhost:8082/"
+Vue.prototype.USER_URL="http://localhost:8111/userservice/"
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

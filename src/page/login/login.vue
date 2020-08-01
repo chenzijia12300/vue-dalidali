@@ -3,7 +3,7 @@
     <el-form class="login-container" label-position="left" label-width="0px">
       <h3 class="login_title">系统登录</h3>
       <el-form-item>
-        <el-input type="text" v-model="loginForm.username" auto-complete="off" placeholder="账号"></el-input>
+        <el-input type="text" v-model="loginForm.account" auto-complete="off" placeholder="账号"></el-input>
       </el-form-item>
  
       <el-form-item>
@@ -24,7 +24,7 @@
         data() {
             return {
                 loginForm: {
-                    username: '',
+                    account: '',
                     password: ''
                 },
                 responseResult: []
@@ -32,9 +32,14 @@
         },
         methods: {
             login:function(){
-                this.$axios.post('http://localhost:8769/login',this.loginForm)
-                .then(function(response){
-                    console.log(response)
+                this.$axios.post(this.USER_URL+'login',this.loginForm)
+                .then(res => {
+                  res = res.data;
+                  localStorage.setItem("userData",res.data);
+                  this.$router.push({name:'/home'});
+                })
+                .catch(err => {
+                  console.error(err.data); 
                 })
             }
         }
