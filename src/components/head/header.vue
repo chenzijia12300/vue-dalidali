@@ -1,6 +1,6 @@
 <template>
   <div id="hello">
-    <remote-js src="http://at.alicdn.com/t/font_1923532_j6bsscdqsv.js"></remote-js>
+    <remote-js src="http://at.alicdn.com/t/font_1923532_35p16gjzo3n.js"></remote-js>
      <el-row class="head">
         <el-col :span="num"><a href="/header"><div class="grid-content bg-purple">主站</div></a></el-col>
         <el-col :span="num"><a href="/header"><div class="grid-content bg-purple">番剧</div></a></el-col>
@@ -13,124 +13,123 @@
         <el-col :span="6">
             <el-input placeholder="请输入内容" v-model="input3" class="input-with-select" style="margin-top:10px">
             <el-button slot="append" icon="el-icon-search"></el-button>
-            </el-input>
+          </el-input>
         </el-col>
-        <el-col :span="1" @mouseover="showImage">
-            <avatar :avatar="avatar" style="width:36px;height:36px;line-height:80px;margin-left:25px"></avatar>
-        </el-col>
-        <div class="userInfo">
-          <div class="info-container">
-            <a href="#">
-              <img src="#">
-            </a>
-            <p class="username">汤姆猫</p>
-            <div class="level-content">
-
-              <!--等级-->
-              <div class="level-info">
-                <span class="grade">等级 5</span>
-                <span class="progress">14121/28800</span>
-                <a href="#" class="level-link">
-                  <div class="level-bar">
-                    <div class="level-progress">
+        <el-col :span="1">
+            <avatar  @mouseover.native="showDetails(true)" align="center" :avatar="avatar" :style="avatarCss"></avatar>
+        <transition name="fade">
+          <div class="userInfo" v-show="isShow" @mouseleave="showDetails(false)">
+            <div class="info-container">
+              <div class="info-avatar">
+                <avatar  :avatar="avatar" style="width:72px;height:72px;text-align: center;position:relative;bottom:20px"></avatar>
+            </div>
+              <p class="username">汤姆猫</p>
+              <div class="level-content">
+                <!--等级-->
+                <div class="level-info">
+                  <span class="grade">等级 5</span>
+                  <span class="progress">14121/28800</span>
+                  <a href="#" class="level-link">
+                    <div class="level-bar">
+                      <div class="level-progress">
+                      </div>
                     </div>
-                  </div>
-                </a>
+                  </a>
+                </div>
               </div>
-              <!-- 硬币 -->
-              <div class="coins">
-                <a href="https://account.bilibili.com/site/coin" target="_blank" title="硬币" class="jump">
-                  <svg >
-                    <use data-v-29bf33c0="" xlink:href="#icon-icon_shipin_yingbishu1"></use>
-                  </svg>
-                  <span data-v-29bf33c0="" class="money">263.0</span>
-                </a>
-                <a href="https://pay.bilibili.com/paywallet-fe/bb_balance.html" target="_blank" title="B币">
-                  <svg>
-                    <use data-v-29bf33c0="" xlink:href="#icon-icon_dingdao_Bbi"></use>
-                  </svg>
-                  <span data-v-29bf33c0="" class="money">0</span>
-                </a>                                   
+                <!-- 硬币 -->
+                <div class="coins">
+                  <a href="https://account.bilibili.com/site/coin" target="_blank" title="硬币" class="jump">
+                    <svg >
+                      <use data-v-29bf33c0="" xlink:href="#icon-icon_shipin_yingbishu1"></use>
+                    </svg>
+                    <span data-v-29bf33c0="" class="money">263.0</span>
+                  </a>
+                  <a href="https://pay.bilibili.com/paywallet-fe/bb_balance.html" target="_blank" title="B币">
+                    <svg>
+                      <use data-v-29bf33c0="" xlink:href="#icon-icon_dingdao_Bbi"></use>
+                    </svg>
+                    <span data-v-29bf33c0="" class="money">0</span>
+                  </a>                                   
+                </div>
+                <!-- 总数 -->
+                <div class="counts">
+                  <a href="">
+                    <div class="item-key">关注</div>
+                    <div class="item-value">
+                      <span class="item-num">43</span>
+                      <span class="item-unit"></span>
+                    </div>
+                  </a>
+                  <a href="">
+                    <div class="item-key">粉丝</div>
+                    <div class="item-value">
+                      <span class="item-num">43</span>
+                      <span class="item-unit"></span>
+                    </div>
+                  </a>
+                  <a href="">
+                    <div class="item-key">动态</div>
+                    <div class="item-value">
+                      <span class="item-num">43</span>
+                      <span class="item-unit"></span>
+                    </div>
+                  </a>
+                </div>
+                <!-- 列表 -->
+                <div class="links">
+                  <a href="https://account.bilibili.com/account/home" class="link-item">
+                    <div class="link-title">
+                      <svg aria-hidden="true" class="coins-icon">
+                        <use  xlink:href="#icon-renwu"></use>
+                      </svg>
+                      <span>个人中心</span>
+                    </div>
+                  </a>
+                  <a href="https://account.bilibili.com/account/home" class="link-item">
+                    
+                    <div class="link-title">
+                    <svg aria-hidden="true" class="coins-icon">
+                      <use xlink:href="#icon-tougao"></use>
+                    </svg>
+                    投稿管理
+                    </div>
+                  </a>
+                  <a href="https://account.bilibili.com/account/home" class="link-item">
+                    <div class="link-title">
+                    <svg aria-hidden="true" class="coins-icon">
+                      <use xlink:href="#icon-qianbao"></use>
+                    </svg>
+                    B币钱包
+                    </div>
+                  </a>
+                  <a href="https://account.bilibili.com/account/home" class="link-item">
+                    
+                    
+                    <div class="link-title">
+                    <svg aria-hidden="true" class="coins-icon">
+                      <use xlink:href="#icon-order"></use>
+                    </svg>
+                    订单中心
+                    </div>
+                  </a>
+                  
+                  
+                </div>
+                <!-- 退出 -->
+                <div data-v-29bf33c0="" class="logout">
+                  <a data-v-29bf33c0="" href="https://account.bilibili.com/login?act=exit">
+                  <i data-v-29bf33c0="" class="link-icon bilifont bili-icon_dingdao_dengchu"></i>
+                    退出
+                  </a>
+                </div>  
               </div>
-              <!-- 总数 -->
-              <div class="counts">
-                <a href="">
-                  <div class="item-key">关注</div>
-                  <div class="item-value">
-                    <span class="item-num">43</span>
-                    <span class="item-unit"></span>
-                  </div>
-                </a>
-                <a href="">
-                  <div class="item-key">粉丝</div>
-                  <div class="item-value">
-                    <span class="item-num">43</span>
-                    <span class="item-unit"></span>
-                  </div>
-                </a>
-                <a href="">
-                  <div class="item-key">动态</div>
-                  <div class="item-value">
-                    <span class="item-num">43</span>
-                    <span class="item-unit"></span>
-                  </div>
-                </a>
-              </div>
-              <!-- 列表 -->
-              <div class="links">
-                <a href="https://account.bilibili.com/account/home" class="link-item">
-                  <svg aria-hidden="true" class="coins-icon">
-                    <use data-v-29bf33c0="" xlink:href="#bili-icon_dingdao_Bbi"></use>
-                  </svg>
-                  <div class="link-title">
-                  个人中心
-                  </div>
-                </a>
-                <a href="https://account.bilibili.com/account/home" class="link-item">
-                  <svg aria-hidden="true" class="coins-icon">
-                    <use data-v-29bf33c0="" xlink:href="#bili-icon_dingdao_Bbi"></use>
-                  </svg>
-                  <div class="link-title">
-                  投稿管理
-                  </div>
-                </a>
-                <a href="https://account.bilibili.com/account/home" class="link-item">
-                  <svg aria-hidden="true" class="coins-icon">
-                    <use data-v-29bf33c0="" xlink:href="#bili-icon_dingdao_Bbi"></use>
-                  </svg>
-                  <div class="link-title">
-                  B币钱包
-                  </div>
-                </a>
-                <a href="https://account.bilibili.com/account/home" class="link-item">
-                  <svg aria-hidden="true" class="coins-icon">
-                    <use data-v-29bf33c0="" xlink:href="#bili-icon_dingdao_Bbi"></use>
-                  </svg>
-                  <div class="link-title">
-                  订单中心
-                  </div>
-                </a>
-                <a href="https://account.bilibili.com/account/home" class="link-item">
-                  <svg aria-hidden="true" class="coins-icon">
-                    <use data-v-29bf33c0="" xlink:href="#bili-icon_dingdao_Bbi"></use>
-                  </svg>
-                  <div class="link-title">
-                  直播中心
-                  </div>
-                </a>
-              </div>
-              <!-- 退出 -->
-              <div data-v-29bf33c0="" class="logout">
-                <a data-v-29bf33c0="" href="https://account.bilibili.com/login?act=exit">
-                <i data-v-29bf33c0="" class="link-icon bilifont bili-icon_dingdao_dengchu"></i>
-                  退出
-                </a>
-              </div>  
-            </div>
-            
+              
 
-            </div>
-        </div>
+          
+          </div>
+        </transition>
+        </el-col>
         <el-col :span="num"><a href="/header"><div class="grid-content bg-purple">大会员</div></a></el-col>
         <el-col :span="num"><a href="/header"><div class="grid-content bg-purple">消息</div></a></el-col>
         <el-col :span="num"><a href="/header"><div class="grid-content bg-purple">动态</div></a></el-col>
@@ -152,7 +151,17 @@ export default {
       num: 1,
       size: 1,
       input3: null,
-      circleUrl:null
+      circleUrl:null,
+      isShow:false,
+      size:36,
+      avatarCss:{
+        width:'36px',
+        height:'36px',
+        lineHeight:'30px',
+        marginTop:'10px',
+        marginLeft:'20px',
+        visibility:'visible'
+      }
     }
   },
   components: {
@@ -164,6 +173,17 @@ export default {
       }
     },
     avatar
+  },
+  methods:{
+    showDetails:function(flag){
+      this.isShow = flag
+      if(flag){
+        console.log("修改");
+        this.avatarCss.visibility = "hidden"
+      }else{
+        this.avatarCss.visibility = "visible"
+      }
+    }
   }
 }
 </script>
@@ -171,8 +191,13 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
+    *{
+      padding: 0px;
+      margin: 0px;
+    }
 
     .el-row {
+      text-align: center;
       margin-bottom: 20px;
     }
     .el-col {
@@ -260,14 +285,24 @@ export default {
 
 /* 用户信息 */
   .userInfo{
+    border: 1px solid;
+    top:60px;
+    left: 790px;
+    background-color: white;
     position: absolute;
-      width: 280px;
-      transform-origin: center top;
-      z-index: 2083;
-      border: 1px solid;
+    width: 280px;
+    z-index: 9999;
   }
 
+  .fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+
   .userInfo div{
+    
     display: inline-block;
   }
 
@@ -276,14 +311,14 @@ export default {
     height: 15px;
   }
 
+  .info-avatar{
+    width: 100%;
+    text-align: center;
+  }
   .info-container{
+    margin:0 auto;  
     min-height: 492px;
     position: relative;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    -ms-flex-align: center;
     align-items: center;
   }
 
@@ -331,6 +366,7 @@ export default {
   } 
   
   .coins{
+    padding: 0 20px;
     width: 100%;
     border-bottom: 1px solid #f4f4f4;
     color: #212121;
@@ -339,4 +375,80 @@ export default {
   .money{
     margin: 0 20px 0 8px;
   }
+  
+  .counts{
+    margin: 0px auto;
+  }
+
+  .counts a{
+    width: 85px;
+    flex: 1;
+    display: inline-block;
+    text-align: center;
+  }
+
+  .counts div{
+    display: block;
+  }
+
+
+/* 链接 */
+  .links{
+    width: 100%;
+    border-bottom: 1px solid #f4f4f4;
+    padding: 7px 0;
+    vertical-align: middle;
+    color: #979797;
+    margin-right: 5px;
+  }
+
+  .links a{ 
+    display: block;
+    cursor: pointer;
+    align-items: center;
+    transition: .3s ease;
+    padding: 8px 23px;
+  }
+
+  .links a:hover{
+    background:#606266;;
+  }
+
+  
+  .links svg{
+    width:24px;
+    height: 24px;
+    
+  }
+
+  .link-title span{
+    line-height: 30px;
+    font-size: 14px;
+  }
+
+  .link-title{
+
+    color: #212121;
+    align-items: center;
+    vertical-align: middle;
+  }
+
+
+/* 通用 */
+
+  .item-key{
+    font-size: 12px;
+    color: #999;
+  }
+
+  .item-value{
+    font-size: 16px;
+    color: #212121;
+    align-items: center;
+    font-weight: 600;
+    height: 20px;
+  }
+
+
+
 </style>
