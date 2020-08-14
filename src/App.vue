@@ -12,7 +12,8 @@ export default {
   data (){
     return{
       header_show:true,
-      isheader:false
+      isheader:false,
+      key:null
     }
   },
   components: {

@@ -6,6 +6,7 @@
         <div class="primary-menu-itnl">
           <!--小图标-->
             <ul class="con">
+            <a href="#">
               <li>
                 <div class="round" style="background: #ff5c7c;">
                         <svg class="big-icon" aria-hidden="true">
@@ -14,6 +15,8 @@
                 </div>
                 <span>首页</span>
               </li>
+              </a>
+              <a href="#">
               <li>
                 <div class="round" style="background-color: #fcba2a;">
                         <svg class="big-icon" aria-hidden="true">
@@ -22,6 +25,8 @@
                 </div>
                 <span>动态</span>
               </li>
+              </a>
+              <a href="#">
               <li>
                 <div class="round" style="background-color:#00a1d6">
                         <svg class="big-icon" aria-hidden="true">
@@ -30,6 +35,8 @@
                 </div>
                 <span>排行榜</span>
               </li>
+              </a>
+              <a href="#">
               <li>
                 <div class="round" style="background-color: #6dc781;">
                         <svg class="big-icon" aria-hidden="true">
@@ -38,15 +45,28 @@
                 </div>
                 <span>频道</span>
               </li>
+              </a>
             </ul>
             <!-------------分割线---------------->
             <span class="tab-line-itnl"></span>
             <!--频道列表-->
             <div class="item-container">
                   <div class="item-type" v-for="(item,index) in items" v-bind:key="index">
-                    <a href="#">
+                    <el-popover placement="bottom" trigger="hover" width="70">
+                        <div>
+                            <ul class="sonCategory">
+                               <li v-for="(sonItem,sIndex) in item.childList" v-bind:key="sIndex">
+                                    <a href="#">
+                                        {{sonItem.name}}
+                                    </a>   
+                                </li> 
+                            </ul>
+                        </div>
+                    
+                    <a href="#" slot="reference">
                       <span>{{item.name}}<em>{{item.proNum}}</em></span>
                     </a>
+                    </el-popover>
                   </div>  
             </div>
             <!-------------分割线---------------->
@@ -116,13 +136,13 @@
             <!--推荐视频-->
             <div class="recommend-box">
                 <div class="recommnd-card">
-                    <div class="info-box" v-for="(item,index) in recommendList" v-bind:key="index">
+                    <div class="info-box" v-for="(item,index) in recommendRightList" v-bind:key="index">
                         <a href="#">
                             <img :src="item.cover"/>
                         </a>
                         <a :href="'#/details?id='+item.id" target="view_window">
                             <div class="info">
-            
+    
                                     <p class="title" :title="item.title">{{item.title}}</p>
                                     <p class="up">
                                         <svg class="small-icon" aria-hidden="true" style="width:16px;height:16px">
@@ -162,106 +182,8 @@
                 </div>
             </header>
             <div class="ext-box">
-                <div class="video-card-common">
-                    <div class="card-pic">
-                        <a href="#">
-                            <img src="http://i0.hdslb.com/bfs/archive/783c0ecdeb0c278aca941e923cf3fd352f4a190b.jpg@412w_232h_1c_100q.jpg"/> 
-                            <div class="count">
-                               <div class="left"></div>
-                               <div class="right"></div>
-                            </div>
-                            <p class="ex-title">
-                                30斤椰子换来一颗【龙吟椰子】完美复刻米其林三星甜品
-                            </p>
-                            <div class="van-framepreview">
-                                <div class="van-fpbar-box">
-                                    <span style="width:50%"></span>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <a href="#" class="ex-up">
-                            <svg class="small-icon" aria-hidden="true">
-                                    <use xlink:href="#icon-UPzhu"></use>
-                            </svg>
-                            假装是个UP主 
-                        </a>
-                </div>
-                <div class="video-card-common">
-                    <div class="card-pic">
-                        <a href="#">
-                            <img src="http://i0.hdslb.com/bfs/archive/783c0ecdeb0c278aca941e923cf3fd352f4a190b.jpg@412w_232h_1c_100q.jpg"/> 
-                            <div class="count">
-                               <div class="left"></div>
-                               <div class="right"></div>
-                            </div>
-                            <p class="ex-title">
-                                30斤椰子换来一颗【龙吟椰子】完美复刻米其林三星甜品
-                            </p>
-                            <div class="van-framepreview">
-                                <div class="van-fpbar-box">
-                                    <span style="width:50%"></span>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <a href="#" class="ex-up">
-                            <svg class="small-icon" aria-hidden="true">
-                                    <use xlink:href="#icon-UPzhu"></use>
-                            </svg>
-                            假装是个UP主 
-                        </a>
-                </div>
-                <div class="video-card-common">
-                    <div class="card-pic">
-                        <a href="#">
-                            <img src="http://i0.hdslb.com/bfs/archive/783c0ecdeb0c278aca941e923cf3fd352f4a190b.jpg@412w_232h_1c_100q.jpg"/> 
-                            <div class="count">
-                               <div class="left"></div>
-                               <div class="right"></div>
-                            </div>
-                            <p class="ex-title">
-                                30斤椰子换来一颗【龙吟椰子】完美复刻米其林三星甜品
-                            </p>
-                            <div class="van-framepreview">
-                                <div class="van-fpbar-box">
-                                    <span style="width:50%"></span>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                        <a href="#" class="ex-up">
-                            <svg class="small-icon" aria-hidden="true">
-                                    <use xlink:href="#icon-UPzhu"></use>
-                            </svg>
-                            假装是个UP主 
-                        </a>
-                </div>
-                <div class="video-card-common">
-                    <div class="card-pic">
-                        <a href="#">
-                            <img src="http://i0.hdslb.com/bfs/archive/783c0ecdeb0c278aca941e923cf3fd352f4a190b.jpg@412w_232h_1c_100q.jpg"/> 
-                            <div class="count">
-                               <div class="left"></div>
-                               <div class="right"></div>
-                            </div>
-                            <p class="ex-title">
-                                30斤椰子换来一颗【龙吟椰子】完美复刻米其林三星甜品
-                            </p>
-                            <div class="van-framepreview">
-                                <div class="van-fpbar-box">
-                                    <span style="width:50%"></span>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <a href="#" class="ex-up">
-                        <svg class="small-icon" aria-hidden="true">
-                                    <use xlink:href="#icon-UPzhu"></use>
-                        </svg>
-                        假装是个UP主 
-                    </a>
-                </div>
+                <basic :videoItem="videoItem" v-for="(videoItem, index) in recommendLeftList" :key="index">      
+                </basic>
             </div>
             </div>
             <!--专栏位-->
@@ -281,8 +203,6 @@
                     </svg>
                 </a>
                 </div>
-
-                
         <div class="recommend-content-list" v-for="(item,index) in items" v-bind:key="index">
             <div class="extension">
             <header class="storey-title">
@@ -291,54 +211,12 @@
                             <use xlink:href="#icon-tuiguang"></use>
                     </svg>
                     <a href="#" class="link-name">{{item.name}}</a>
-                    
                 </div>
             </header>
             <div class="zone-list-box" :id="item.id">
-                <div class="video-card-common" v-for="(videoItem, index) in videoList[item.id] " :key="index">
-                    <a :href="'#/details?id='+videoItem.id" target="view_window">
-                    <div class="card-pic"  @mousemove="movePreview($event)" @mouseout="clearPreview($event)">
-                            <img :src="videoItem.cover"/> 
-                            <div class="count">
-                               <div class="left">
-                                   <span style="margin-right:16px">
-                                        <svg style="width:16px;height:16px;vertical-align: middle;" aria-hidden="true">
-                                                <use xlink:href="#icon-bofangshu"></use>
-                                        </svg>
-                                        {{videoItem.playNum}}
-                                    </span>
-                                    <span>
-                                        <svg style="width:14px;height:14px;vertical-align: middle;" aria-hidden="true">
-                                            <use xlink:href="#icon-zan"></use>
-                                        </svg>  
-                                        {{videoItem.praiseNum}}
-                                    </span>
-                               </div>
-                               <div class="right">
-                                   <span>{{videoLength(videoItem.length)}}</span>
-                               </div>
-                            </div>
-                            <div id="preview-container" class="preview-container" :style="{backgroundImage: 'url(' + videoItem.previewUrl + ')'}">
-                                <div class="van-framepreview">
-                                <div class="van-fpbar-box">
-                                    <span  class="progress-bar"></span>
-                                </div>
-                            </div>    
-                            </div>
-                            <p class="ex-title">
-                                {{videoItem.title}}
-                            </p>
-                            
+                    <basic :videoItem="videoItem" v-for="(videoItem, index) in videoList[item.id] " :key="index">
                         
-                    </div>
-                    </a>
-                    <a href="#" class="ex-up">
-                            <svg class="small-icon" aria-hidden="true">
-                                    <use xlink:href="#icon-UPzhu"></use>
-                            </svg>
-                            {{videoItem.upName}}
-                    </a>
-                </div>
+                    </basic>
             </div>
         </div>
             <!--专栏位-->
@@ -400,7 +278,16 @@
         padding: 0;
     }
 
-     .back{
+    .sonCategory li{
+        list-style: none;
+        line-height: 30px;
+    }
+
+    .sonCategory a:hover{
+        color: #73c9e5;
+    }
+
+    .back{
     z-index: -1;
     left: 0px;
     top: -10px;
@@ -426,6 +313,7 @@
 
 
   .con{
+    font-size: 14px;
     display: inline-block;
     margin: 0; padding: 0;
     text-align: center;
@@ -438,6 +326,9 @@
     width: 48px;
     height: 66px;
     display:block;
+  }
+  .con a:hover span{
+      color: #73c9e5;
   }
   .round{
     position: relative;
@@ -460,6 +351,11 @@
     width: 73px;
     height: 34px;
   }
+
+  .item-link a:hover span{
+      color: #73c9e5;
+  }
+  
   .item-type em{
     font-style: normal;
     font-size: 12px;
@@ -667,106 +563,8 @@
         cursor: pointer;
      }
 
-     .video-card-common img{
-        width: 206px;
-        height: 116px;
-     }
 
-     .card-pic{
-        position: relative;
-        width: 100%;
-        height: 116px;
-     }
 
-    .ext-box{
-        width:870px;
-        height: 192px;
-        margin: 0;padding: 0;
-
-    }
-    .video-card-common:last-child{
-        margin-right: 0px;
-    }
-
-    .video-card-common {
-        margin: 0;padding: 0;
-        margin-right: 10px;
-        display: inline-block;
-        width: 206px;
-        height: 192px;
-    }
-
-    .card-pic{
-        width: 100%;
-        height: 116px;
-    }
-
-    .count{
-        line-height: 10px;
-        font-size: 12px;
-        z-index: 999;
-        position: absolute;
-        bottom: 0;
-        width: 190px;
-        padding: 6px 8px;
-        color: #fff;
-    }
-
-    .ex-title{
-        font-size: 14px;
-        line-height: 20px;
-        margin: 10px 0 8px;
-        height: 40px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        font-weight: 500;
-        padding-right: 12px;
-    }
-
-    .van-framepreview{
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        overflow: hidden;
-        transition: opacity .3s;
-        z-index: 1;
-    }
-
-    .van-fpbar-box{
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 10px;
-        border-color: #000;
-        border-style: solid;
-        border-width: 4px 8px;
-        background: #444;
-        box-sizing: border-box;
-    }
-
-    .van-fpbar-box span {
-        display: block;
-        background: #fff;
-        height: 2px;
-        transition: width .12s;
-    }
-
-    .ex-up{
-        display: flex;
-        -ms-flex-align: center;
-        align-items: center;
-        font-size: 12px;
-        color: #999;
-        line-height: 16px;
-        margin-top: 60px;
-    }
 
     /*
         专栏位css
@@ -838,31 +636,63 @@
         height: 404px;
         margin: 0;padding: 0;
     }
-    
 
-    /**
-        预览图样式
-    */
 
-    .preview-container{
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 116px;
-        z-index: -1;
-    }
-
-    .left{
-        float: left;
-    }
-
-    .right{
-        float: right;
-    }
 </style>   
 <script>
 import https from '../../https.js'  
+import basic from '@/components/video/basic.vue'
+
+export default {
+    components:{
+        basic
+    },
+    data(){
+        return{
+            items:null,
+            imageUrl:require("../../assets/image.jpg"),
+            recommendLeftList:null,
+            recommendRightList:null,
+            videoList:new Array(10)
+      }
+    },
+    mounted(){
+        //加载频道+
+        this.$axios.get("http://localhost:8081/category")
+        .then(res => {
+            res = res.data
+            console.log(res.message);
+            this.items=res.data;
+        })
+        .catch(err => {
+            console.error(err); 
+        })
+
+        //加载推荐左边视频
+        this.$axios.get("http://localhost:8081/video/recommend/LEFT/1")
+        .then(res => {
+            res = res.data
+            this.recommendLeftList = res.data
+        })
+        .catch(err => {
+            console.error(err); 
+        })
+
+        //加载推荐右边视频
+        this.$axios.get("http://localhost:8081/video/recommend/RIGHT/1")
+        .then(res => {
+            res = res.data
+            this.recommendRightList = res.data
+        })
+        .catch(err => {
+            console.error(err); 
+        })
+    },
+    created(){
+        myVue = this;
+    }
+}
+
 /*
          *
          * String: className
@@ -912,64 +742,4 @@ lazyLoad('zone-list-box', function (ele) {
         console.error(err); 
     })
 });
-export default {
-    data(){
-        return{
-            items:null,
-            imageUrl:require("../../assets/image.jpg"),
-            recommendList:null,
-            videoList:new Array(10)
-      }
-    },
-    mounted(){
-        //加载频道+
-        this.$axios.get("http://localhost:8081/category")
-        .then(res => {
-            res = res.data
-            console.log(res.message);
-            this.items=res.data;
-        })
-        .catch(err => {
-            console.error(err); 
-        })
-
-        //加载推荐视频
-        this.$axios.get("http://localhost:8081/video/recommend/1")
-        .then(res => {
-            res = res.data
-            this.recommendList = res.data
-        })
-        .catch(err => {
-            console.error(err); 
-        })
-    },
-    created(){
-        myVue = this;
-    },
-    methods:{
-        movePreview:function(event){
-            let target = event.currentTarget.getElementsByClassName("preview-container")[0];;
-            let x = event.offsetX;
-            let i = Math.ceil(x/(206/10));
-            target.style.backgroundPosition=""+(-i*206)+"px 0px";
-            target.style.zIndex=999;
-            let progressBar = target.getElementsByClassName("progress-bar")[0];
-            console.log(target);
-            progressBar.style.width=i*10+"%"
-
-        },
-        clearPreview:function(){
-            let target = event.currentTarget.getElementsByClassName("preview-container")[0];
-            target.style.zIndex=-1;
-            console.log("移除~")
-        },
-        videoLength:function(length){
-            console.log(length);
-            let minutes = parseInt(length/60);
-            minutes = minutes<10?'0'+minutes:minutes;
-            console.log(minutes);
-            return minutes+":"+(length%60)
-        }
-    }
-}
 </script>

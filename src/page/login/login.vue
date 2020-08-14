@@ -35,7 +35,8 @@
                 this.$axios.post(this.USER_URL+'login',this.loginForm)
                 .then(res => {
                   res = res.data;
-                  localStorage.setItem("userData",res.data);
+                  console.log(JSON.stringify(res.data));
+                  localStorage.setItem("userData",JSON.stringify(res.data));
                   this.$router.push({name:'/home'});
                 })
                 .catch(err => {
