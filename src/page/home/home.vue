@@ -229,39 +229,26 @@
                     </svg> 
                     </a>
                 </header>
-                <div class="rank-wrap">
-                    <span class="number on">1</span>
-                    <div class="preview">
-                        <!--图片-->
-                        <div class="pic">
-                            <a href="#" class="link">
-                                <img src="//i1.hdslb.com/bfs/archive/d3321bbd0645f01a1583a09fa4ef976ba3b8b3b6.jpg@140w_79h_1c_100q.webp"/>
-                            </a>
+                <div class="rank-wrap" v-for="(videoItem,index) in topVideoList[item.id]" :key="index">
+                    <a href="#">
+                        <span class="number" :class="{ 'on' : index<3}">{{index+1}}</span>
+                        <div class="preview" v-if="index==0">
+                            <!--图片-->
+                            <div class="pic">
+                                <a href="#" class="link">
+                                    <img :src="videoItem.cover"/>
+                                </a>
+                            </div>
+                            <div class="txt">
+                                <a href="#" class="link">
+                                    <p title="" >{{videoItem.title}}</p>
+                                </a>
+                                <span>综合评分:{{videoItem.playNum*1.5}}万</span>
+                            </div>
                         </div>
-                        <div class="txt">
-                            <a href="#" class="link">
-                                <p title="" >对不起，我旧病复发，医生说这次需要移植</p>
-                            </a>
-                            <span>综合评分:151.6万</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="rank-wrap">
-                    <span class="number on">2</span>
-                    <a href="#" class="link">
-                         <p class="title">开口以为是青铜，结果是王者的门牙哥来了！Beatbox senorita翻唱</p>
-                    </a>
-                </div>
-                <div class="rank-wrap">
-                    <span class="number on">3</span>
-                    <a href="#" class="link">
-                         <p class="title">【初音ミク】就算没有爱 只要有你就好【ピノキオピー】</p>
-                    </a>
-                </div>
-                <div class="rank-wrap">
-                    <span class="number">4</span>
-                    <a href="#" class="link">
-                         <p class="title">【drum尊】中国的粉丝们，我开B站账号了！</p>
+                        <a href="#" class="link" v-else>
+                            <p class="title"> {{videoItem.title}}</p>
+                        </a>
                     </a>
                 </div>
             </div>
@@ -355,6 +342,18 @@
   .item-link a:hover span{
       color: #73c9e5;
   }
+
+  .link p{
+    font-size: 14px;
+    height: 40px;
+    line-height: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    margin-bottom: 5px;
+  }
   
   .item-type em{
     font-style: normal;
@@ -394,6 +393,9 @@
         display: inline-block;
         height: 34px;
     }
+
+
+
     .big-icon{
        width: 18px; height: 20px;
        vertical-align: -0.15em;
@@ -637,6 +639,14 @@
         margin: 0;padding: 0;
     }
 
+    .rank-wrap a:hover{
+        color: #00a1d6;
+    }
+
+    .link:hover .title{
+        color: #00a1d6;
+    }
+
 
 </style>   
 <script>
@@ -653,7 +663,8 @@ export default {
             imageUrl:require("../../assets/image.jpg"),
             recommendLeftList:null,
             recommendRightList:null,
-            videoList:new Array(10)
+            videoList:new Array(10),
+            topVideoList:new Array(10)
       }
     },
     mounted(){
@@ -737,6 +748,16 @@ lazyLoad('zone-list-box', function (ele) {
         res = res.data;
         console.log(res)
         myVue.$set(myVue.videoList,ele.id,res.data)
+    })
+    .catch(err => {
+        console.error(err); 
+    })
+
+    myVue.$axios.get("http://localhost:8081/video/top/"+ele.id+"/10")
+    .then(res => {
+        res = res.data;
+        console.log(res)
+        myVue.$set(myVue.topVideoList,ele.id,res.data)
     })
     .catch(err => {
         console.error(err); 

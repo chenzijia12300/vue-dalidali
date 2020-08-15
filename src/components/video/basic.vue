@@ -30,7 +30,9 @@
         </div>    
         </div>
         <p class="ex-title" v-show="flag">
-            {{videoItem.title}}
+            <a href="#">
+                {{videoItem.title}}
+            </a>
         </p>    
     </div>
     </a>
@@ -38,7 +40,9 @@
     <svg class="small-icon" aria-hidden="true">
             <use xlink:href="#icon-UPzhu"></use>
     </svg>
-    {{videoItem.upName}}
+    <a href="#" class="upName">
+        {{videoItem.upName}}
+    </a>
     </a>
     </div>
 </template>
@@ -212,5 +216,9 @@ export default {
         color: #999;
         line-height: 16px;
         
+    }
+
+    .ex-title a:hover,.upName:hover{
+        color: #00a1d6;
     }
 </style>
