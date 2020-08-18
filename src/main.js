@@ -8,8 +8,12 @@ import 'element-ui/lib/theme-chalk/index.css'
 import VideoPlayer from 'vue-video-player'
 import axios from 'axios' 
 import moment from 'moment'
+import 'element-ui/lib/theme-chalk/base.css';
+import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
 require('video.js/dist/video-js.css')
 require('vue-video-player/src/custom-theme.css')
+Vue.component(CollapseTransition.name, CollapseTransition)
+
 Vue.use(VideoPlayer)
 Vue.use(ElementUI)
 Vue.config.productionTip = false

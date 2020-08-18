@@ -64,8 +64,9 @@ export default {
         movePreview:function(event){
             let target = event.currentTarget.getElementsByClassName("preview-container")[0];;
             let x = event.offsetX;
-            let i = Math.ceil(x/(206/10));
-            target.style.backgroundPosition=""+(-i*206)+"px 0px";
+            let width = target.offsetWidth
+            let i = Math.ceil(x/(width/10));
+            target.style.backgroundPosition=""+(-i*width)+"px 0px";
             target.style.zIndex=999;
             let progressBar = target.getElementsByClassName("progress-bar")[0];
             console.log(target);
@@ -88,6 +89,10 @@ export default {
 }
 </script>
 <style scoped>
+    *{
+        margin: 0;
+        padding: 0;
+    }
       a {text-decoration:none;color:#000} 
      /*
         视频
@@ -102,14 +107,8 @@ export default {
         width: 100%;
     }
     .card-pic img{
-                height: 116px;
-        width: 206px;
-    }
-    .ext-box{
-        width:870px;
-        height: 192px;
-        margin: 0;padding: 0;
-
+        height: 100%;
+        width: 100%;
     }
     .video-card-common:last-child{
         margin-right: 0px;
@@ -119,8 +118,8 @@ export default {
         margin: 0;padding: 0;
         margin-right: 10px;
         display: inline-block;
-        width: 206px;
-        height: 192px;
+        width: 100%;
+        height: 100%;
     }
     .count{
         line-height: 10px;
@@ -128,7 +127,7 @@ export default {
         z-index: 999;
         position: absolute;
         bottom: 75px;
-        width: 190px;
+        width: 100%;
         padding: 6px 8px;
         color: #fff;
     }
@@ -163,7 +162,7 @@ export default {
         left: 0;
         top: 0;
         width: 100%;
-        height: 116px;
+        height: 100%;
         z-index: -1;
     }
 

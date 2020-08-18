@@ -1,782 +1,972 @@
 <template>
-        <div class="v-wrap">
-            <div class="header-box">
-
+  <div class="v-wrap">
+    <div class="header-box"></div>
+    <div class="l-con">
+      <div class="video-header-info">
+        <h1 :title="details.title" class="video-title">
+          <!---->
+          <span class="tit">{{details.title}}</span>
+        </h1>
+        <div class="video-data">
+          <span class="a-crumbs">
+            <a target="_blank" href="//www.bilibili.com/v/information/">{{details.categoryPName}}</a>
+            >
+            <a
+              target="_blank"
+              href="//www.bilibili.com/v/information/global/"
+            >{{details.categoryName}}</a>
+          </span>
+          <span>2020-07-08 14:13:48</span>
+          <!---->
+        </div>
+        <div class="video-data">
+          <span :title="details.playNum+'总播放数'" class="view">{{details.playNum}}播放量&nbsp;·&nbsp;</span>
+          <span title="历史累计弹幕数503" class="dm">{{details.danmuNum}}弹幕</span>
+          <span class="copyright">
+            <svg aria-hidden="true" style="width:14px;height:14px;vertical-align:middle">
+              <use xlink:href="#icon-jinzhi" />
+            </svg>
+            未经作者授权，禁止转载
+          </span>
+          <!---->
+        </div>
+      </div>
+      <div class="player-wrap">
+        <v-barrage
+          ref="barrage"
+          :isPause="isPause"
+          :percent="100"
+          :videoUrl="details.urls"
+          :length="details.length"
+        ></v-barrage>
+      </div>
+      <div class="player-bottom">
+        <div class="player-video-sendbar">
+          <!--多少人在看-->
+          <div class="player-video-info">
+            <div class="player-video-info-people">
+              <span class="player-video-info-people-number">9999</span>
+              <span class="player-video-info-people-text">人正在看</span>
             </div>
-            <div class="l-con">
-                <div class="video-header-info">
-                    <h1 :title="details.title" class="video-title">
-                        <!---->
-                        <span class="tit">{{details.title}}</span>
-                        </h1>
-                    <div class="video-data">
-                        <span class="a-crumbs">
-                            <a target="_blank" href="//www.bilibili.com/v/information/"
-                            >{{details.categoryPName}}</a>
-                            >
-                            <a target="_blank" href="//www.bilibili.com/v/information/global/">{{details.categoryName}}</a>
-                            </span><span>2020-07-08 14:13:48</span>
-                            <!---->
-                            </div>
-                            <div class="video-data">
-                                <span :title="details.playNum+'总播放数'" class="view">
-                                    {{details.playNum}}播放量&nbsp;·&nbsp;
-                                </span><span title="历史累计弹幕数503" class="dm">{{details.danmuNum}}弹幕</span><span class="copyright">
-                                    <svg aria-hidden="true" style="width:14px;height:14px;vertical-align:middle">
-                                        <use xlink:href="#icon-jinzhi"></use>
-                                    </svg>
-                                    未经作者授权，禁止转载</span><!----></div>
-                </div>
-                 <div class="player-wrap">
-                    <v-barrage
-                        ref="barrage"
-                        :isPause="isPause"
-                        :percent="100"
-                        :videoUrl="details.urls"
-                        :length="details.length"
-                        >
-                    </v-barrage>
-                 </div>
-                <div class="player-bottom">
-                    <div class="player-video-sendbar">
-                        <!--多少人在看-->
-                        <div class="player-video-info">
-                            <div class="player-video-info-people">
-                                <span class="player-video-info-people-number">9999</span>
-                                <span class="player-video-info-people-text">人正在看</span>
-                            </div>
-                            <!--多少弹幕量-->
-                            <div class="player-video-info-danmu">
-                                <span>，</span>
-                                <span class="player-video-info-danmu-number">1246</span>
-                                <span class="player-video-info-danmu-text">条弹幕</span>
-                            </div>
-                        </div>
-                        <div class="player-video-danmaku-root">
-                            <!--开关按钮-->
-                            <el-switch
-                            v-model="value"
-                            active-color="#13ce66"
-                            inactive-color="#ff4949">
-                            </el-switch>
-                            <!--弹幕控制框-->
-                            <svg class="gg-icon" aria-hidden="true" style="margin-left:10px">
-                                <use xlink:href="#icon-shiliangzhinengduixiang"></use>
-                            </svg>
-                    
-                        </div>
-                        <div class="player-video-inputbar-wrap">
-                                <svg class="gg-icon" aria-hidden="true" style="margin-left:10px">
-                                    <use xlink:href="#icon-yansexuanzeqi"></use>
-                                </svg> 
-                                <input class="player-video-danmaku-input" placeholder="发个友善的弹幕见证当下" style="" v-model="danmuInput">
-                                <div class="player-video-danmaku-hint">
-                                    <a href="#" class="hint">
-                                        <span>弹幕礼仪</span>
-                                    </a>
-                                </div>
-                                <div class="player-video-danmaku-btn" @click="submitDanmu()">
-                                    发送
-                                </div>
-                            </div>
-                    </div>
-                </div>
-                <div class="ops">
-                    <span title="点赞数4098" class="like"><!----><!----><!----><!----><!---->
-                        <svg class="gg-icon" aria-hidden="true">
-                            <use xlink:href="#icon-dianzan"></use>
-                        </svg>
-                        4098</span>
-                    <span title="投硬币枚数1446" class="coin">
-                        <svg class="gg-icon" aria-hidden="true" style="background-color:gray;border-radius: 50%;border:none">
-                            <use xlink:href="#icon-icon_shipin_yingbishu"></use>
-                        </svg>
-                        1446</span>
-                    <span title="收藏人数894" class="collect">
+            <!--多少弹幕量-->
+            <div class="player-video-info-danmu">
+              <span>，</span>
+              <span class="player-video-info-danmu-number">1246</span>
+              <span class="player-video-info-danmu-text">条弹幕</span>
+            </div>
+          </div>
+          <div class="player-video-danmaku-root">
+            <!--开关按钮-->
+            <el-switch v-model="value" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+            <!--弹幕控制框-->
+            <svg class="gg-icon" aria-hidden="true" style="margin-left:10px">
+              <use xlink:href="#icon-shiliangzhinengduixiang" />
+            </svg>
+          </div>
+          <div class="player-video-inputbar-wrap">
+            <svg class="gg-icon" aria-hidden="true" style="margin-left:10px">
+              <use xlink:href="#icon-yansexuanzeqi" />
+            </svg>
+            <input
+              class="player-video-danmaku-input"
+              placeholder="发个友善的弹幕见证当下"
+              style
+              v-model="danmuInput"
+            />
+            <div class="player-video-danmaku-hint">
+              <a href="#" class="hint">
+                <span>弹幕礼仪</span>
+              </a>
+            </div>
+            <div class="player-video-danmaku-btn" @click="submitDanmu()">发送</div>
+          </div>
+        </div>
+      </div>
+      <div class="ops">
+        <span title="点赞数4098" class="like">
+          <!---->
+          <!---->
+          <!---->
+          <!---->
+          <!---->
+          <svg class="gg-icon" aria-hidden="true">
+            <use xlink:href="#icon-dianzan" />
+          </svg>
+          4098
+        </span>
+        <span title="投硬币枚数1446" class="coin">
+          <svg
+            class="gg-icon"
+            aria-hidden="true"
+            style="background-color:gray;border-radius: 50%;border:none"
+          >
+            <use xlink:href="#icon-icon_shipin_yingbishu" />
+          </svg>
+          1446
+        </span>
+        <span title="收藏人数894" class="collect">
+          <svg class="gg-icon" aria-hidden="true">
+            <use xlink:href="#icon-xingxing" />
+          </svg>
+          894
+        </span>
+        <span title="分享" class="share">
+          <svg class="gg-icon" aria-hidden="true">
+            <use xlink:href="#icon-forward" />
+          </svg>
+          102
+        </span>
+      </div>
+
+      <!--视频简介-->
+      <div class="video-desc">
+        <span class="info">家本是爱的港湾，而不是仇恨暴力的场所。彼此尊重才能真正解决家暴问题。</span>
+      </div>
+      <!--视频标签-->
+      <div class="video-tags">
+        <ul>
+          <li class="tag">
+            <a href="#" class="tag-link">飙戏</a>
+          </li>
+        </ul>
+      </div>
+      <!--相关广告-->
+      <div class="advertising-container">
+        <a href="#">
+          <div class="lazy-img">
+            <img
+              src="https://i0.hdslb.com/bfs/sycp/creative_img/202007/518e7372b19fc0dd0c51931d4c459a45.jpg"
+            />
+          </div>
+        </a>
+      </div>
+      <div>
+        <comment :commentNum="details.commentNum"></comment>
+      </div>
+    </div>
+    <div class="r-con">
+      <div class="up-info">
+        <!--头像-->
+        <div class="up-info-face">
+          <a href="#" class="fa">
+            <img
+              src="//i1.hdslb.com/bfs/face/1d6f100b921c9b48914eda8f3b37e76ba9ef4ca5.jpg@68w_68h.webp"
+              class="up-info-face"
+            />
+          </a>
+        </div>
+        <!--基本信息-->
+        <div class="up-info-text">
+          <div class="name">
+            <a href="#" class="username">观察者网</a>
+            <a href="#" class="message">发消息</a>
+          </div>
+          <!--描述-->
+          <div class="desc">我是描述~~~~</div>
+        </div>
+      </div>
+      <!--按钮-->
+      <div class="btn-panel">
+        <div class="btn-charge">
+          <span>为TA充电</span>
+        </div>
+        <div class="btn-follow">
+          <span>关注</span>
+        </div>
+      </div>
+      <!--弹幕列表框-->
+      <div class="collapse-header">
+        <div class="collapse-header-left">
+          <span class="collapse-header-left-title">弹幕列表</span>
+          <svg class="gg-icon" aria-hidden="true" style="margin-left:10px;width:16px;height:16px;">
+            <use xlink:href="#icon-gengduo" />
+          </svg>
+        </div>
+        <div class="collapse-header-right">
+          <span class="collapse-header-left-text" @click="danmuShow=!danmuShow">展开</span>
+        </div>
+        <el-collapse-transition>
+          
+            <el-table
+              v-show="danmuShow"
+              :data="tableData"
+              height="585"
+              style="width: 100%;font-size: 12px;"
+            >
+              <el-table-column prop="date" label="时间" width="60"></el-table-column>
+              <el-table-column prop="name" label="弹幕内容" width="172"></el-table-column>
+              <el-table-column prop="address" label="发送时间"></el-table-column>
+            </el-table>
+          
+        </el-collapse-transition>
+            <div class="rec-container">
+              <div class="rec-title">相关推荐</div>
+              <div class="rec-list">
+                <div class="rec-item" v-for="(item,index) in recVideoList" :key="index">
+                  <basic
+                  style="width:141px;height:80px;"
+                  :flag="false"
+                  
                 
-                        <svg class="gg-icon" aria-hidden="true">
-                            <use xlink:href="#icon-xingxing"></use>
-                        </svg>
-                        894</span>
-                    <span title="分享" class="share">
-                        <svg class="gg-icon" aria-hidden="true">
-                            <use xlink:href="#icon-forward"></use>
-                        </svg>
-                    102</span>
+                  :videoItem="item"
+                >
+                </basic>
+                <div class="rec-item-info">
+                  <a href="#" class="rec-item-title">{{item.title}}</a>
+                  <div class="count up">
+                    <a href="#">{{item.upName}}</a>
+                  </div>
+                  <div class="count">{{item.playNum}}播放&nbsp;*&nbsp;{{item.danmuNum}}弹幕</div>
                 </div>
-
-                <!--视频简介-->
-                <div class="video-desc">
-                    <span class="info">家本是爱的港湾，而不是仇恨暴力的场所。彼此尊重才能真正解决家暴问题。</span>
                 </div>
-                <!--视频标签-->
-                <div class="video-tags">
-                    <ul>
-                        <li class="tag">
-                            <a href="#" class="tag-link">飙戏</a>
-                        </li>
-                    </ul>
-                </div>
-                <!--相关广告-->
-                <div class="advertising-container">
-                    <a href="#">
-                        <div class="lazy-img">
-                            <img src="https://i0.hdslb.com/bfs/sycp/creative_img/202007/518e7372b19fc0dd0c51931d4c459a45.jpg"/>
-                        </div>
-                    </a>
-                </div>
-                <div>
-                    <comment :commentNum="details.commentNum">
-
-                    </comment>
-                </div>
-
-
+                
+                
+              </div>
             </div>
-            <div class="r-con">
-                <div class="up-info">
-                    <!--头像-->
-                    <div class="up-info-face">
-                        <a href="#" class="fa">
-                            <img src="//i1.hdslb.com/bfs/face/1d6f100b921c9b48914eda8f3b37e76ba9ef4ca5.jpg@68w_68h.webp" class="up-info-face">
-                        </a>
-                    </div>
-                    <!--基本信息-->
-                    <div class="up-info-text">
-                        <div class="name">
-                            <a href="#" class="username">
-                                观察者网    
-                            </a>
-                            <a href="#" class="message">
-                                发消息
-                            </a>
-                        </div>
-                        <!--描述-->
-                        <div class="desc">
-                            我是描述~~~~
-                        </div>
-                    </div>
-                </div>
-                <!--按钮-->
-                <div class="btn-panel">
-                    <div class="btn-charge">
-                        <span>为TA充电</span>
-                    </div>
-                    <div class="btn-follow">
-                        <span>关注</span>
-                    </div>
-                </div>
-                <!--弹幕列表框-->
-                <div class="collapse-header">
-                    <div class="collapse-header-left">
-                        <span class="collapse-header-left-title">弹幕列表</span>
-                        <svg class="gg-icon" aria-hidden="true" style="margin-left:10px;width:16px;height:16px;">
-                                <use xlink:href="#icon-gengduo"></use>
-                        </svg>
-                    </div>
-                    <div class="collapse-header-right">
-                        <span class="collapse-header-left-text">展开</span>
-                    </div>
-                </div>
-            </div>
-
-            </div>
-
+          </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped>
-    *{
-        margin: 0;
-        padding: 0;
-    }
+* {
+  margin: 0;
+  padding: 0;
+}
 
-    a{
-        color: #999;
-        text-decoration: none;
-    }
-    a:link:hover, a:visited {
-        text-decoration: none;
-    }
+a {
+  color: #999;
+  text-decoration: none;
+}
+a:link:hover,
+a:visited {
+  text-decoration: none;
+}
 
-    /*
+/*
         详细页的开始
      */
-     #app{
-        margin: 0;
-        padding: 0;
-        border: 0;
-        font-size: 100%;
-        vertical-align: baseline;
-     }
+#app {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+}
 
-    /* 最外层布局  */
-     .v-wrap{
-        
-        width:1152px;
-        max-width: 1660px;
-        min-width: 988px;
-        margin: 20px auto;
-     }
-    
-    /*
+/* 最外层布局  */
+.v-wrap {
+  width: 1152px;
+  max-width: 1660px;
+  min-width: 988px;
+  margin: 20px auto;
+}
+
+/*
         右边布局
      */
 
-     .r-con{
-        position: relative;
-        float:right;
-        width: 320px;
-        margin-left: 30px;
-     }
+.r-con {
+  position: relative;
+  float: right;
+  width: 320px;
+  margin-left: 30px;
+}
 
-     .up-info{
-         
-        margin-bottom: 16px;
-     }
+.up-info {
+  margin-bottom: 16px;
+}
 
-     .up-info-face{
-        float: left;
-        width: 48px;
-        height: 48px;
-        position: relative;    
-     }
+.up-info-face {
+  float: left;
+  width: 48px;
+  height: 48px;
+  position: relative;
+}
 
-    .up-info .up-info-face .fa {
-        display: block;
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        overflow: hidden;
-        background-color: #f4f5f7;
-    }
+.up-info .up-info-face .fa {
+  display: block;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #f4f5f7;
+}
 
-    .up-info-text{
-        
-        margin-bottom: 5px;
-        text-align: left;
-        margin-left: 16px;
-        float: left;
-    }
+.up-info-text {
+  margin-bottom: 5px;
+  text-align: left;
+  margin-left: 16px;
+  float: left;
+}
 
-    .name {
-        font-size: 14px;
-        color: #00a1d6;
-    }
+.name {
+  font-size: 14px;
+  color: #00a1d6;
+}
 
-    .username {
-        font-size: 14px;
-        color: #212121;
-        font-weight: 500;
-        display: inline-block;
-        max-width: 180px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        vertical-align: top;
-    }  
-    .message {
-        margin-left: 12px;
-        font-size: 12px;
-        color: #505050;
-        display: inline-block;
-        vertical-align: middle;
-    }
+.username {
+  font-size: 14px;
+  color: #212121;
+  font-weight: 500;
+  display: inline-block;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: top;
+}
+.message {
+  margin-left: 12px;
+  font-size: 12px;
+  color: #505050;
+  display: inline-block;
+  vertical-align: middle;
+}
 
-    .desc {
-        margin-top: 4px;
-        width: 256px;
-        font-size: 12px;
-        line-height: 16px;
-        height: 16px;
-        color: #999;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    } 
+.desc {
+  margin-top: 4px;
+  width: 256px;
+  font-size: 12px;
+  line-height: 16px;
+  height: 16px;
+  color: #999;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
-    .up-info .btn-panel {
-        display: flex;
-        margin-left: 63px;
-    }
+.up-info .btn-panel {
+  display: flex;
+  margin-left: 63px;
+}
 
-    .btn-charge {
-        text-align: center;
-        cursor: pointer;
-        border-radius: 2px;
-        line-height: 30px;
-        font-size: 14px;
-        height: 30px;
-        display: inline-block;
-        background: #fb7299;
-        color: #fff;
-        width: 123px;
-    }
+.btn-charge {
+  text-align: center;
+  cursor: pointer;
+  border-radius: 2px;
+  line-height: 30px;
+  font-size: 14px;
+  height: 30px;
+  display: inline-block;
+  background: #fb7299;
+  color: #fff;
+  width: 123px;
+}
 
-    .btn-follow {
-        text-align: center;
-        cursor: pointer;
-        border-radius: 2px;
-        line-height: 30px;
-        font-size: 14px;
-        height: 30px;
-        display: inline-block;
-        color: #999;
-        border: 1px solid #e7e7e7;
-        background: #e7e7e7;
-        width: 123px;
-    }
+.btn-follow {
+  text-align: center;
+  cursor: pointer;
+  border-radius: 2px;
+  line-height: 30px;
+  font-size: 14px;
+  height: 30px;
+  display: inline-block;
+  color: #999;
+  border: 1px solid #e7e7e7;
+  background: #e7e7e7;
+  width: 123px;
+}
 
-    /**
+/**
         弹幕列表框
      */
-    .collapse-header {
-        top: 32px;
-        position: relative;
-        height: 46px;
-        width: 100%;
-        background: #f4f4f4;
-        color: #222;
-        border-radius: 2px;
-        cursor: pointer;
-    }
-    .collapse-header-left{
-        float: left;
-        z-index: 2;
-        background: #f4f5f7;
-        height: 46px;
-        line-height: 46px;
-        border: none;
-        border-radius: 2px;
-        padding: 0 10px 0 16px;
-        zoom: 1;
-    }
 
-    .collapse-header-left-title{
-        font-size: 16px;
-        color: #222;
-    }
+.collapse-header {
+  top: 32px;
+  position: relative;
+  height: 46px;
+  width: 320px;
+  background: #f4f4f4;
+  color: #222;
+  border-radius: 2px;
+  cursor: pointer;
+}
+.collapse-header-left {
+  float: left;
+  z-index: 2;
+  background: #f4f5f7;
+  height: 46px;
+  line-height: 46px;
+  border: none;
+  border-radius: 2px;
+  padding: 0 10px 0 16px;
+  zoom: 1;
+}
 
-    .collapse-header-right{
-        margin-right: 20px;
-        line-height: 46px;
-        float: right;
-        font-size: 12px;
-        height: 14px;
-        bottom: 0;
-        color: #505050;
-    }
+.collapse-header-left-title {
+  font-size: 16px;
+  color: #222;
+}
 
-    .header-box{
-        position: absolute;
-        background: #fff;
-        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.08);
-    }
+.collapse-header-right {
+  margin-right: 20px;
+  line-height: 46px;
+  float: right;
+  font-size: 12px;
+  height: 14px;
+  bottom: 0;
+  color: #505050;
+}
 
+.header-box {
+  position: absolute;
+  background: #fff;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.08);
+}
 
-    .barrage{
-        width:400px;
-        height: 400px;
-        border: 1px solid;
-    }
+.barrage {
+  width: 400px;
+  height: 400px;
+  border: 1px solid;
+}
 
-    /**
+/**
         左边内容
       */
-      .l-con{
-        float: left;
-        width: 802px; 
-      }
+.l-con {
+  float: left;
+  width: 802px;
+}
 
-        /**
+/**
             视频头部内容
         */
-        .video-header-info{
-            margin-bottom: 16px;
-            width:802px;
-            height: 81px;
-        }
+.video-header-info {
+  margin-bottom: 16px;
+  width: 802px;
+  height: 81px;
+}
 
-        /**
+/**
             视频标题
         */
-        .video-title{
-            font-size: 18px;
-            font-weight: 500;
-            color: #212121;
-            line-height: 26px;
-            height: 26px;
-            margin-bottom: 12px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        .tit{   
-            vertical-align: middle;
-        }
-        .video-data{
-            margin-top: 11px;
-            font-size: 12px;
-            height: 16px;
-            color: #999;
-            vertical-align:middle;
-        }
+.video-title {
+  font-size: 18px;
+  font-weight: 500;
+  color: #212121;
+  line-height: 26px;
+  height: 26px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tit {
+  vertical-align: middle;
+}
+.video-data {
+  margin-top: 11px;
+  font-size: 12px;
+  height: 16px;
+  color: #999;
+  vertical-align: middle;
+}
 
-        .a-crumbs {
-            margin-right: 16px;
-        }
+.a-crumbs {
+  margin-right: 16px;
+}
 
-        .video-data span {
-            display: inline-block;
-            height: 16px;
-        }
-        .copyright {
-            margin-left: 16px;
-            display: inline-block;
-            font-size: 12px;
-            line-height: 18px;
-        }
+.video-data span {
+  display: inline-block;
+  height: 16px;
+}
+.copyright {
+  margin-left: 16px;
+  display: inline-block;
+  font-size: 12px;
+  line-height: 18px;
+}
 
-        .player-wrap{
-            position: relative;
-            width:802px;
-            height: 585px;
-        }
+.player-wrap {
+  position: relative;
+  width: 802px;
+  height: 585px;
+}
 
-        .player-bottom{
-            
-            width: 802px;
-            height: 46px;
-            line-height: 30px;
-            height: 28px;
-            font-size: 14px;
-            color: #505050;
-            border-bottom: 1px solid #e5e9f0;
-            padding-bottom: 12px;
-        }
+.player-bottom {
+  width: 802px;
+  height: 46px;
+  line-height: 30px;
+  height: 28px;
+  font-size: 14px;
+  color: #505050;
+  border-bottom: 1px solid #e5e9f0;
+  padding-bottom: 12px;
+}
 
-        .ops{
-            border-bottom: 1px solid #e5e9f0;
-            position: relative;
-            float: left;
-            height: 24px;
-            margin: 20px 0;
-            padding-bottom:12px;
-            width: 100%;
-            font-size: 100%;
-            vertical-align: baseline;
-        }
+.ops {
+  border-bottom: 1px solid #e5e9f0;
+  position: relative;
+  float: left;
+  height: 24px;
+  margin: 20px 0;
+  padding-bottom: 12px;
+  width: 100%;
+  font-size: 100%;
+  vertical-align: baseline;
+}
 
-        .ops span{
-            width: 92px;
-            margin-right: 8px;
-            cursor: pointer;
-            transition: all .3s;
-            display: inline-block;
-            white-space: nowrap;
-            color: #505050;
-            position: relative;
+.ops span {
+  width: 92px;
+  margin-right: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: inline-block;
+  white-space: nowrap;
+  color: #505050;
+  position: relative;
+}
 
-        }
+.video-toolbar .ops .share {
+  position: relative;
+  height: 35px;
+  width: 62px;
+}
 
-        .video-toolbar .ops .share {
-            position: relative;
-            height: 35px;
-            width: 62px;
-        }
-
-
-
-        /**
+/**
             视频下框的信息
         */
-        .player-video-sendbar{
-            box-shadow:0px 2px 3px  rgba(0,0,0,.5);
-            -ms-flex-negative: 0;
-            flex-shrink: 0;
-            position: relative;
-            height: 46px;
-            display: flex;
-            align-items: center;
-            padding: 0 12px 0 20px;
-            background: #fff;
-            zoom: 1;
-        }
+.player-video-sendbar {
+  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.5);
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  position: relative;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px 0 20px;
+  background: #fff;
+  zoom: 1;
+}
 
-        .player-video-info{
-            flex-shrink: 1;
-            font-size: 12px;
-            height: 16px;
-            line-height: 12px;
-            color: #505050;
-            align-items: center;
-            margin-right: 12px;
-            width: 208px;
-            white-space: nowrap;
-            align-items: flex-end;
-            overflow: hidden;
-        }
+.player-video-info {
+  flex-shrink: 1;
+  font-size: 12px;
+  height: 16px;
+  line-height: 12px;
+  color: #505050;
+  align-items: center;
+  margin-right: 12px;
+  width: 208px;
+  white-space: nowrap;
+  align-items: flex-end;
+  overflow: hidden;
+}
 
-        .player-video-info-people{
-            float: left;
-        }
+.player-video-info-people {
+  float: left;
+}
 
-        .player-video-info-people-number{
-            height: 14px;
-            line-height: 14px;
-            font-size: 14px;
-            font-weight: 600;
-        }
+.player-video-info-people-number {
+  height: 14px;
+  line-height: 14px;
+  font-size: 14px;
+  font-weight: 600;
+}
 
-
-        /**
+/**
             弹幕提交框
         */
 
-        .player-video-inputbar-wrap {
-            width: 408px;
-            border-radius: 2px 0 0 2px;
-            display: -webkit-box;
-            display: -ms-flexbox;
-            display: flex;
-            box-sizing: border-box;
-        }
+.player-video-inputbar-wrap {
+  width: 408px;
+  border-radius: 2px 0 0 2px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  box-sizing: border-box;
+}
 
-        .player-video-danmaku-input{
-            color: #212121;
-            flex-grow: 1;
-            border: 0;
-            height: 30px;
-            line-height: 30px;
-            z-index: 12;
-            padding: 0 5px;
-            background: none;
-            font-size: 12px;
-            
-            width: 249px;
-            outline: none;
-        }
+.player-video-danmaku-input {
+  color: #212121;
+  flex-grow: 1;
+  border: 0;
+  height: 30px;
+  line-height: 30px;
+  z-index: 12;
+  padding: 0 5px;
+  background: none;
+  font-size: 12px;
 
-        input:focus{
-            color:none;
-            border:none;
-        }
+  width: 249px;
+  outline: none;
+}
 
-        .player-video-danmaku-hint{
-            width:82px;     
-            float: right;
-            
-        }
-        
-        .hint{
-            font-size: 12px;
-            color: #757575;
-            fill: #757575;
-            height: 100%;
-            display: inline-block;
-        }
+input:focus {
+  color: none;
+  border: none;
+}
 
-        .hint:hover{
-            color: #00a1d6;
-            fill: #00a1d6;
-        }
+.player-video-danmaku-hint {
+  width: 82px;
+  float: right;
+}
 
-        .hint span{
-            
-            height: 100%;
-            line-height: 28px;
-            display: inline-block;
-        }
+.hint {
+  font-size: 12px;
+  color: #757575;
+  fill: #757575;
+  height: 100%;
+  display: inline-block;
+}
 
+.hint:hover {
+  color: #00a1d6;
+  fill: #00a1d6;
+}
 
+.hint span {
+  height: 100%;
+  line-height: 28px;
+  display: inline-block;
+}
 
-        /**
+/**
             小图标
         */
 
-        .gg-icon{
-            font-size: 28px;
-            vertical-align: middle;
-            margin-right: 6px;
-            width: 28px;
-            height: 28px;
-            color: #757575;
-        }
+.gg-icon {
+  font-size: 28px;
+  vertical-align: middle;
+  margin-right: 6px;
+  width: 28px;
+  height: 28px;
+  color: #757575;
+}
 
-        /**
+/**
             视频播放器样式
          */
-        .video-js{
-            position: relative;
-            border: 1px solid;
-            width: 100%;
-            height: 100%;
-            display: block;
-            z-index: 99999;
-        }
+.video-js {
+  position: relative;
+  border: 1px solid;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 99999;
+}
 
-        /**
+/**
             视频简介样式
          */
 
-         .video-desc .info {
-            white-space: pre-line;
-            transition: all .3s;
-            font-size: 12px;
-            color: #212121;
-            letter-spacing: 0;
-            line-height: 18px;
-            height: 63px;
-            width: 573px;
-            overflow: hidden;
-        }
+.video-desc .info {
+  white-space: pre-line;
+  transition: all 0.3s;
+  font-size: 12px;
+  color: #212121;
+  letter-spacing: 0;
+  line-height: 18px;
+  height: 63px;
+  width: 573px;
+  overflow: hidden;
+}
 
-        /**
+/**
             标签样式
          */
-        .video-tags{
-            margin-top: 16px;
-            position: relative;
-            clear: both;
-            margin-bottom: 20px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid #e5e9ef;
-        }
+.video-tags {
+  margin-top: 16px;
+  position: relative;
+  clear: both;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e5e9ef;
+}
 
-        .video-tags ul{
-            height: 32px;
-            list-style: none;
-            outline: none;
-        }
+.video-tags ul {
+  height: 32px;
+  list-style: none;
+  outline: none;
+}
 
-        .video-tags ul .tag{
-            float: left;
-            margin: 0 10px 8px 0;
-            background: #f4f4f4;
-            border-radius: 100px;
-            padding: 0 12px;
-            position: relative;
-            height: 22px;
-            line-height: 22px;
-            transition: all .3s;
-            font-size: 12px;
-            border: 1px solid #f4f4f4;
-        }
+.video-tags ul .tag {
+  float: left;
+  margin: 0 10px 8px 0;
+  background: #f4f4f4;
+  border-radius: 100px;
+  padding: 0 12px;
+  position: relative;
+  height: 22px;
+  line-height: 22px;
+  transition: all 0.3s;
+  font-size: 12px;
+  border: 1px solid #f4f4f4;
+}
 
-        .tag-link {
-            display: inline-block;
-            height: 22px;
-            color: #505050;
-            position: relative;
-            z-index: 10;
-            transition: all .3s;
-        }       
+.tag-link {
+  display: inline-block;
+  height: 22px;
+  color: #505050;
+  position: relative;
+  z-index: 10;
+  transition: all 0.3s;
+}
 
-        /**
+/**
             广告相关样式
          */
 
-        .advertising-container{
-            width: 100%;
-            max-width: 1279px;
-            max-height: 106px;
-            border-radius: 2px;
-        }
+.advertising-container {
+  width: 100%;
+  max-width: 1279px;
+  max-height: 106px;
+  border-radius: 2px;
+}
 
-        .lazy-img{
-            width: 100%;
-            height: 100%;
-            display: inline-block;
-        }
-        img{
-            width: 100%;
-            height: 100%;
-            border-radius: 2px;
-        }
+.lazy-img {
+  width: 100%;
+  height: 100%;
+  display: inline-block;
+}
+img {
+  width: 100%;
+  height: 100%;
+  border-radius: 2px;
+}
 
-        .player-video-danmaku-btn{
-            float:right;
-            background: #1890ff;
-            color: #fff;
-            z-index: 13;
-            height: 30px;
-            width: 60px;
-            min-width: 60px;
-            line-height: 30px;
-            text-align: center;
-            -webkit-box-sizing: border-box;
-            box-sizing: border-box;
-            border-radius: 0 2px 2px 0;
-        }
+.player-video-danmaku-btn {
+  float: right;
+  background: #1890ff;
+  color: #fff;
+  z-index: 13;
+  height: 30px;
+  width: 60px;
+  min-width: 60px;
+  line-height: 30px;
+  text-align: center;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  border-radius: 0 2px 2px 0;
+}
 
-         .player-video-danmaku-btn:hover{
-            background-color: #00a1d6;
-            color: #fff;
-            cursor: pointer;
-         }
+.player-video-danmaku-btn:hover {
+  background-color: #00a1d6;
+  color: #fff;
+  cursor: pointer;
+}
 
+/* 推荐视频列表 */
+.rec-container {
+  position: absolute;
+  padding-left: 10px;
+  margin-top: 80px;
+  z-index: 9998;
+  border: 0;
+  font-size: 100%;
+}
+
+.rec-title {
+  font-size: 16px;
+  color: #222;
+  margin-bottom: 6px;
+}
+
+
+.rec-item-info {
+  display: inline-block;
+  width: 149px;
+}
+
+.rec-item-title {
+      color: #222;
+  font-size: 14px;
+  font-weight: 500;
+  height: 36px;
+  line-height: 18px;
+  margin-bottom: 6px;
+  word-break: break-all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.count {
+  display: inline-block;
+  height: 16px;
+  width: 100%;
+  color: #999;
+  font-size: 12px;
+}
+.up {
+  width: 160px;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 </style>
 <script>
-import '@/https.js'
-import vBarrage from '@/components/VBarrage/index.vue'
-import comment from '@/components/comment/Comment.vue'
+import "@/https.js";
+import vBarrage from "@/components/VBarrage/index.vue";
+import comment from "@/components/comment/Comment.vue";
+import basic from "@/components/video/basic.vue";
 export default {
-    components:{
-        vBarrage,
-        comment
-    },
-    data(){
-        return{
-            //弹幕提交位置
-            location:"top",
-            //当前秒数
-            danmuInput:null,
-            isheader:true,
-            videoId:0,
-            value:null,
-            details:null,
-            arr:[],
-            isPause: false
-        }
-    },
-    created(){
-        this.videoId = this.$route.query.id
-        this.$axios.get("http://localhost:8081/video/"+this.videoId+"?userId=1")
-        .then(res => {
-            res = res.data
-            console.log(res)
-            this.details=res.data
+  components: {
+    vBarrage,
+    comment,
+    basic,
+  },
+  data() {
+    return {
+      //弹幕提交位置
+      location: "top",
+      //当前秒数
+      danmuInput: null,
+      isheader: true,
+      videoId: 0,
+      value: null,
+      details: {
+        cover:
+          "http://192.168.99.103:9000/dalidali/e03036ca-0293-488e-87f2-0521a2593daa.jpg",
+        playNum: "541",
+        praiseNum: "987",
+        length: 68,
+        urls:
+          "http://192.168.99.103:9000/dalidali/e03036ca-0293-488e-87f2-0521a2593daa.mp4,http://192.168.99.103:9000/dalidali/e03036ca-0293-488e-87f2-0521a2593daa360.mp4,http://192.168.99.103:9000/dalidali/e03036ca-0293-488e-87f2-0521a2593daa480.mp4,http://192.168.99.103:9000/dalidali/e03036ca-0293-488e-87f2-0521a2593daa720.mp4",
+        previewUrl:
+          "http://192.168.99.103:9000/dalidali/e03036ca-0293-488e-87f2-0521a2593daa_preview.png",
+        title: "假装是标题",
+        upName:"观察者网"
+      },
+      arr: [],
+      isPause: false,
+      tableData: [
+        {
+          date: "00:08",
+          name: "王小虎",
+          address: "8-17 19:17",
+        },
+        {
+          date: "00:08",
+          name: "王小虎",
+          address: "8-17 19:17",
+        },
+        {
+          date: "00:08",
+          name: "王小虎",
+          address: "8-17 19:17",
+        },
+        {
+          date: "00:08",
+          name: "王小虎",
+          address: "8-17 19:17",
+        },
+        {
+          date: "00:08",
+          name: "王小虎",
+          address: "8-17 19:17",
+        },
+        {
+          date: "00:08",
+          name: "王小虎",
+          address: "8-17 19:17",
+        },
+      ],
+      danmuShow: false,
+      recVideoList: [
+        {
+          cover:"http://192.168.99.103:9000/dalidali/e03036ca-0293-488e-87f2-0521a2593daa.jpg",
+          playNum: "541",
+          praiseNum: "987",
+          danmuNum:"1999",
+          length: 68,
+          previewUrl:
+            "http://192.168.99.103:9000/dalidali/e03036ca-0293-488e-87f2-0521a2593daa_preview.png",
+          title: "假装是标题",
+        upName:"观察者网"
+        },
+        {
+          cover:"http://192.168.99.103:9000/dalidali/e03036ca-0293-488e-87f2-0521a2593daa.jpg",
+          playNum: "541",
+          praiseNum: "987",
+          danmuNum:"1999",
+          length: 68,
+          previewUrl:
+            "http://192.168.99.103:9000/dalidali/e03036ca-0293-488e-87f2-0521a2593daa_preview.png",
+          title: "假装是标题",
+        upName:"观察者网"
+        },
+        {
+          cover:"http://192.168.99.103:9000/dalidali/e03036ca-0293-488e-87f2-0521a2593daa.jpg",
+          playNum: "541",
+          praiseNum: "987",
+          danmuNum:"1999",
+          length: 68,
+          previewUrl:
+            "http://192.168.99.103:9000/dalidali/e03036ca-0293-488e-87f2-0521a2593daa_preview.png",
+          title: "假装是标题",
+        upName:"观察者网"
+        },
+        {
+          cover:"http://192.168.99.103:9000/dalidali/e03036ca-0293-488e-87f2-0521a2593daa.jpg",
+          playNum: "541",
+          praiseNum: "987",
+          danmuNum:"1999",
+          length: 68,
+          previewUrl:
+            "http://192.168.99.103:9000/dalidali/e03036ca-0293-488e-87f2-0521a2593daa_preview.png",
+          title: "假装是标题",
+        upName:"观察者网"
+        },
+        {
+          cover:"http://192.168.99.103:9000/dalidali/e03036ca-0293-488e-87f2-0521a2593daa.jpg",
+          playNum: "541",
+          praiseNum: "987",
+          danmuNum:"1999",
+          length: 68,
+          previewUrl:
+            "http://192.168.99.103:9000/dalidali/e03036ca-0293-488e-87f2-0521a2593daa_preview.png",
+          title: "假装是标题",
+        upName:"观察者网"
+        },
+      ],
+    };
+  },
+  created() {
+    this.videoId = this.$route.query.id;
+    this.$axios
+      .get("http://localhost:8081/video/" + this.videoId + "?userId=1")
+      .then((res) => {
+        res = res.data;
+        console.log(res);
+        this.details = res.data;
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  },
+  mounted() {},
+  methods: {
+    // 初始化模拟弹幕数据
+    submitDanmu() {
+      console.log(this.$refs.barrage);
+      let param = {
+        vid: this.videoId,
+        showSecond: this.$refs.barrage.nowSec,
+        uid: 1,
+        location: this.location,
+        content: this.danmuInput,
+      };
+      this.$axios
+        .post(this.COMMENT_URL + "danmu", param, {
+          headers: {
+            "Content-Type": "application/json;charset=UTF-8",
+          },
         })
-        .catch(err => {
-            console.error(err); 
+        .then((res) => {
+          console.log(res.data);
+          this.arr.unshift(param);
         })
+        .catch((err) => {
+          console.error(err);
+        });
+      this.danmuInput = "";
     },
-    mounted(){
-    },
-    methods:{
-            // 初始化模拟弹幕数据
-        submitDanmu(){
-            console.log(this.$refs.barrage);
-            let param = {
-                vid:this.videoId,
-                showSecond:this.$refs.barrage.nowSec,
-                uid:1,
-                location:this.location,
-                content:this.danmuInput
-            }
-            this.$axios.post(this.COMMENT_URL+"danmu",param,{
-                   headers: {
-                    'Content-Type':'application/json;charset=UTF-8'
-                }
-            })
-            .then(res => {
-                console.log(res.data);
-                this.arr.unshift(param);
-            })
-            .catch(err => {
-                console.error(err); 
-            })
-            this.danmuInput="";
-        }
-    }
-}
+  },
+};
 </script>

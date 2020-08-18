@@ -2,6 +2,7 @@
   <section class="barrage-wrapper" ref="barrageWrapper" :style="{height:percent+'%'}">
     <div class="barrage-main">
       <div
+        id="video-player-container"
         class="barrage-main-dm"
         @mouseout="handlerControl(false)"
         @mouseover="handlerControl(true)"
@@ -18,7 +19,7 @@
         ></video-player>
         <div class="video-control" v-show="isShow">
           <div class="video-control-top">
-            <div class="progress" @click="skip($event)">
+            <div class="progress" @click="skip($event)" id="progress">
               <div class="progress-details" :style="{width: progressDetails}"></div>
             </div>
           </div>
@@ -67,7 +68,7 @@
               </el-popover>
 
               <!--倍数代码 -->
-              <span @mouseover="speedFlag = true" @mouseout="speedFlag = false">
+              <div @mouseover="speedFlag = true" @mouseout="speedFlag = false" style="display:inline-block">
                 <ul class="speed" v-show="speedFlag">
                   <li
                     class="select-item"
@@ -83,18 +84,18 @@
                 <div class="video-speed">
                   <span>倍数</span>
                 </div>
-              </span>
+              </div>
               <!-- 声音代码 -->
-              <span @mouseover="soundFlag = true" @mouseout="soundFlag = false">
-                <div class="sound" v-show="soundFlag">
+              <div @mouseover="soundFlag = true"  @mouseout="soundFlag = false" style="display:inline-block;position:relative">
+                <div class="sound" v-show="soundFlag" style="height:100%">
                   <el-slider v-model="sound" vertical height="200px"></el-slider>
                 </div>
-                <div class="video-sound">
+                <div class="video-sound" >
                   <svg class="player-svg" aria-hidden="true" style="width:26px;height:18px">
                     <use xlink:href="#icon-shengyin" />
                   </svg>
                 </div>
-              </span>
+              </div>
               <div class="video-setting">
                 <svg class="player-svg" aria-hidden="true" style="width:26px;height:18px">
                   <use xlink:href="#icon-settings" />
@@ -103,30 +104,30 @@
 
               <div class="video-in-video">
                 <el-tooltip content="画中画" placement="top">
-                <svg class="player-svg" aria-hidden="true" style="width:26px;height:18px">
-                  <use xlink:href="#icon-kaiqihuazhonghua" />
-                </svg>
+                  <svg class="player-svg" aria-hidden="true" style="width:26px;height:18px">
+                    <use xlink:href="#icon-kaiqihuazhonghua" />
+                  </svg>
                 </el-tooltip>
               </div>
               <div class="video-wide">
                 <el-tooltip content="宽屏模式" placement="top">
-                <svg class="player-svg" aria-hidden="true" style="width:26px;height:18px">
-                  <use xlink:href="#icon-yinliang-" />
-                </svg>
+                  <svg class="player-svg" aria-hidden="true" style="width:26px;height:18px">
+                    <use xlink:href="#icon-yinliang-" />
+                  </svg>
                 </el-tooltip>
               </div>
               <div class="video-web-wide">
                 <el-tooltip content="网页全屏" placement="top">
-                <svg class="player-svg" aria-hidden="true" style="width:26px;height:18px">
-                  <use xlink:href="#icon-widescreen" />
-                </svg>
+                  <svg class="player-svg" aria-hidden="true" style="width:26px;height:18px">
+                    <use xlink:href="#icon-widescreen" />
+                  </svg>
                 </el-tooltip>
               </div>
-              <div class="video-full">
+              <div class="video-full" @click="controlScreen()">
                 <el-tooltip content="进入全屏" placement="top">
-                <svg class="player-svg" aria-hidden="true" style="width:26px;height:18px">
-                  <use xlink:href="#icon-quanping" />
-                </svg>
+                  <svg class="player-svg" aria-hidden="true" style="width:26px;height:18px">
+                    <use xlink:href="#icon-quanping" />
+                  </svg>
                 </el-tooltip>
               </div>
             </div>
@@ -232,6 +233,7 @@ export default {
       speedFlag: false,
       soundFlag: false,
       sound: 0,
+      isFull: false,
     };
   },
   computed: {},
@@ -549,6 +551,40 @@ export default {
     sleep: function (ms) {
       return new Promise((resolve) => setTimeout(resolve, ms));
     },
+    controlScreen: function () {
+      if(this.isFull){
+        this.step = 798 / this.length;
+        this.exitFullscreen();
+      }
+      else{
+        this.fullScreen();
+        this.step = document.body.clientWidth / this.length;
+      }
+      console.log(progress);
+      this.isFull = !this.isFull;
+    },
+    // 进入全屏
+    fullScreen() {
+      var ele = document.getElementById("video-player-container");
+      console.log(ele);
+      if (ele.requestFullscreen) {
+        ele.requestFullscreen();
+      } else if (ele.mozRequestFullScreen) {
+        ele.mozRequestFullScreen();
+      } else if (ele.webkitRequestFullScreen) {
+        ele.webkitRequestFullScreen();
+      }
+    },
+    //退出全屏
+    exitFullscreen() {
+      if(document.exitFullscreen) {
+        document.exitFullscreen();
+    } else if(document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+    } else if(document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+    }
+    },
   },
   components: {},
 };
@@ -672,7 +708,6 @@ export default {
   自定义视频控制器样式
  */
 .video-control {
-  border: 1px solid;
   padding: 0 12px;
   position: absolute;
   bottom: 0;
@@ -684,7 +719,6 @@ export default {
 .video-control-top {
   height: 16px;
 
-  border: 1px solid;
   position: absolute;
   left: 0;
   right: 0;
@@ -848,14 +882,13 @@ a {
   height: 216px;
   position: absolute;
   z-index: 9999;
-  bottom: 45px;
+  bottom: 20px;
   text-align: center;
 }
 
 .sound {
   position: absolute;
-  bottom: 40px;
-  left: 100px;
+  bottom: 220px;
 }
 
 .speed a {
