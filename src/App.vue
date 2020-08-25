@@ -22,7 +22,7 @@ export default {
   watch: {
 		// 方法1
 		'$route' (to, from) { //监听路由是否变化
-      if(to.path == "/"){ //跳转到哪个页面
+      if(to.path == "/" || to.path == "/rank"){ //跳转到哪个页面
       		console.log(999)
           this.isheader=false
 			}else{

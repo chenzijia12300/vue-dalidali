@@ -20,6 +20,7 @@ Vue.config.productionTip = false
 Vue.prototype.$axios = axios; 
 Vue.prototype.COMMENT_URL="http://localhost:8082/"
 Vue.prototype.USER_URL="http://localhost:8111/userservice/"
+Vue.prototype.VIDEO_URL="http://localhost:8111/videoservice/"
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

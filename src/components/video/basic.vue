@@ -1,6 +1,6 @@
 <template>
     <div class="video-card-common">
-    <a :href="'#/details?id='+videoItem.id" target="view_window">
+    <a :href="'#/details?id='+videoItem.id" target="_blank">
     <div class="card-pic"  @mousemove="movePreview($event)" @mouseout="clearPreview($event)">
         <img :src="videoItem.cover"/> 
         <div class="count" v-show="flag">
@@ -79,11 +79,13 @@ export default {
             console.log("移除~")
         },
         videoLength:function(length){
-            console.log(length);
+                        console.log(length);
             let minutes = parseInt(length/60);
+            let second = (length%60);
             minutes = minutes<10?'0'+minutes:minutes;
+            second = second<10?'0'+second:second;
             console.log(minutes);
-            return minutes+":"+(length%60)
+            return minutes+":"+second
         }
     }
 }
@@ -102,11 +104,15 @@ export default {
         width: 206px;
         cursor: pointer;
         height: 116px;
+        margin-right: 10px;
+        display: inline-block;
      }
     .card-pic{
         width: 100%;
+        width: 206px;
     }
     .card-pic img{
+        max-height: 116px;
         height: 100%;
         width: 100%;
     }
@@ -114,19 +120,12 @@ export default {
         margin-right: 0px;
     }
 
-    .video-card-common {
-        margin: 0;padding: 0;
-        margin-right: 10px;
-        display: inline-block;
-        width: 100%;
-        height: 100%;
-    }
     .count{
         line-height: 10px;
         font-size: 12px;
         z-index: 999;
         position: absolute;
-        bottom: 75px;
+        bottom: 0px;
         width: 100%;
         padding: 6px 8px;
         color: #fff;
@@ -150,7 +149,10 @@ export default {
     }
 
     .right{
+        position: relative;
+        right: 20px;
         float: right;
+        
     }
 
     /**
@@ -163,10 +165,12 @@ export default {
         top: 0;
         width: 100%;
         height: 100%;
+        max-height: 116px;
         z-index: -1;
     }
 
-        .van-framepreview{
+    .van-framepreview{
+         max-height: 116px;
         position: absolute;
         left: 0;
         top: 0;

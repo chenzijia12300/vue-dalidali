@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import home from "../page/home/home.vue"
+import rank from "../page/home/rank.vue"
 import videodetails from "../page/video/videodetails.vue"
 import login from "../page/login/login.vue"
 import comments from "../components/comment/Comment.vue"
@@ -34,6 +35,10 @@ export default new Router({
       path: '/dynamic',
       name: 'dynamic',
       component: dynamic
+    },{
+      path:'/rank',
+      name:'rank',
+      component: rank
     }
   ]
 })

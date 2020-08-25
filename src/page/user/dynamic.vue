@@ -1,5 +1,7 @@
 <template>
+<div>
 <body>
+</body>
     <div class="container">
         <!-- 左布局 -->
         <div class="left-container">
@@ -221,18 +223,18 @@
 
             <!-- 正文内容 -->
             <div class="content">
-                <div class="card">
-                    <avatar :avatar="avatar" class="up-avatar"></avatar>
+                <div class="card" v-for="(item,index) in dynamicList" :key="index">
+                    <avatar :avatar="item.upImg" class="up-avatar"></avatar>
 
                     <div class="main-content">
                         <div class="up-name">
                             <a href="#">
-                                观察者网
+                                {{item.upName}}
                             </a>
                         </div>
                         <div class="publish-time">
                             <a href="#">
-                                22分钟前
+                                {{item.createTime | dateFmt('YYYY-MM-DD HH:mm')}}
                             </a>
                         </div>
                         <div class="card-content">
@@ -243,15 +245,15 @@
                                 </div>
                                 <a href="#">
                                 <div class="video-container">
-                                    <basic :videoItem="videoItem" :flag=false style="width:203px;height:127px;display: inline-block;border-radius: 0 4px 4px 0;">
+                                    <basic :videoItem="item" :flag=false style="width:203px;height:127px;display: inline-block;border-radius: 0 4px 4px 0;">
 
                                     </basic>
                                     <div class="textarea">  
                                         <div class="title">
-                                            <a href="#">阿联酋与以色列将建交，特朗普：太棒了！本来想叫特朗普协议的</a>
+                                            <a href="#">{{item.title}}</a>
                                         </div>
                                         <div class="content">
-                                            8月13日，特朗普在白宫召开新闻发布会，宣布阿联酋与以色列将建交并达成协议。对于这份协议，特朗普称：“本来想叫它特朗普协议的，但我认为媒体不会理解”。随后白宫各位同事纷纷对特朗普表达称赞，各种“彩虹屁”轮番上场。最后，特朗普在近半分钟的掌声中露出了满意的招牌特朗普微笑。
+                                            {{item.description}}
                                         </div>
                                         <div class="view-data">
                                             <div class="data-item">
@@ -259,7 +261,7 @@
                                                     <use xlink:href="#icon-bofangshu"></use>
                                                 </svg>
                                                 <span class="playNum">
-                                                    4.1万
+                                                    {{item.playNum}}
                                                 </span>
 
                                             </div>
@@ -268,7 +270,7 @@
                                                     <use xlink:href="#icon-danmu"></use>
                                                 </svg>
                                                 <span class="danmuNum">
-                                                    251
+                                                    {{item.danmuNum}}
                                                 </span>
                                                 
                                             </div>
@@ -283,7 +285,7 @@
                                             <use xlink:href="#icon-zhuanfa"></use>
                                         </svg>
                                         <span class="danmuNum">
-                                            251
+                                            666
                                         </span>
                                     </div>
                                     </a>
@@ -293,7 +295,7 @@
                                             <use xlink:href="#icon-pinglun"></use>
                                         </svg>
                                         <span class="danmuNum">
-                                            251
+                                            {{item.commentNum}}
                                         </span>
                                     </div>
                                     </a>
@@ -303,7 +305,7 @@
                                             <use xlink:href="#icon-zan1"></use>
                                         </svg>
                                         <span class="danmuNum">
-                                            251
+                                            {{item.praiseNum}}
                                         </span>
                                     </div>
                                     </a>
@@ -315,10 +317,10 @@
         </div>
         <!-- 右布局 -->
         <div class="right-container">
-
+            
         </div>
     </div>
-</body>
+    </div>
 </template>
 <script>
 import avatar from '@/components/Avatar.vue'
@@ -334,12 +336,27 @@ export default {
                 length:68,
                 previewUrl:"http://192.168.99.103:9000/dalidali/e03036ca-0293-488e-87f2-0521a2593daa_preview.png",
                 title:"假装是标题"
-            }
+            },
+            pageNum:1,
+            pageSize:8,
+            dynamicList:[]
         }
     },
     components:{
         avatar,
         basic
+    },
+    mounted(){
+        this.$axios.get(this.USER_URL+"dynamic/list/"+this.pageNum+"/"+this.pageSize,null)
+        .then(res => {
+            res = res.data
+            console.log(res)
+            this.dynamicList=res.data;
+            console.log(this.dynamicList);
+        })
+        .catch(err => {
+            console.error(err); 
+        })
     }
 }
 </script>
@@ -350,6 +367,10 @@ export default {
     
     }
     body{
+        z-index: -99;
+        top: 0;
+        left: 0;
+        position: fixed;
         background-size: cover;
         background-position: center;
         width: 100vw;

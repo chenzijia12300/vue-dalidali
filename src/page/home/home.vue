@@ -1,128 +1,19 @@
 <template>
     <div>
+        <!-- 垂直滚动条 -->
+    <div class="subject-cont">
+        <div class="subject-block">
+        <div clsas="subject-item" v-for='(item, index) in ["语文", "数学", "英语", "物理", "化学", "生物", "体育"]' :key="index">
+            <a class="subject-name" href="#">{{ item }}</a>
+        </div>
+        </div>
+    </div>
     <div class="back"></div>
     <div id="type">
       <!--导航栏-->
         <div class="primary-menu-itnl">
-          <!--小图标-->
-            <ul class="con">
-            <a href="#">
-              <li>
-                <div class="round" style="background: #ff5c7c;">
-                        <svg class="big-icon" aria-hidden="true">
-                            <use xlink:href="#icon-fangzi-copy"></use>
-                        </svg> 
-                </div>
-                <span>首页</span>
-              </li>
-              </a>
-              <a href="#">
-              <li>
-                <div class="round" style="background-color: #fcba2a;">
-                        <svg class="big-icon" aria-hidden="true">
-                            <use xlink:href="#icon-fengche"></use>
-                        </svg> 
-                </div>
-                <span>动态</span>
-              </li>
-              </a>
-              <a href="#">
-              <li>
-                <div class="round" style="background-color:#00a1d6">
-                        <svg class="big-icon" aria-hidden="true">
-                            <use xlink:href="#icon-paihangbang"></use>
-                        </svg> 
-                </div>
-                <span>排行榜</span>
-              </li>
-              </a>
-              <a href="#">
-              <li>
-                <div class="round" style="background-color: #6dc781;">
-                        <svg class="big-icon" aria-hidden="true">
-                            <use xlink:href="#icon-pindaoleibiefenbu"></use>
-                        </svg> 
-                </div>
-                <span>频道</span>
-              </li>
-              </a>
-            </ul>
-            <!-------------分割线---------------->
-            <span class="tab-line-itnl"></span>
-            <!--频道列表-->
-            <div class="item-container">
-                  <div class="item-type" v-for="(item,index) in items" v-bind:key="index">
-                    <el-popover placement="bottom" trigger="hover" width="70">
-                        <div>
-                            <ul class="sonCategory">
-                               <li v-for="(sonItem,sIndex) in item.childList" v-bind:key="sIndex">
-                                    <a href="#">
-                                        {{sonItem.name}}
-                                    </a>   
-                                </li> 
-                            </ul>
-                        </div>
-                    
-                    <a href="#" slot="reference">
-                      <span>{{item.name}}<em>{{item.proNum}}</em></span>
-                    </a>
-                    </el-popover>
-                  </div>  
-            </div>
-            <!-------------分割线---------------->
-            <span class="tab-line-itnl"></span>
-            
-            <!--一些链接-->
-            <div id="primaryFriendshipLink">
-                <div class="item-link">
-                    <a href="#">
-                        <svg class="small-icon" aria-hidden="true">
-                            <use xlink:href="#icon-zhuanlan2"></use>
-                        </svg>
-                        <span>专栏</span>
-                    </a>
-                </div>
-                <div class="item-link">
-                    <a href="#">
-                        <svg class="small-icon" aria-hidden="true">
-                            <use xlink:href="#icon-huodong"></use>
-                        </svg>                        
-                        <span>活动</span>
-                    </a>
-                </div>
-                <div class="item-link">
-                    <a href="#">
-                        <svg class="small-icon" aria-hidden="true">
-                            <use xlink:href="#icon-xiaoheiwu"></use>
-                        </svg> 
-                        <span>小黑屋</span>
-                    </a>
-                </div>
-                <div class="item-link">
-                    <a href="#">
-                        <svg class="small-icon" aria-hidden="true">
-                            <use xlink:href="#icon-zhibo"></use>
-                        </svg> 
-                        <span>直播</span>
-                    </a>
-                </div>
-                <div class="item-link">
-                    <a href="#">
-                        <svg class="small-icon" aria-hidden="true">
-                            <use xlink:href="#icon-ketang"></use>
-                        </svg> 
-                        <span>课堂</span>
-                    </a>
-                </div>
-                <div class="item-link">
-                    <a href="#">
-                        <svg class="small-icon" aria-hidden="true">
-                            <use xlink:href="#icon-music"></use>
-                        </svg> 
-                        <span>音乐plus</span>
-                    </a>
-                </div>                                                                                
-            </div>
+            <!-- 通用头部 -->
+            <common-header></common-header>
             <!--推荐内容-->
             <div class="recommend-content">
             <!--轮播图-->
@@ -398,7 +289,7 @@
 
     .big-icon{
        width: 18px; height: 20px;
-       vertical-align: -0.15em;
+       vertical-align: -0.30em;
        fill: currentColor;
        overflow: hidden;
     }
@@ -648,14 +539,67 @@
     }
 
 
+
+
+
+/* 垂直滚动条 */
+
+.subject-cont{
+    right: 50px;
+    position:fixed;
+    top: 220px;
+    width: 56px;
+    height: 469px;
+}
+
+.subject-item{
+    width: 54px;
+    height: 24px;
+    line-height: 24px;
+    text-align: center;
+    cursor: pointer;
+    background: #fff;
+}
+
+.subject-item :hover{
+    background: #73c9e5;
+}
+
+.subject-block {
+    padding-top: 6px;
+    position: relative;
+    background: #fff;
+    border: 1px solid #e7e7e7;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    white-space: nowrap;
+}
+.subject-block div {
+      width: 100%;
+      height: 30px;
+      line-height: 30px;
+      text-align: center;
+      font-size: 15px;
+      color: #9f9fa0;
+      border-bottom: 0.5px solid #ddd;
+}
+.subject-block  div:last-child {
+      border-bottom: 0;
+}
+   
 </style>   
 <script>
 import https from '../../https.js'  
 import basic from '@/components/video/basic.vue'
-
+import commonHeader from '../home/commonHeader.vue'
 export default {
     components:{
-        basic
+        basic,
+        commonHeader
     },
     data(){
         return{

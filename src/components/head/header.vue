@@ -1,6 +1,6 @@
 <template>
   <div id="hello">
-    <remote-js src="http://at.alicdn.com/t/font_1923532_0pdq0huup1ag.js"></remote-js>
+    <remote-js src="http://at.alicdn.com/t/font_1923532_bnjrtp1mz4k.js"></remote-js>
      <el-row class="head">
         <el-col :span="num"><a href="/header"><div class="grid-content bg-purple">主站</div></a></el-col>
         <el-col :span="num"><a href="/header"><div class="grid-content bg-purple">番剧</div></a></el-col>
@@ -137,7 +137,7 @@
           </el-col>
           <el-col :span="num"><a href="/header"><div class="grid-content bg-purple">大会员</div></a></el-col>
           <el-col :span="num"><a href="/header"><div class="grid-content bg-purple">消息</div></a></el-col>
-          <el-col :span="num"><a href="/header"><div class="grid-content bg-purple">动态</div></a></el-col>
+          <el-col :span="num"><a href="/#/dynamic" target="_blank"><div class="grid-content bg-purple">动态</div></a></el-col>
           <el-col :span="num"><a href="/header"><div class="grid-content bg-purple">收藏</div></a></el-col>
           <el-col :span="num"><a href="/header"><div class="grid-content bg-purple">历史</div></a></el-col>
           <el-col :span="num+0.5"><a href="/header"><div class="grid-content bg-purple">创作中心</div></a></el-col>
@@ -218,6 +218,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+  #hello{
+    z-index: 9999;
+  }
 
     *{
       padding: 0px;
