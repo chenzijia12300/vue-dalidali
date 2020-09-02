@@ -136,7 +136,7 @@
 		},
 		 methods: { //事件处理器
 	        listHotComment:function(page){
-                this.$axios.get("http://localhost:8082/comment/list/praise/VIDEO/"+this.$route.query.id+"/"+page+"/8?userId=1",)
+                this.$axios.get(this.COMMENT_URL+"comment/list/praise/VIDEO/"+this.$route.query.id+"/"+page+"/8?userId=1",)
 			    .then(res => {
                     res = res.data
                     this.commentHotList = res.data
@@ -147,7 +147,7 @@
                 })
             },
             listNewComment:function(page){
-                this.$axios.get("http://localhost:8082/comment/list/time/VIDEO/"+this.$route.query.id+"/"+page+"/8?userId=1",)
+                this.$axios.get(this.COMMENT_URL+"comment/list/time/VIDEO/"+this.$route.query.id+"/"+page+"/8?userId=1",)
 		        .then(res => {
                     res = res.data
                     this.commentNewList = res.data

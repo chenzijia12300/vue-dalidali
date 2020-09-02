@@ -18,9 +18,9 @@ Vue.use(VideoPlayer)
 Vue.use(ElementUI)
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios; 
-Vue.prototype.COMMENT_URL="http://localhost:8082/"
-Vue.prototype.USER_URL="http://localhost:8111/userservice/"
-Vue.prototype.VIDEO_URL="http://localhost:8111/videoservice/"
+Vue.prototype.COMMENT_URL=process.env.API_ROOT+"commentservice/"
+Vue.prototype.USER_URL=process.env.API_ROOT+"userservice/"
+Vue.prototype.VIDEO_URL=process.env.API_ROOT+"videoservice/"
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

@@ -3,8 +3,8 @@
         <!-- 垂直滚动条 -->
     <div class="subject-cont">
         <div class="subject-block">
-        <div clsas="subject-item" v-for='(item, index) in ["语文", "数学", "英语", "物理", "化学", "生物", "体育"]' :key="index">
-            <a class="subject-name" href="#">{{ item }}</a>
+        <div clsas="subject-item" v-for='(item, index) in items' :key="index">
+            <a class="subject-name" href="#">{{ item.name}}</a>
         </div>
         </div>
     </div>
@@ -13,7 +13,7 @@
       <!--导航栏-->
         <div class="primary-menu-itnl">
             <!-- 通用头部 -->
-            <common-header></common-header>
+            <common-header v-on:categoryList="getCategoryList"></common-header>
             <!--推荐内容-->
             <div class="recommend-content">
             <!--轮播图-->
@@ -80,15 +80,15 @@
             <!--专栏位-->
 
             <div class="bypb-window">
-                <div class="online"><a href="https://www.bilibili.com/video/online.html" target="_blank">在线列表</a></div>
-                <a data-loc-id="29" target="_blank" class="operate-card" href="https://www.bilibili.com/read/cv6505287" data-target-url="https://www.bilibili.com/read/cv6505287"><img src="http://i0.hdslb.com/bfs/archive/0bf1a101af3a0014def2a3978ff68101c7002106.jpg" alt="外星人"><!----></a>
+                <div class="online"><a href="#" target="_blank">在线列表</a></div>
+                <a data-loc-id="29" target="_blank" class="operate-card" href="#"><img src="@/assets/post_example.jpg" alt="外星人"><!----></a>
             </div>
         </div>
         <div class="storey-box">
             <div class="proxy-box">
                 <div class="bili_live">
                 <a href="#">
-                    <img src="https://i0.hdslb.com/bfs/sycp/creative_img/202007/8fc4eff039caf7bd74950cb548037517.jpg" alt=""> 
+                    <img src="@/assets/advertising.jpg" alt=""> 
                     <svg class="gg-icon" aria-hidden="true">
                             <use xlink:href="#icon-guanggao"></use>
                     </svg>
@@ -121,23 +121,23 @@
                     </a>
                 </header>
                 <div class="rank-wrap" v-for="(videoItem,index) in topVideoList[item.id]" :key="index">
-                    <a href="#">
+                    <a :href="'#/details?id='+videoItem.id" target="_blank">
                         <span class="number" :class="{ 'on' : index<3}">{{index+1}}</span>
                         <div class="preview" v-if="index==0">
                             <!--图片-->
                             <div class="pic">
-                                <a href="#" class="link">
+                                <a :href="'#/details?id='+videoItem.id" target="_blank" class="link">
                                     <img :src="videoItem.cover"/>
                                 </a>
                             </div>
                             <div class="txt">
-                                <a href="#" class="link">
+                                <a :href="'#/details?id='+videoItem.id" target="_blank" class="link">
                                     <p title="" >{{videoItem.title}}</p>
                                 </a>
                                 <span>综合评分:{{videoItem.playNum*1.5}}万</span>
                             </div>
                         </div>
-                        <a href="#" class="link" v-else>
+                        <a :href="'#/details?id='+videoItem.id" target="_blank" class="link" v-else>
                             <p class="title"> {{videoItem.title}}</p>
                         </a>
                     </a>
@@ -172,7 +172,7 @@
     position:absolute;
     width: 100%;
     height: 155px;
-    background:url(https://i0.hdslb.com/bfs/archive/22650682fd25a4a5aa96dd9ef53190c6b8d54912.png) no-repeat -200px;
+    background:url('~@/assets/home_cover.png') no-repeat -200px;
     
   }
     
@@ -612,19 +612,10 @@ export default {
       }
     },
     mounted(){
-        //加载频道+
-        this.$axios.get("http://localhost:8081/category")
-        .then(res => {
-            res = res.data
-            console.log(res.message);
-            this.items=res.data;
-        })
-        .catch(err => {
-            console.error(err); 
-        })
+
 
         //加载推荐左边视频
-        this.$axios.get("http://localhost:8081/video/recommend/LEFT/1")
+        this.$axios.get(this.VIDEO_URL+"video/recommend/LEFT/1")
         .then(res => {
             res = res.data
             this.recommendLeftList = res.data
@@ -634,7 +625,7 @@ export default {
         })
 
         //加载推荐右边视频
-        this.$axios.get("http://localhost:8081/video/recommend/RIGHT/1")
+        this.$axios.get(this.VIDEO_URL+"video/recommend/RIGHT/1")
         .then(res => {
             res = res.data
             this.recommendRightList = res.data
@@ -645,6 +636,12 @@ export default {
     },
     created(){
         myVue = this;
+    },
+    methods:{
+        getCategoryList(childValue){
+            console.log("childValue:"+childValue);
+            this.items = childValue;
+        }
     }
 }
 
@@ -687,7 +684,7 @@ function lazyLoad (className, callback) {
     }
 }
 lazyLoad('zone-list-box', function (ele) {
-    myVue.$axios.get("http://localhost:8081/category/random/"+ele.id)
+    myVue.$axios.get(myVue.VIDEO_URL+"category/random/"+ele.id)
     .then(res => {
         res = res.data;
         console.log(res)
@@ -697,7 +694,7 @@ lazyLoad('zone-list-box', function (ele) {
         console.error(err); 
     })
 
-    myVue.$axios.get("http://localhost:8081/video/top/"+ele.id+"/10")
+    myVue.$axios.get(myVue.VIDEO_URL+"video/top/"+ele.id+"/10")
     .then(res => {
         res = res.data;
         console.log(res)

@@ -1,81 +1,88 @@
 <template>
-  <div id="poster">
-    <el-form class="login-container" label-position="left" label-width="0px">
-      <h3 class="login_title">系统登录</h3>
-      <el-form-item>
-        <el-input type="text" v-model="loginForm.account" auto-complete="off" placeholder="账号"></el-input>
-      </el-form-item>
- 
-      <el-form-item>
-        <el-input type="password" v-model="loginForm.password" auto-complete="off" placeholder="密码"></el-input>
-      </el-form-item>
- 
-      <el-form-item style="width: 100%">
-        <el-button type="primary" style="width: 100%;background: #505458;border: none" v-on:click="login">登录</el-button>
-      </el-form-item>
-    </el-form>
+  <div class="login">
+    <h1>dalidali</h1>
+    <div class="form">
+      <div class="item">
+        <i class="fa fa-user-circle" aria-hidden="true"></i>
+        <input type="text" v-model="loginForm.account" auto-complete="off" placeholder="账号" />
+      </div>
+      <div class="item">
+        <i class="fa fa-key" aria-hidden="true"></i>
+        <input type="text" v-model="loginForm.password" auto-complete="off" placeholder="密码" />
+      </div>
+    </div>
+    <button value="Login" @click="login">登录</button>
   </div>
 </template>
  
  
 <script>
-    export default {
-        name: "Login",
-        data() {
-            return {
-                loginForm: {
-                    account: '',
-                    password: ''
-                },
-                responseResult: []
-            }
-        },
-        methods: {
-            login:function(){
-                this.$axios.post(this.USER_URL+'login',this.loginForm)
-                .then(res => {
-                  res = res.data;
-                  console.log(JSON.stringify(res.data));
-                  localStorage.setItem("userData",JSON.stringify(res.data));
-                  this.$router.push({name:'/home'});
-                })
-                .catch(err => {
-                  console.error(err.data); 
-                })
-            }
-        }
-    }
+export default {
+  name: "Login",
+  data() {
+    return {
+      loginForm: {
+        account: "",
+        password: "",
+      },
+      responseResult: [],
+    };
+  },
+  methods: {
+    login: function () {
+      this.$axios
+        .post(this.USER_URL + "login", this.loginForm)
+        .then((res) => {
+          res = res.data;
+          console.log(JSON.stringify(res.data));
+          localStorage.setItem("userData", JSON.stringify(res.data));
+          this.$router.push({ path: "/" });
+        })
+        .catch((err) => {
+          console.error(err.data);
+        });
+    },
+  },
+};
 </script>
  
-<style>
-  #poster {
-    background-position: center;
-    height: 100%;
-    width: 100%;
-    background-size: cover;
-    position: fixed;
-  }
-  body{
-    margin: 0px;
-    padding: 0;
-  }
- 
-  .login-container {
-    border-radius: 15px;
-    background-clip: padding-box;
-    margin: 90px auto;
-    width: 350px;
-    padding: 35px 35px 15px 35px;
-    background: #fff;
-    border: 1px solid #eaeaea;
-    box-shadow: 0 0 25px #cac6c6;
-  }
- 
-  .login_title {
-    margin: 0px auto 40px auto;
-    text-align: center;
-    color: #505458;
-  }
- 
- 
+<style scoped>
+body {
+  background: url(~@/assets/login.jpg);
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+}
+.login {
+  padding: 20px 50px;
+  background: #00000060;
+  width: 30%;
+  height: auto;
+  margin: 0 auto;
+  margin-top: 15%;
+  text-align: center;
+}
+.login h1 {
+  color: #fff;
+}
+.login .form .item {
+  margin-top: 15px;
+}
+.login .form .item input {
+  width: 200px;
+  font-size: 15px;
+  padding: 5px 10px;
+  background: #ffffff00;
+  border: 0px;
+  border-bottom: 2px solid #fff;
+  color: #fff;
+}
+.login button {
+  margin-top: 50px;
+  width: 200px;
+  height: 30px;
+  border: 0px;
+  background: #ffffff80;
+  background-image: linear-gradient(120deg, #db3125 0%, #578bc3 100%);
+  border-radius: 15px;
+}
 </style>

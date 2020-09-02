@@ -146,7 +146,7 @@
   position: absolute;
   width: 100%;
   height: 155px;
-  background: url(https://i0.hdslb.com/bfs/archive/22650682fd25a4a5aa96dd9ef53190c6b8d54912.png)
+  background: url(/assets/home_cover.png)
     no-repeat -200px;
 }
 
@@ -277,15 +277,16 @@ export default {
   mounted() {
     //加载频道+
     this.$axios
-      .get("http://localhost:8081/category")
+      .get(this.VIDEO_URL+"category")
       .then((res) => {
         res = res.data;
         console.log(res.message);
         this.items = res.data;
+            this.$emit('categoryList',this.items);
       })
       .catch((err) => {
         console.error(err);
       });
-  },
+  }
 };
 </script>

@@ -181,7 +181,7 @@
         <a href="#">
           <div class="lazy-img">
             <img
-              src="https://i0.hdslb.com/bfs/sycp/creative_img/202007/518e7372b19fc0dd0c51931d4c459a45.jpg"
+              src="@/assets/advertising1.jpg"
             />
           </div>
         </a>
@@ -196,7 +196,7 @@
         <div class="up-info-face">
           <a href="#" class="fa">
             <img
-              src="//i1.hdslb.com/bfs/face/1d6f100b921c9b48914eda8f3b37e76ba9ef4ca5.jpg@68w_68h.webp"
+              src="@/assets/default_up.jpg"
               class="up-info-face"
             />
           </a>
@@ -250,10 +250,9 @@
               <div class="rec-list">
                 <div class="rec-item" v-for="(item,index) in recVideoList" :key="index">
                   <basic
-                  style="width:141px;height:80px;"
+                  style="width:141px;height:80px;  display: inline-block;"
                   :flag="false"
                   
-                
                   :videoItem="item"
                 >
                 </basic>
@@ -1014,63 +1013,7 @@ export default {
         },
       ],
       danmuShow: false,
-      recVideoList: [
-        {
-          cover:"http://192.168.99.103:9000/dalidali/e03036ca-0293-488e-87f2-0521a2593daa.jpg",
-          playNum: "541",
-          praiseNum: "987",
-          danmuNum:"1999",
-          length: 68,
-          previewUrl:
-            "http://192.168.99.103:9000/dalidali/e03036ca-0293-488e-87f2-0521a2593daa_preview.png",
-          title: "假装是标题",
-        upName:"观察者网"
-        },
-        {
-          cover:"http://192.168.99.103:9000/dalidali/e03036ca-0293-488e-87f2-0521a2593daa.jpg",
-          playNum: "541",
-          praiseNum: "987",
-          danmuNum:"1999",
-          length: 68,
-          previewUrl:
-            "http://192.168.99.103:9000/dalidali/e03036ca-0293-488e-87f2-0521a2593daa_preview.png",
-          title: "假装是标题",
-        upName:"观察者网"
-        },
-        {
-          cover:"http://192.168.99.103:9000/dalidali/e03036ca-0293-488e-87f2-0521a2593daa.jpg",
-          playNum: "541",
-          praiseNum: "987",
-          danmuNum:"1999",
-          length: 68,
-          previewUrl:
-            "http://192.168.99.103:9000/dalidali/e03036ca-0293-488e-87f2-0521a2593daa_preview.png",
-          title: "假装是标题",
-        upName:"观察者网"
-        },
-        {
-          cover:"http://192.168.99.103:9000/dalidali/e03036ca-0293-488e-87f2-0521a2593daa.jpg",
-          playNum: "541",
-          praiseNum: "987",
-          danmuNum:"1999",
-          length: 68,
-          previewUrl:
-            "http://192.168.99.103:9000/dalidali/e03036ca-0293-488e-87f2-0521a2593daa_preview.png",
-          title: "假装是标题",
-        upName:"观察者网"
-        },
-        {
-          cover:"http://192.168.99.103:9000/dalidali/e03036ca-0293-488e-87f2-0521a2593daa.jpg",
-          playNum: "541",
-          praiseNum: "987",
-          danmuNum:"1999",
-          length: 68,
-          previewUrl:
-            "http://192.168.99.103:9000/dalidali/e03036ca-0293-488e-87f2-0521a2593daa_preview.png",
-          title: "假装是标题",
-        upName:"观察者网"
-        },
-      ],
+      recVideoList: [],
       hasLike:false,
       hasCoin:false,
       hasCollect:false,
@@ -1079,9 +1022,11 @@ export default {
     };
   },
   created() {
+    // 请求视频详细信息
     this.videoId = this.$route.query.id;
+    console.log(this.VIDEO_URL);
     this.$axios
-      .get("http://localhost:8081/video/" + this.videoId + "?userId=1")
+      .get(this.VIDEO_URL+"video/" + this.videoId)
       .then((res) => {
         res = res.data;
         console.log(res);
@@ -1089,6 +1034,19 @@ export default {
         if(this.details.log==null){
           this.details.log={}
         }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+
+
+      // 请求相关推荐
+      this.$axios
+      .get(this.VIDEO_URL+"category/random/all")
+      .then((res) => {
+        res = res.data;
+        console.log(res);
+        this.recVideoList = res.data;
       })
       .catch((err) => {
         console.error(err);

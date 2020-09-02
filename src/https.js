@@ -17,6 +17,13 @@ axios.interceptors.request.use((config) => {
 
 //返回状态判断(添加响应拦截器)
 axios.interceptors.response.use((res) =>{
+        console.log(res.data.code);
+        if(res.data.code == 403){
+            this.$router.push({
+                path: '/login'
+        })
+     }
+
     //对响应数据做些事
     if(!res.data.success){
         return Promise.resolve(res);

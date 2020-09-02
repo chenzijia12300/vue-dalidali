@@ -14,7 +14,6 @@
           ref="videoPlayer"
           @click.native="handlerPlay()"
           @timeupdate="onPlayerTimeupdate($event)"
-          :playsinline="true"
           :options="playerOptions"
         ></video-player>
         <div class="video-control" v-show="isShow">
@@ -68,7 +67,11 @@
               </el-popover>
 
               <!--倍数代码 -->
-              <div @mouseover="speedFlag = true" @mouseout="speedFlag = false" style="display:inline-block">
+              <div
+                @mouseover="speedFlag = true"
+                @mouseout="speedFlag = false"
+                style="display:inline-block"
+              >
                 <ul class="speed" v-show="speedFlag">
                   <li
                     class="select-item"
@@ -86,11 +89,15 @@
                 </div>
               </div>
               <!-- 声音代码 -->
-              <div @mouseover="soundFlag = true"  @mouseout="soundFlag = false" style="display:inline-block;position:relative">
+              <div
+                @mouseover="soundFlag = true"
+                @mouseout="soundFlag = false"
+                style="display:inline-block;position:relative"
+              >
                 <div class="sound" v-show="soundFlag" style="height:100%">
                   <el-slider v-model="sound" vertical height="200px"></el-slider>
                 </div>
-                <div class="video-sound" >
+                <div class="video-sound">
                   <svg class="player-svg" aria-hidden="true" style="width:26px;height:18px">
                     <use xlink:href="#icon-shengyin" />
                   </svg>
@@ -552,11 +559,10 @@ export default {
       return new Promise((resolve) => setTimeout(resolve, ms));
     },
     controlScreen: function () {
-      if(this.isFull){
+      if (this.isFull) {
         this.step = 798 / this.length;
         this.exitFullscreen();
-      }
-      else{
+      } else {
         this.fullScreen();
         this.step = document.body.clientWidth / this.length;
       }
@@ -577,92 +583,116 @@ export default {
     },
     //退出全屏
     exitFullscreen() {
-      if(document.exitFullscreen) {
+      if (document.exitFullscreen) {
         document.exitFullscreen();
-    } else if(document.mozCancelFullScreen) {
+      } else if (document.mozCancelFullScreen) {
         document.mozCancelFullScreen();
-    } else if(document.webkitExitFullscreen) {
+      } else if (document.webkitExitFullscreen) {
         document.webkitExitFullscreen();
-    }
+      }
     },
   },
   components: {},
 };
 </script>
 <style  lang="scss">
-.barrage-wrapper {
-  * {
-    margin: 0;
-    padding: 0;
-  }
+
+/**
+    视频播放器样式
+  */
+.video-js {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/**
+  自定义视频控制器样式
+ */
+.video-control {
+  padding: 0 12px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+</style>
+<style  lang="scss" scoped>
+  .barrage-wrapper {
   z-index: 1;
   position: absolute;
   left: 0px;
   top: 0px;
   width: 100%;
   height: 100%;
-  .barrage-item {
-    z-index: 99;
-    position: absolute;
-    // left: 0px;
-    // top: 0px;
-    // transform: translateX(-100%);
-    // padding: 5px 0px;
-    user-select: none; // 禁用选择文字
-    position: absolute;
-    white-space: pre;
-    cursor: pointer;
-    // pointer-events: none;
-    // perspective: 500px;
-    display: inline-block;
-    will-change: transform;
-    font-size: 25px;
-    color: white;
-    font-family: SimHei, "Microsoft JhengHei", Arial, Helvetica, sans-serif;
-    font-weight: bold;
-    line-height: 1.125;
-    opacity: 1;
-    text-shadow: rgb(0, 0, 0) 1px 0px 1px, rgb(0, 0, 0) 0px 1px 1px,
-      rgb(0, 0, 0) 0px -1px 1px, rgb(0, 0, 0) -1px 0px 1px;
-    &:hover {
-      color: red;
-      animation-play-state: paused !important;
-      z-index: 150;
+}
+.barrage-item {
+  z-index: 99;
+  position: absolute;
+  // left: 0px;
+  // top: 0px;
+  // transform: translateX(-100%);
+  // padding: 5px 0px;
+  user-select: none; // 禁用选择文字
+  position: absolute;
+  white-space: pre;
+  cursor: pointer;
+  // pointer-events: none;
+  // perspective: 500px;
+  display: inline-block;
+  will-change: transform;
+  font-size: 25px;
+  color: white;
+  font-family: SimHei, "Microsoft JhengHei", Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  line-height: 1.125;
+  opacity: 1;
+  text-shadow: rgb(0, 0, 0) 1px 0px 1px, rgb(0, 0, 0) 0px 1px 1px,
+    rgb(0, 0, 0) 0px -1px 1px, rgb(0, 0, 0) -1px 0px 1px;
+  &:hover {
+    color: red;
+    animation-play-state: paused !important;
+    z-index: 150;
+
+    .top-item {
+      z-index: -1;
+    }
+    .barrage-main {
+      z-index: -1;
+      /* border: 2px solid blue; */
+      width: 100%;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+      // background: #000;
+    }
+
+    .control-container {
+      position: absolute;
+      width: 100%;
+      height: 555px;
+      border: 1px solid;
+      background-color: blacks;
+      z-index: 9999;
+    }
+
+    .barrage-main-dm {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+    }
+    .self-dm {
+      border: 2px solid #87ceeb;
+      box-sizing: border-box;
     }
   }
-  .top-item {
-    z-index: -1;
-  }
-  .barrage-main {
-    z-index: -1;
-    /* border: 2px solid blue; */
-    width: 100%;
-    height: 100%;
-    position: relative;
-    overflow: hidden;
-    // background: #000;
-  }
 
-  .control-container {
-    position: absolute;
-    width: 100%;
-    height: 555px;
-    border: 1px solid;
-    background-color: blacks;
-    z-index: 9999;
-  }
-
-  .barrage-main-dm {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
-  }
-}
-.self-dm {
-  border: 2px solid #87ceeb;
-  box-sizing: border-box;
+  
 }
 @keyframes barrage-run {
   0% {
@@ -694,28 +724,6 @@ export default {
   }
 }
 
-/**
-    视频播放器样式
-  */
-.video-js {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
-/**
-  自定义视频控制器样式
- */
-.video-control {
-  padding: 0 12px;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-}
 .video-control-top {
   height: 16px;
 
