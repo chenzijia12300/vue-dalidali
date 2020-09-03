@@ -1,20 +1,24 @@
 <template>
+<div>
+  <app-header :class="{ headerBox :true}"></app-header>
   <div class="v-wrap">
     <div class="header-box"></div>
     <!-- 硬币弹窗 -->
     <div class="dialog-container" v-show="showDialog">
       <div class="dialog-content">
         <!-- 关闭 -->
-        <svg aria-hidden="true" style="width:14px;height:14px;vertical-align:middle;    position: absolute;    right: 16px;
-    top: 16px;cursor: pointer;" @click="showDialog=false">
-              <use xlink:href="#icon-quxiao" />
+        <svg
+          aria-hidden="true"
+          style="width:14px;height:14px;vertical-align:middle;    position: absolute;    right: 16px;
+    top: 16px;cursor: pointer;"
+          @click="showDialog=false"
+        >
+          <use xlink:href="#icon-quxiao" />
         </svg>
         <!-- 标题 -->
         <div class="dialog-title">
           给up主投上
-          <span>
-            1
-          </span>
+          <span>1</span>
           枚硬币
         </div>
         <!-- 盒子 -->
@@ -112,39 +116,52 @@
         </div>
       </div>
       <div class="ops">
-          <span :title='"点赞数"+details.praiseNum' class="like" @mouseover="hasLike=true" @mouseout="hasLike=false" @click="handlerLike()">
-            <!---->
-            <!---->
-            <!---->
-            <!---->
-            <!---->
-            <svg class="gg-icon" aria-hidden="true" v-if="hasLike || details.log.isPraise">
-              <use xlink:href="#icon-dianzan-copy" />
-            </svg>
-            <svg class="gg-icon" aria-hidden="true" v-else>
-              <use xlink:href="#icon-dianzan" />
-            </svg>
-            {{details.praiseNum}}
-          </span>
-        <span :title="'投硬币枚数'+details.coinNum" class="coin" @mouseover="hasCoin=true" @mouseout="hasCoin=false" @click="handlerDialog()">
-          <svg
-            class="gg-icon"
-            aria-hidden="true"
-            v-if="hasCoin || details.log.coinNum>0"
-          >
+        <span
+          :title="'点赞数'+details.praiseNum"
+          class="like"
+          @mouseover="hasLike=true"
+          @mouseout="hasLike=false"
+          @click="handlerLike()"
+        >
+          <!---->
+          <!---->
+          <!---->
+          <!---->
+          <!---->
+          <svg class="gg-icon" aria-hidden="true" v-if="hasLike || details.log.isPraise">
+            <use xlink:href="#icon-dianzan-copy" />
+          </svg>
+          <svg class="gg-icon" aria-hidden="true" v-else>
+            <use xlink:href="#icon-dianzan" />
+          </svg>
+          {{details.praiseNum}}
+        </span>
+        <span
+          :title="'投硬币枚数'+details.coinNum"
+          class="coin"
+          @mouseover="hasCoin=true"
+          @mouseout="hasCoin=false"
+          @click="handlerDialog()"
+        >
+          <svg class="gg-icon" aria-hidden="true" v-if="hasCoin || details.log.coinNum>0">
             <use xlink:href="#icon-icon_shipin_yingbishu-copy" />
           </svg>
           <svg
             class="gg-icon"
             aria-hidden="true"
             style="background-color:gray;border-radius: 50%;border:none"
-            v-else
-          >
+            v-else>
             <use xlink:href="#icon-icon_shipin_yingbishu" />
           </svg>
           {{details.coinNum}}
         </span>
-        <span title="收藏人数894" class="collect" @mouseover="hasCollect=true" @mouseout="hasCollect=false" @click="handlerCollection()">
+        <span
+          title="收藏人数894"
+          class="collect"
+          @mouseover="hasCollect=true"
+          @mouseout="hasCollect=false"
+          @click="handlerCollection()"
+        >
           <svg class="gg-icon" aria-hidden="true" v-if="hasCollect || details.log.isCollection">
             <use xlink:href="#icon-xingxing-copy" />
           </svg>
@@ -180,9 +197,7 @@
       <div class="advertising-container">
         <a href="#">
           <div class="lazy-img">
-            <img
-              src="@/assets/advertising1.jpg"
-            />
+            <img src="@/assets/advertising1.jpg" />
           </div>
         </a>
       </div>
@@ -195,10 +210,7 @@
         <!--头像-->
         <div class="up-info-face">
           <a href="#" class="fa">
-            <img
-              src="@/assets/default_up.jpg"
-              class="up-info-face"
-            />
+            <img src="@/assets/default_up.jpg" class="up-info-face" />
           </a>
         </div>
         <!--基本信息-->
@@ -232,49 +244,49 @@
           <span class="collapse-header-left-text" @click="danmuShow=!danmuShow">展开</span>
         </div>
         <el-collapse-transition>
-          
-            <el-table
-              v-show="danmuShow"
-              :data="tableData"
-              height="585"
-              style="width: 100%;font-size: 12px;"
-            >
-              <el-table-column prop="date" label="时间" width="60"></el-table-column>
-              <el-table-column prop="name" label="弹幕内容" width="172"></el-table-column>
-              <el-table-column prop="address" label="发送时间"></el-table-column>
-            </el-table>
-          
+          <el-table
+            v-show="danmuShow"
+            :data="tableData"
+            height="585"
+            style="width: 100%;font-size: 12px;"
+          >
+            <el-table-column prop="date" label="时间" width="60"></el-table-column>
+            <el-table-column prop="name" label="弹幕内容" width="172"></el-table-column>
+            <el-table-column prop="address" label="发送时间"></el-table-column>
+          </el-table>
         </el-collapse-transition>
-            <div class="rec-container">
-              <div class="rec-title">相关推荐</div>
-              <div class="rec-list">
-                <div class="rec-item" v-for="(item,index) in recVideoList" :key="index">
-                  <basic
-                  style="width:141px;height:80px;  display: inline-block;"
-                  :flag="false"
-                  
-                  :videoItem="item"
-                >
-                </basic>
-                <div class="rec-item-info">
-                  <a href="#" class="rec-item-title">{{item.title}}</a>
-                  <div class="count up">
-                    <a href="#">{{item.upName}}</a>
-                  </div>
-                  <div class="count">{{item.playNum}}播放&nbsp;*&nbsp;{{item.danmuNum}}弹幕</div>
+        <div class="rec-container">
+          <div class="rec-title">相关推荐</div>
+          <div class="rec-list">
+            <div class="rec-item" v-for="(item,index) in recVideoList" :key="index">
+              <basic
+                style="width:141px;height:80px;  display: inline-block;"
+                :flag="false"
+                :videoItem="item"
+              ></basic>
+              <div class="rec-item-info">
+                <a href="#" class="rec-item-title">{{item.title}}</a>
+                <div class="count up">
+                  <a href="#">{{item.upName}}</a>
                 </div>
-                </div>
-                
-                
+                <div class="count">{{item.playNum}}播放&nbsp;*&nbsp;{{item.danmuNum}}弹幕</div>
               </div>
             </div>
           </div>
+        </div>
       </div>
     </div>
+  </div>
   </div>
 </template>
 
 <style scoped>
+
+    .headerBox{
+        position: relative;
+        background: #fff;
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.08);
+    }
 * {
   margin: 0;
   padding: 0;
@@ -564,7 +576,6 @@ a:visited {
   position: relative;
 }
 
-
 .video-toolbar .ops .share {
   position: relative;
   height: 35px;
@@ -683,18 +694,6 @@ input:focus {
 }
 
 /**
-            视频播放器样式
-         */
-.video-js {
-  position: relative;
-  border: 1px solid;
-  width: 100%;
-  height: 100%;
-  display: block;
-  z-index: 99999;
-}
-
-/**
             视频简介样式
          */
 
@@ -810,14 +809,13 @@ img {
   margin-bottom: 6px;
 }
 
-
 .rec-item-info {
   display: inline-block;
   width: 149px;
 }
 
 .rec-item-title {
-      color: #222;
+  color: #222;
   font-size: 14px;
   font-weight: 500;
   height: 36px;
@@ -846,20 +844,18 @@ img {
   text-overflow: ellipsis;
 }
 
-
-
 /* 投币弹窗 */
-.dialog-container{
-    background: rgba(0,0,0,.65);
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
-    z-index: 10102;
+.dialog-container {
+  background: rgba(0, 0, 0, 0.65);
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  z-index: 10102;
 }
 
-.dialog-content{
+.dialog-content {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -873,88 +869,87 @@ img {
   overflow: hidden;
 }
 
-  .dialog-title{
-    font-size: 16px;
-    margin-top: 30px;
-    color: #222;
-    text-align: center;
-  }
+.dialog-title {
+  font-size: 16px;
+  margin-top: 30px;
+  color: #222;
+  text-align: center;
+}
 
-  .dialog-title span{
-    font-size: 30px;
-    color: #00a1d6;
-  }
+.dialog-title span {
+  font-size: 30px;
+  color: #00a1d6;
+}
 
-  .c-num{
-    color: #00a1d6;
-    text-align: left;
-    font-size: 14px;
-    line-height: 40px;
-    position: absolute;
-    left: 15px;
-  }
+.c-num {
+  color: #00a1d6;
+  text-align: left;
+  font-size: 14px;
+  line-height: 40px;
+  position: absolute;
+  left: 15px;
+}
 
-  .dialog-box{
-    text-align: center;
-  }
+.dialog-box {
+  text-align: center;
+}
 
-  .dialog-box-left{
-    margin-left: 35px;
-    background-size: 122px;
-    background-image: url(//s1.hdslb.com/bfs/static/jinkela/video/asserts/22.gif);
-    position: relative;
-    display: inline-block;
-    margin-right: 30px;
-    margin-top: 35px;
-    width: 160px;
-    height: 230px;
-    border: 2px dashed #ccd0d6;
-    border-radius: 5px;
-    background-repeat: no-repeat;
-    background-position: 50%;
-        border-style: solid;
-    border-color: #02a0d8;
-  }
+.dialog-box-left {
+  margin-left: 35px;
+  background-size: 122px;
+  background-image: url(//s1.hdslb.com/bfs/static/jinkela/video/asserts/22.gif);
+  position: relative;
+  display: inline-block;
+  margin-right: 30px;
+  margin-top: 35px;
+  width: 160px;
+  height: 230px;
+  border: 2px dashed #ccd0d6;
+  border-radius: 5px;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  border-style: solid;
+  border-color: #02a0d8;
+}
 
-  .dialog-bottom{
-    text-align: center;
-    padding: 25px 0;
-  }
+.dialog-bottom {
+  text-align: center;
+  padding: 25px 0;
+}
 
-  .dialog-bottom .btn{
-    display: inline-block;
-    background: #00a1d6;
-    color: #fff;
-    font-size: 14px;
-    padding: 4px 18px;
-    border-radius: 4px;
-    transition: all .3s;
-    -ms-user-select: none;
-    user-select: none;
-    border: 1px solid #00a1d6;
-    text-align: center;
-    cursor: pointer;
-  }
-  .dialog-bottom .tips{
-    font-size: 12px;
-    color: #99a2aa;
-    margin-top: 10px;
-  }
-
-
-
-
+.dialog-bottom .btn {
+  display: inline-block;
+  background: #00a1d6;
+  color: #fff;
+  font-size: 14px;
+  padding: 4px 18px;
+  border-radius: 4px;
+  transition: all 0.3s;
+  -ms-user-select: none;
+  user-select: none;
+  border: 1px solid #00a1d6;
+  text-align: center;
+  cursor: pointer;
+}
+.dialog-bottom .tips {
+  font-size: 12px;
+  color: #99a2aa;
+  margin-top: 10px;
+}
 </style>
 <script>
 import "@/https.js";
 import vBarrage from "@/components/VBarrage/index.vue";
 import comment from "@/components/comment/Comment.vue";
 import basic from "@/components/video/recommend.vue";
+import appHeader from "@/components/head/header";
+
 export default {
   components: {
     vBarrage,
     comment,
     basic,
+    appHeader,
   },
   data() {
     return {
@@ -976,7 +971,7 @@ export default {
         previewUrl:
           "http://192.168.99.103:9000/dalidali/e03036ca-0293-488e-87f2-0521a2593daa_preview.png",
         title: "假装是标题",
-        upName:"观察者网"
+        upName: "观察者网",
       },
       arr: [],
       isPause: false,
@@ -1014,11 +1009,11 @@ export default {
       ],
       danmuShow: false,
       recVideoList: [],
-      hasLike:false,
-      hasCoin:false,
-      hasCollect:false,
-      hasShare:false,
-      showDialog:false
+      hasLike: false,
+      hasCoin: false,
+      hasCollect: false,
+      hasShare: false,
+      showDialog: false,
     };
   },
   created() {
@@ -1026,23 +1021,22 @@ export default {
     this.videoId = this.$route.query.id;
     console.log(this.VIDEO_URL);
     this.$axios
-      .get(this.VIDEO_URL+"video/" + this.videoId)
+      .get(this.VIDEO_URL + "video/" + this.videoId)
       .then((res) => {
         res = res.data;
         console.log(res);
         this.details = res.data;
-        if(this.details.log==null){
-          this.details.log={}
+        if (this.details.log == null) {
+          this.details.log = {};
         }
       })
       .catch((err) => {
         console.error(err);
       });
 
-
-      // 请求相关推荐
-      this.$axios
-      .get(this.VIDEO_URL+"category/random/all")
+    // 请求相关推荐
+    this.$axios
+      .get(this.VIDEO_URL + "category/random/all")
       .then((res) => {
         res = res.data;
         console.log(res);
@@ -1080,72 +1074,87 @@ export default {
       this.danmuInput = "";
     },
     // 处理点赞逻辑
-    handlerLike(){
-      this.$axios.post(this.VIDEO_URL+"video/dynamic_like",{
-        vid:this.videoId
-      },{
-          headers: {
-            "Content-Type": "application/json;charset=UTF-8",
+    handlerLike() {
+      this.$axios
+        .post(
+          this.VIDEO_URL + "video/dynamic_like",
+          {
+            vid: this.videoId,
           },
-      }
-      )
-      .then(res => {
-        this.$message('操作成功~');
-        this.$set(this.details.log,'isPraise',!this.details.log.isPraise)
-      })
-      .catch(err => {
-        console.error(err); 
-      })
+          {
+            headers: {
+              "Content-Type": "application/json;charset=UTF-8",
+            },
+          }
+        )
+        .then((res) => {
+          this.$message("操作成功~");
+          this.$set(this.details.log, "isPraise", !this.details.log.isPraise);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     },
     // 投币
-    handlerDialog(){
-      if(this.details.log.coinNum==null||this.details.log.coinNum<2){
-        this.showDialog=true
-      }else{
+    handlerDialog() {
+      if (this.details.log.coinNum == null || this.details.log.coinNum < 2) {
+        this.showDialog = true;
+      } else {
         this.$message({
-          type: 'warning',
-          message: '该视频你已经不能在投币拉',
+          type: "warning",
+          message: "该视频你已经不能在投币拉",
         });
-
       }
     },
-    submitCoin(){
-      this.$axios.post(this.VIDEO_URL+"video/coin",{
-        vid:this.videoId,
-        num:1
-      },{
-          headers: {
-            "Content-Type": "application/json;charset=UTF-8",
+    submitCoin() {
+      this.$axios
+        .post(
+          this.VIDEO_URL + "video/coin",
+          {
+            vid: this.videoId,
+            num: 1,
           },
-      }
-      )
-      .then(res => {
-        this.$message('投币成功,经验加10~');
-        this.showDialog = false
-        this.$set(this.details.log,'coinNum',this.details.log.coinNum+1)
-      })
-      .catch(err => {
-        console.error(err); 
-      })
+          {
+            headers: {
+              "Content-Type": "application/json;charset=UTF-8",
+            },
+          }
+        )
+        .then((res) => {
+          this.$message("投币成功,经验加10~");
+          this.showDialog = false;
+          this.$set(this.details.log, "coinNum", this.details.log.coinNum + 1);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     },
     // 收藏
-    handlerCollection(){
-      this.$axios.post(this.VIDEO_URL+"video/collection",{
-        vid:this.videoId
-      },{
-          headers: {
-            "Content-Type": "application/json;charset=UTF-8",
+    handlerCollection() {
+      this.$axios
+        .post(
+          this.VIDEO_URL + "video/collection",
+          {
+            vid: this.videoId,
           },
-      }
-      )
-      .then(res => {
-        this.$message('操作成功~');
-        this.$set(this.details.log,'isCollection',!this.details.log.isCollection)
-      })
-      .catch(err => {
-        console.error(err); 
-      })
-    }
+          {
+            headers: {
+              "Content-Type": "application/json;charset=UTF-8",
+            },
+          }
+        )
+        .then((res) => {
+          this.$message("操作成功~");
+          this.$set(
+            this.details.log,
+            "isCollection",
+            !this.details.log.isCollection
+          );
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    },
   },
 };
 </script>

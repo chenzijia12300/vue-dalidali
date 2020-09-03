@@ -1,6 +1,8 @@
 <template>
+<div>
+  <appHeader></appHeader>
   <div class="primary-menu-itnl">
-    <common-header></common-header>
+    <commonHeader></commonHeader>
     <div class="rank-body">
       <div class="rank-tab-wrap">
         <ul class="rank-tab">
@@ -85,6 +87,7 @@
       </div>
     </div>
   </div>
+</div>
 </template>
 <style scoped>
 /* 排行榜 */
@@ -267,9 +270,11 @@ img{
 </style>
 <script>
 import commonHeader from "../home/commonHeader.vue";
+import appHeader from '@/components/head/header'
 export default {
   components: {
     commonHeader,
+    appHeader
   },
   data() {
     return {};

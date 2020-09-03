@@ -23,7 +23,7 @@
           <span>动态</span>
         </li>
       </a>
-      <a href="#">
+      <a href="/#/rank" target="_blank">
         <li>
           <div class="round" style="background-color:#00a1d6">
             <svg class="big-icon" aria-hidden="true">

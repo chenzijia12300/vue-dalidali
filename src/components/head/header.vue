@@ -171,7 +171,7 @@
                 </div>
                 <!-- 退出 -->
                 <div class="links">
-                  <a href="https://account.bilibili.com/account/home" class="link-item">
+                  <a class="link-item" @click="logout()">
                     <svg aria-hidden="true" class="coins-icon">
                       <use xlink:href="#icon-zhuxiao" />
                     </svg>
@@ -246,6 +246,8 @@
 
 <script>
 import avatar from "../Avatar.vue";
+import {store} from "@/router/index.js"
+
 export default {
   data() {
     return {
@@ -281,7 +283,8 @@ export default {
     avatar,
   },
   mounted() {
-    this.userInfo = JSON.parse(localStorage.getItem("userData"));
+    console.log(store.state.user);
+    this.userInfo = store.state.user
   },
   methods: {
     showDetails: function (flag) {
@@ -293,6 +296,16 @@ export default {
         this.avatarCss.top = "0px";
       }
     },
+    logout(){
+      console.log(this.userInfo);
+      this.$message({
+        message: '欢迎“'+this.userInfo.username+'”下次再来',
+      })
+      store.commit('setUser',null)
+      localStorage.removeItem("userData");
+      this.userInfo=null;
+      this.$router.push('/login');
+    }
   },
 };
 </script>

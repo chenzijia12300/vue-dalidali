@@ -71,8 +71,7 @@ const router = new Router({
 })
 
 export default router
-
-const store = new Vuex.Store({
+export const store =  new Vuex.Store({
   state:{
     user:JSON.parse(localStorage.getItem("userData"))
   },
@@ -82,6 +81,8 @@ const store = new Vuex.Store({
     }
   }
 })
+
+
 router.beforeEach((to,from,next)=>{
   if(to.path == '/login'){
     if(store.state.user)

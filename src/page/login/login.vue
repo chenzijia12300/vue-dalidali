@@ -1,4 +1,5 @@
 <template>
+<body>
   <div class="login">
     <h1>dalidali</h1>
     <div class="form">
@@ -13,10 +14,12 @@
     </div>
     <button value="Login" @click="login">登录</button>
   </div>
+</body>
 </template>
  
  
 <script>
+import {store} from '@/router/index.js'
 export default {
   name: "Login",
   data() {
@@ -34,9 +37,14 @@ export default {
         .post(this.USER_URL + "login", this.loginForm)
         .then((res) => {
           res = res.data;
-          console.log(JSON.stringify(res.data));
-          localStorage.setItem("userData", JSON.stringify(res.data));
-          this.$router.push({ path: "/" });
+          let user = JSON.stringify(res.data);
+          store.commit("setUser",user)
+          localStorage.setItem("userData",user);
+          this.$message({
+          message: '欢迎“'+res.data.username+'”访问dalidali',
+          type: 'success'
+        });
+          this.$router.push("/");
         })
         .catch((err) => {
           console.error(err.data);
@@ -47,7 +55,17 @@ export default {
 </script>
  
 <style scoped>
+*{
+  margin:0;
+  padding: 0;
+}
 body {
+  z-index: -1;
+  left: 0;
+  top: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
   background: url(~@/assets/login.jpg);
   background-repeat: no-repeat;
   background-size: 100% auto;

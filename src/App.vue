@@ -1,12 +1,10 @@
 <template>
   <div id="app">
-    <app-header v-if="header_show" v-bind:class="{'header-box': isheader}" :key="key"></app-header>
     <router-view/>
   </div>
 </template>
 
 <script>
-import Header from './components/head/header'
 export default {
   name: 'App',
   data (){
@@ -15,9 +13,6 @@ export default {
       isheader:false,
       key:null
     }
-  },
-  components: {
-    'app-header':Header
   },
   watch: {
 		// 方法1
@@ -34,13 +29,5 @@ export default {
 }
 </script>
 
-<style scope>
-    /**
-        头部布局
-     */
-    .header-box{
-        position: relative;
-        background: #fff;
-        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.08);
-    }
+<style>
 </style>

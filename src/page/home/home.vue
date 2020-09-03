@@ -1,6 +1,8 @@
 <template>
     <div>
-        <!-- 垂直滚动条 -->
+    <!-- 通用头部 -->
+    <appHeader></appHeader>
+    <!-- 垂直滚动条 -->
     <div class="subject-cont">
         <div class="subject-block">
         <div clsas="subject-item" v-for='(item, index) in items' :key="index">
@@ -28,10 +30,10 @@
             <div class="recommend-box">
                 <div class="recommnd-card">
                     <div class="info-box" v-for="(item,index) in recommendRightList" v-bind:key="index">
-                        <a href="#">
+                        <a :href="'#/details?id='+item.id" target="_blank">
                             <img :src="item.cover"/>
                         </a>
-                        <a :href="'#/details?id='+item.id" target="view_window">
+                        <a :href="'#/details?id='+item.id" target="_blank">
                             <div class="info">
     
                                     <p class="title" :title="item.title">{{item.title}}</p>
@@ -596,10 +598,13 @@
 import https from '../../https.js'  
 import basic from '@/components/video/basic.vue'
 import commonHeader from '../home/commonHeader.vue'
+import appHeader from '@/components/head/header'
+
 export default {
     components:{
         basic,
-        commonHeader
+        commonHeader,
+        appHeader
     },
     data(){
         return{

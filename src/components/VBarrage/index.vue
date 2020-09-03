@@ -16,7 +16,7 @@
           @timeupdate="onPlayerTimeupdate($event)"
           :options="playerOptions"
         ></video-player>
-        <div class="video-control" v-show="isShow">
+        <div class="video-control">
           <div class="video-control-top">
             <div class="progress" @click="skip($event)" id="progress">
               <div class="progress-details" :style="{width: progressDetails}"></div>
@@ -69,10 +69,10 @@
               <!--倍数代码 -->
               <div
                 @mouseover="speedFlag = true"
-                @mouseout="speedFlag = false"
-                style="display:inline-block"
+                 @mouseout="speedFlag = false"
+                class="speed-container"
               >
-                <ul class="speed" v-show="speedFlag">
+                <ul class="speed" :class="{unfold:speedFlag}">
                   <li
                     class="select-item"
                     v-for="(item,index) in speedList"
@@ -595,12 +595,21 @@ export default {
   components: {},
 };
 </script>
-<style  lang="scss">
+<style>
+.el-popover {
+  background: rgba(21, 21, 21, 0.9);
+  border: none;
+}
+</style>
+<style  lang="scss" scoped>
 
-/**
-    视频播放器样式
-  */
-.video-js {
+  *{
+    margin: 0;
+    padding: 0;
+  }
+
+
+  /deep/ .video-js {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -619,8 +628,22 @@ export default {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
-</style>
-<style  lang="scss" scoped>
+
+
+/**
+  自定义视频控制器样式
+ */
+.video-control {
+  padding: 0 12px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+
   .barrage-wrapper {
   z-index: 1;
   position: absolute;
@@ -680,7 +703,7 @@ export default {
     }
 
     .barrage-main-dm {
-      position: absolute;
+      position: relative;
       width: 100%;
       height: 100%;
       left: 0;
@@ -851,10 +874,6 @@ a {
   text-decoration: none;
 }
 
-.el-popover {
-  background: rgba(21, 21, 21, 0.9);
-  border: none;
-}
 
 .select-list {
   border-radius: 2px;
@@ -872,6 +891,7 @@ a {
 }
 
 .select-item {
+  margin: 0 auto;
   vertical-align: middle;
   height: 36px;
   line-height: 36px;
@@ -879,19 +899,31 @@ a {
 }
 
 .bilibili-player-video-text {
-  margin-right: 4px;
+  margin-right: 40px;
 }
 
+
+// 倍数容器
+.speed-container{
+  padding: 8px;
+  display:inline-block;
+}
 .speed {
+  display: block;
   left: 40px;
   background: rgba(21, 21, 21, 0.9);
   border: none;
   width: 70px;
-  height: 216px;
+  height: 0px;
   position: absolute;
   z-index: 9999;
   bottom: 20px;
   text-align: center;
+}
+
+.unfold{
+  bottom: 35px;
+  height: 216px;
 }
 
 .sound {
