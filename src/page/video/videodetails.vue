@@ -1090,6 +1090,7 @@ export default {
         .then((res) => {
           this.$message("操作成功~");
           this.$set(this.details.log, "isPraise", !this.details.log.isPraise);
+          this.details.praiseNum=this.details.praiseNum+1;
         })
         .catch((err) => {
           console.error(err);
@@ -1124,6 +1125,7 @@ export default {
           this.$message("投币成功,经验加10~");
           this.showDialog = false;
           this.$set(this.details.log, "coinNum", this.details.log.coinNum + 1);
+          this.details.coinNum=this.details.coinNum+1
         })
         .catch((err) => {
           console.error(err);

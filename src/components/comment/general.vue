@@ -401,8 +401,8 @@
 					tableNameEnum:"VIDEO"
 				};
 				console.log(this.$route.query.id)
-				console.log(this.textareaMap[0])
-				this.$axios.post("http://localhost:8082/comment",param,{
+				console.log(param)
+				this.$axios.post("http://116.196.105.203:6380/commentservice/comment?uid=1",param,{
                    headers: {
                     'Content-Type':'application/json;charset=UTF-8'
                         }
@@ -425,10 +425,10 @@
 					content:this.textareaMap[index],
 					tableNameEnum:"VIDEO"
 				};
-				this.$axios.post("http://localhost:8082/reply",param,{
+				this.$axios.post("http://116.196.105.203:6380/commentservice/reply?uid=1",param,{
                    headers: {
                     'Content-Type':'application/json;charset=UTF-8'
-                        }
+                    }
                })
 				.then(res => {
 					console.log(res)

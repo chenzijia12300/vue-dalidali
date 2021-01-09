@@ -1,6 +1,6 @@
 <template>
   <div id="hello">
-    <remote-js src="http://at.alicdn.com/t/font_1923532_mn7cv380qcd.js"></remote-js>
+    <remote-js src="http://at.alicdn.com/t/font_1923532_1mhrzfro251.js"></remote-js>
     <el-row class="head">
       <el-col :span="num">
         <a href="/header">

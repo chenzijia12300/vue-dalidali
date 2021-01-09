@@ -36,9 +36,15 @@
 }
 
 .rank-wrap {
+    height: 40px;
     font-weight: 500;
-    margin-bottom: 18px;
 }
+
+.rank-list .rank-wrap:nth-of-type(1){
+    height: 70px;
+    font-weight: 500;
+}
+
 
 .rank-wrap .number {
     vertical-align: top;
@@ -85,7 +91,15 @@
     margin-left: 12px;
 }   
 
-.rank-wrap .preview .txt p {
+/* .rank-wrap .preview .txt p {
+    text-overflow: ellipsis;
+    font-size: 14px;
+    height: 40px;
+    line-height: 20px;
+    margin-bottom: 5px;
+} */
+
+.topTitle{
     text-overflow: ellipsis;
     font-size: 14px;
     height: 40px;

@@ -25,13 +25,13 @@
           <div class="video-control-bottom">
             <!--自定义控制器左边-->
             <div class="video-control-bottom-left">
-              <div class="video-btn">
+              <div class="video-btn" @click="handlerPlay()">
                 <div class="player-icon">
                   <svg class="player-svg" aria-hidden="true" v-if="isPlay">
-                    <use xlink:href="#icon-play" />
+                    <use xlink:href="#icon-zantingtingzhi" />
                   </svg>
                   <svg class="player-svg" aria-hidden="true" v-else>
-                    <use xlink:href="#icon-zantingtingzhi" />
+                    <use xlink:href="#icon-play" />
                   </svg>
                 </div>
               </div>
@@ -65,48 +65,68 @@
                   <span>{{nowQuality}}</span>
                 </div>
               </el-popover>
-
-              <!--倍数代码 -->
               <div
                 @mouseover="speedFlag = true"
-                 @mouseout="speedFlag = false"
-                class="speed-container"
+                @mouseout="speedFlag = false"
+                style="display:inline-block"
               >
-                <ul class="speed" :class="{unfold:speedFlag}">
-                  <li
-                    class="select-item"
-                    v-for="(item,index) in speedList"
-                    v-bind:key="index"
-                    @click="updateSpeed(index)"
-                  >
-                    <a href="#">
-                      <span class="bilibili-player-video-text">{{item.name}}</span>
-                    </a>
-                  </li>
-                </ul>
-                <div class="video-speed">
-                  <span>倍数</span>
+                <!--倍数代码 -->
+                <div class="speed-container">
+                  <ul class="speed" :class="{unfold:speedFlag}">
+                    <li
+                      class="select-item"
+                      v-for="(item,index) in speedList"
+                      v-bind:key="index"
+                      @click="updateSpeed(index)"
+                    >
+                      <a href="#">
+                        <span class="bilibili-player-video-text">{{item.name}}x</span>
+                      </a>
+                    </li>
+                  </ul>
+                  <div class="video-speed">
+                    <span>倍数</span>
+                  </div>
                 </div>
               </div>
               <!-- 声音代码 -->
               <div
                 @mouseover="soundFlag = true"
                 @mouseout="soundFlag = false"
-                style="display:inline-block;position:relative"
+                class="sound-container"
+                :class="{highest:soundFlag}"
               >
-                <div class="sound" v-show="soundFlag" style="height:100%">
-                  <el-slider v-model="sound" vertical height="200px"></el-slider>
+                <div class="sound" v-show="soundFlag">
+                  <el-slider
+                    v-model="sound"
+                    vertical
+                    height="80px"
+                    class="sound-slider"
+                    @change="changeSound"
+                  ></el-slider>
+                  <span class="sound-text">{{sound}}</span>
                 </div>
-                <div class="video-sound">
-                  <svg class="player-svg" aria-hidden="true" style="width:26px;height:18px">
+
+                <div class="video-sound" @click="controlSound">
+                  <svg
+                    class="player-svg"
+                    aria-hidden="true"
+                    style="width:26px;height:18px"
+                    v-if="this.sound>0"
+                  >
                     <use xlink:href="#icon-shengyin" />
+                  </svg>
+                  <svg class="player-svg" aria-hidden="true" style="width:26px;height:18px" v-else>
+                    <use xlink:href="#icon-jinyin" />
                   </svg>
                 </div>
               </div>
               <div class="video-setting">
-                <svg class="player-svg" aria-hidden="true" style="width:26px;height:18px">
-                  <use xlink:href="#icon-settings" />
-                </svg>
+                <el-tooltip content="设置" placement="top">
+                  <svg class="player-svg" aria-hidden="true" style="width:26px;height:18px">
+                    <use xlink:href="#icon-settings" />
+                  </svg>
+                </el-tooltip>
               </div>
 
               <div class="video-in-video">
@@ -229,17 +249,18 @@ export default {
         },
       ],
       speedList: [
-        { name: "2.0x" },
-        { name: "1.5x" },
-        { name: "1.25x" },
-        { name: "1.0x" },
-        { name: "0.75x" },
-        { name: "0.5x" },
+        { name: 2.0 },
+        { name: 1.5 },
+        { name: 1.25 },
+        { name: 1.0 },
+        { name: 0.75 },
+        { name: 0.5 },
       ],
       nowQuality: null,
       speedFlag: false,
       soundFlag: false,
-      sound: 0,
+      //当前声音大小
+      sound: 100,
       isFull: false,
     };
   },
@@ -591,6 +612,27 @@ export default {
         document.webkitExitFullscreen();
       }
     },
+    // 调整声音
+    changeSound(val) {
+      val = val*0.01;
+      console.log(val);
+      this.$refs.videoPlayer.player.volume(val);
+      console.log(this.$refs.videoPlayer.player.volume);
+    },
+    // 打开/关闭声音
+    controlSound() {
+      if (this.sound > 0) {
+        this.sound = 0;
+      } else {
+        this.sound = 100;
+      }
+    },
+    // 调整倍数
+    updateSpeed(index) {
+      let speed = this.speedList[index].name;
+      console.log("当前倍数：" + speed);
+      this.$refs.videoPlayer.player.playbackRate(speed);
+    },
   },
   components: {},
 };
@@ -602,14 +644,12 @@ export default {
 }
 </style>
 <style  lang="scss" scoped>
+* {
+  margin: 0;
+  padding: 0;
+}
 
-  *{
-    margin: 0;
-    padding: 0;
-  }
-
-
-  /deep/ .video-js {
+/deep/ .video-js {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -620,6 +660,7 @@ export default {
   自定义视频控制器样式
  */
 .video-control {
+  z-index: 9999;
   padding: 0 12px;
   position: absolute;
   bottom: 0;
@@ -628,7 +669,6 @@ export default {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
-
 
 /**
   自定义视频控制器样式
@@ -643,8 +683,7 @@ export default {
   box-sizing: border-box;
 }
 
-
-  .barrage-wrapper {
+.barrage-wrapper {
   z-index: 1;
   position: absolute;
   left: 0px;
@@ -714,8 +753,6 @@ export default {
       box-sizing: border-box;
     }
   }
-
-  
 }
 @keyframes barrage-run {
   0% {
@@ -749,7 +786,7 @@ export default {
 
 .video-control-top {
   height: 16px;
-
+  z-index: 9998;
   position: absolute;
   left: 0;
   right: 0;
@@ -784,6 +821,8 @@ export default {
   transition: all 0.2s ease-out;
 }
 .video-control-bottom-left {
+  position: relative;
+  bottom: -12px;
   display: inline-block;
   margin: 0;
   padding: 0;
@@ -837,6 +876,7 @@ export default {
 }
 
 .video-control-bottom-right {
+  top: 5px;
   position: relative;
   float: right;
 }
@@ -874,7 +914,6 @@ a {
   text-decoration: none;
 }
 
-
 .select-list {
   border-radius: 2px;
   font-size: 12px;
@@ -891,6 +930,7 @@ a {
 }
 
 .select-item {
+  text-align: center;
   margin: 0 auto;
   vertical-align: middle;
   height: 36px;
@@ -898,37 +938,60 @@ a {
   white-space: nowrap;
 }
 
-.bilibili-player-video-text {
-  margin-right: 40px;
-}
-
-
 // 倍数容器
-.speed-container{
+.speed-container {
   padding: 8px;
-  display:inline-block;
+  display: inline-block;
 }
 .speed {
   display: block;
-  left: 40px;
+  left: 50px;
   background: rgba(21, 21, 21, 0.9);
   border: none;
   width: 70px;
   height: 0px;
   position: absolute;
   z-index: 9999;
-  bottom: 20px;
+  bottom: 0px;
   text-align: center;
 }
 
-.unfold{
-  bottom: 35px;
+.unfold {
+  z-index: 9999;
+  bottom: 40px;
   height: 216px;
 }
 
+// 声音容器
+
+.sound-container {
+  z-index: 1;
+  padding: 10px;
+  display: inline-block;
+  position: relative;
+}
+
 .sound {
+  align-items: center;
+  background: rgba(21, 21, 21, 0.9);
+  border: none;
+  width: 40px;
+  height: 120px;
   position: absolute;
-  bottom: 220px;
+  bottom: 40px;
+  text-align: center;
+}
+.sound-slider {
+  position: absolute;
+  bottom: 10px;
+}
+
+.highest {
+  z-index: 9999;
+}
+
+.sound-text {
+  color: white;
 }
 
 .speed a {

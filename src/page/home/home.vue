@@ -134,7 +134,7 @@
                             </div>
                             <div class="txt">
                                 <a :href="'#/details?id='+videoItem.id" target="_blank" class="link">
-                                    <p title="" >{{videoItem.title}}</p>
+                                    <p title="" class="topTitle">{{videoItem.title}}</p>
                                 </a>
                                 <span>综合评分:{{videoItem.playNum*1.5}}万</span>
                             </div>
@@ -308,7 +308,8 @@
 
 
     .recommend-content,.recommend-content-list{
-        margin-top: px;
+        margin-top: 20px;
+        margin-bottom: 20px;
         width: 1198px;
         height: 242px;
     }
@@ -550,12 +551,13 @@
     right: 50px;
     position:fixed;
     top: 220px;
-    width: 56px;
+    width: 70px;
     height: 469px;
 }
 
 .subject-item{
-    width: 54px;
+    font-size: 10px;
+    width: 60px;
     height: 24px;
     line-height: 24px;
     text-align: center;
@@ -563,8 +565,12 @@
     background: #fff;
 }
 
-.subject-item :hover{
-    background: #73c9e5;
+.subject-name:hover{
+    background-color: #73c9e5;
+}
+
+.subject-item:hover{
+    background-color: #73c9e5;
 }
 
 .subject-block {
@@ -592,6 +598,8 @@
 .subject-block  div:last-child {
       border-bottom: 0;
 }
+
+
    
 </style>   
 <script>
@@ -689,7 +697,7 @@ function lazyLoad (className, callback) {
     }
 }
 lazyLoad('zone-list-box', function (ele) {
-    myVue.$axios.get(myVue.VIDEO_URL+"category/random/"+ele.id)
+    myVue.$axios.get(myVue.VIDEO_URL+"category/random/all")
     .then(res => {
         res = res.data;
         console.log(res)
@@ -699,7 +707,8 @@ lazyLoad('zone-list-box', function (ele) {
         console.error(err); 
     })
 
-    myVue.$axios.get(myVue.VIDEO_URL+"video/top/"+ele.id+"/10")
+    // myVue.$axios.get(myVue.VIDEO_URL+"video/top/"+ele.id+"/10")
+    myVue.$axios.get(myVue.VIDEO_URL+"video/top/all/8")
     .then(res => {
         res = res.data;
         console.log(res)

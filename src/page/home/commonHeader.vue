@@ -49,7 +49,7 @@
     <!--频道列表-->
     <div class="item-container">
       <div class="item-type" v-for="(item,index) in items" v-bind:key="index">
-        <el-popover placement="bottom" trigger="hover" width="70">
+        <el-popover placement="bottom" trigger="hover" width="50">
           <div>
             <ul class="sonCategory">
               <li v-for="(sonItem,sIndex) in item.childList" v-bind:key="sIndex">
@@ -194,6 +194,7 @@ a {
   display: block;
   width: 73px;
   height: 34px;
+  font-size: 12px;
 }
 
 .item-link a:hover span {
@@ -280,9 +281,9 @@ export default {
       .get(this.VIDEO_URL+"category")
       .then((res) => {
         res = res.data;
-        console.log(res.message);
-        this.items = res.data;
-            this.$emit('categoryList',this.items);
+        this.items = res.data.slice(0,20);
+                console.log(this.items);
+        this.$emit('categoryList',this.items);
       })
       .catch((err) => {
         console.error(err);
